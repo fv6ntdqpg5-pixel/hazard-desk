@@ -1,0 +1,7 @@
+[
+{"obs_abbr":"avo","volcano_name":"Gareloi","vnum":"311070","sent_utc":"2026-10-01 20:35:44","color_code":"YELLOW","alert_level":"ADVISORY","notice_url":"https://volcanoes.usgs.gov/hans-public/notice/DOI-USGS-AVO-2026-10-01T19:24:56+00:00"},
+{"obs_abbr":"avo","volcano_name":"Great Sitkin","vnum":"311120","sent_utc":"2026-10-01 20:35:44","color_code":"ORANGE","alert_level":"WATCH","notice_url":"https://volcanoes.usgs.gov/hans-public/notice/DOI-USGS-AVO-2026-10-01T19:24:56+00:00"},
+{"obs_abbr":"avo","volcano_name":"Shishaldin","vnum":"311360","sent_utc":"2026-10-01 20:35:44","color_code":"YELLOW","alert_level":"ADVISORY","notice_url":"https://volcanoes.usgs.gov/hans-public/notice/DOI-USGS-AVO-2026-10-01T19:24:56+00:00"},
+{"obs_abbr":"hvo","volcano_name":"Kilauea","vnum":"332010","sent_utc":"2026-10-01 19:05:15","color_code":"ORANGE","alert_level":"WATCH","notice_url":"https://volcanoes.usgs.gov/hans-public/notice/DOI-USGS-HVO-2026-10-01T01:30:09+00:00"},
+{"obs_abbr":"nmi","volcano_name":"Ahyi Seamount","vnum":"284141","sent_utc":"2026-10-01 20:39:46","color_code":"YELLOW","alert_level":"ADVISORY","notice_url":"https://volcanoes.usgs.gov/hans-public/notice/DOI-USGS-NMI-2026-10-01T20:37:33+00:00"}
+]

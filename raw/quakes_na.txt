@@ -1,0 +1,86 @@
+# source: earthquake.usgs.gov fdsnws, M3+, lat 5..75, lon -180..-50, since 2026-09-27T12:40Z. time|lat|lon|depth_km|mag|place
+2026-10-04T08:59:26|18.557|-68.431|141|4.0|3 km SW of Punta Cana, Dominican Republic
+2026-10-04T08:20:24|18.962|-64.924|21.7|3.0|68 km N of Charlotte Amalie, U.S. Virgin Islands
+2026-10-04T08:11:21|19.093|-64.520|9.5|3.4|89 km NNE of Cruz Bay, U.S. Virgin Islands
+2026-10-04T03:10:56|18.816|-64.462|16.9|3.3|64 km NNE of Cruz Bay, U.S. Virgin Islands
+2026-10-04T03:08:37|18.844|-64.487|9.6|3.3|65 km NNE of Cruz Bay, U.S. Virgin Islands
+2026-10-04T01:58:07|62.032|-149.233|18.7|3.5|32 km N of Fishhook, Alaska
+2026-10-03T22:48:05|54.710|-157.050|5|3.1|188 km SE of Perryville, Alaska
+2026-10-03T21:25:25|51.723|-173.613|35|3.5|66 km SE of Atka, Alaska
+2026-10-03T20:33:45|14.105|-93.352|10|4.5|121 km SW of Puerto Madero, Mexico
+2026-10-03T16:06:51|51.696|-175.291|50.3|4.1|93 km SW of Atka, Alaska
+2026-10-03T16:03:54|18.337|-64.165|81.2|3.3|66 km E of Cruz Bay, U.S. Virgin Islands
+2026-10-03T15:03:20|19.348|-68.978|41|3.7|40 km ENE of Samaná, Dominican Republic
+2026-10-03T13:58:12|38.964|-115.305|5|3.3|21 km WNW of Preston, Nevada
+2026-10-03T10:35:38|18.446|-67.398|6|3.9|19 km NW of Rincón, Puerto Rico
+2026-10-03T10:04:47|56.299|-156.290|63.9|3.2|130 km E of Chignik, Alaska
+2026-10-03T09:37:30|11.545|-87.200|37.5|4.4|79 km WSW of Masachapa, Nicaragua
+2026-10-03T07:12:22|56.039|-149.220|10|3.0|256 km SE of Chiniak, Alaska
+2026-10-03T05:38:48|18.359|-66.334|110.8|3.4|2 km NW of Corozal, Puerto Rico
+2026-10-03T01:03:12|51.569|-176.686|49.1|4.1|34 km S of Adak, Alaska
+2026-10-02T17:55:58|19.416|-155.279|0.3|3.5|5 km WSW of Volcano, Hawaii
+2026-10-02T16:31:25|10.370|-62.422|9.8|5.0|26 km SSW of Güiria, Venezuela
+2026-10-02T13:29:01|18.954|-67.918|31.6|3.3|65 km NE of Punta Cana, Dominican Republic
+2026-10-02T12:06:12|19.000|-67.947|7.9|3.1|66 km NE of Punta Cana, Dominican Republic
+2026-10-02T11:35:16|14.421|-90.983|115.2|4.2|9 km SSW of Yepocapa, Guatemala
+2026-10-02T10:00:11|38.894|-120.081|10.9|3.3|9 km WSW of South Lake Tahoe, CA
+2026-10-02T06:53:35|18.756|-104.375|24.0|4.8|35 km SSW of El Colomo, Mexico
+2026-10-02T06:02:57|51.328|-175.993|17.3|4.0|75 km SE of Adak, Alaska
+2026-10-01T18:47:10|31.697|-104.549|4.7|3.1|55 km SSW of Whites City, New Mexico
+2026-10-01T15:13:16|58.977|-150.994|54.5|3.0|63 km SE of Port Graham, Alaska
+2026-10-01T14:46:19|53.723|-163.724|35|4.8|127 km S of False Pass, Alaska
+2026-10-01T10:18:48|61.836|-151.996|115.6|3.2|35 km WSW of Skwentna, Alaska
+2026-10-01T08:14:59|14.736|-92.696|71.3|4.1|28 km SW of Buenos Aires, Mexico
+2026-10-01T07:52:05|19.416|-155.277|0.3|3.4|5 km WSW of Volcano, Hawaii
+2026-10-01T05:25:44|19.125|-64.346|12|3.5|99 km NNE of Cruz Bay, U.S. Virgin Islands
+2026-10-01T03:29:08|59.514|-152.202|77.9|3.4|23 km NW of Nanwalek, Alaska
+2026-10-01T03:22:33|59.940|-152.443|93.5|3.0|38 km WNW of Anchor Point, Alaska
+2026-10-01T00:01:59|33.502|-116.463|5.1|3.1|20 km ESE of Anza, CA
+2026-09-30T21:55:26|9.753|-86.506|8|5.6|94 km SW of Tamarindo, Costa Rica
+2026-09-30T21:00:48|18.478|-66.614|105.4|3.1|4 km NNE of Animas, Puerto Rico
+2026-09-30T10:56:40|19.462|-65.304|77|3.6|127 km NNE of Vieques, Puerto Rico
+2026-09-30T10:31:47|62.048|-147.635|20.8|3.1|26 km N of Glacier View, Alaska
+2026-09-30T10:25:49|32.222|-101.976|7.8|3.1|20 km WNW of Stanton, Texas
+2026-09-30T09:19:50|18.998|-64.022|80|3.6|109 km NE of Cruz Bay, U.S. Virgin Islands
+2026-09-30T08:50:13|31.624|-104.364|7.0|3.3|61 km S of Whites City, New Mexico
+2026-09-30T04:06:59|17.471|-93.860|177.7|4.2|39 km W of Plan de Ayala, Mexico
+2026-09-30T03:00:27|34.393|-118.763|9.6|3.8|4 km SE of Piru, CA
+2026-09-30T00:25:25|14.342|-93.846|10|4.4|142 km SSW of La Esperanza (El Zapotal), Mexico
+2026-09-29T21:05:56|47.400|-122.722|27.9|4.2|6 km WNW of Wauna, Washington
+2026-09-29T11:36:39|40.423|-125.418|10|4.8|97 km W of Petrolia, CA
+2026-09-29T10:24:37|54.660|-161.590|49.9|4.0|64 km SE of King Cove, Alaska
+2026-09-29T10:14:35|58.195|-136.833|8|3.2|28 km W of Elfin Cove, Alaska
+2026-09-29T09:50:11|38.921|-115.288|0|3.1|19 km W of Preston, Nevada
+2026-09-29T08:21:56|13.762|-92.635|41.5|4.5|95 km SSW of Ocós, Guatemala
+2026-09-29T02:26:32|64.788|-140.748|8.7|3.0|17 km E of Eagle Village, Alaska
+2026-09-29T01:46:26|18.431|-68.900|114.9|3.4|7 km E of La Romana, Dominican Republic
+2026-09-29T00:55:42|18.912|-64.158|21.2|3.3|92 km NE of Cruz Bay, U.S. Virgin Islands
+2026-09-28T22:54:45|39.341|-99.705|5|3.0|2 km SSW of Bogue, Kansas
+2026-09-28T20:13:51|53.912|-164.048|35|3.0|112 km SSW of False Pass, Alaska
+2026-09-28T16:44:00|59.674|-152.565|86.6|3.6|42 km WSW of Anchor Point, Alaska
+2026-09-28T14:55:55|63.492|-151.620|5|4.2|7 km SE of Denali National Park, Alaska
+2026-09-28T14:42:31|6.809|-72.960|155.2|4.3|6 km NNE of Cepitá, Colombia
+2026-09-28T13:30:32|41.138|-127.452|10|3.2|275 km W of Indianola, California
+2026-09-28T13:15:28|63.758|-148.775|109.5|3.0|7 km ENE of Denali Park, Alaska
+2026-09-28T11:46:28|62.952|-148.093|52.1|3.9|65 km SE of Cantwell, Alaska
+2026-09-28T11:13:35|51.442|-174.908|6.8|3.3|97 km SSW of Atka, Alaska
+2026-09-28T11:03:45|54.502|-162.690|67.4|3.0|60 km SE of False Pass, Alaska
+2026-09-28T10:54:05|18.409|-68.717|153|3.8|5 km WSW of San Rafael del Yuma, Dominican Republic
+2026-09-28T09:13:39|50.171|-129.679|10|5.2|190 km WSW of Port McNeill, Canada
+2026-09-28T07:35:09|18.185|-68.510|86.5|3.4|23 km SSE of Boca de Yuma, Dominican Republic
+2026-09-28T07:21:55|18.910|-104.377|51.8|4.4|20 km SW of El Colomo, Mexico
+2026-09-28T05:53:11|38.896|-115.294|0|3.3|20 km W of Preston, Nevada
+2026-09-28T04:41:21|50.053|-130.221|10|5.4|231 km WSW of Port McNeill, Canada
+2026-09-28T02:53:43|50.237|-129.777|10|4.9|195 km WSW of Port McNeill, Canada
+2026-09-28T01:05:11|18.302|-68.842|156.6|3.4|19 km SE of La Romana, Dominican Republic
+2026-09-28T01:03:39|59.819|-153.311|138.3|3.1|44 km E of Pedro Bay, Alaska
+2026-09-28T00:02:23|51.533|-177.551|28.5|3.0|73 km WSW of Adak, Alaska
+2026-09-27T22:09:02|51.578|-174.562|10|3.5|73 km SSW of Atka, Alaska
+2026-09-27T21:49:48|18.587|-68.999|119.2|4.8|2 km W of Guaymate, Dominican Republic
+2026-09-27T21:36:20|53.511|-157.733|10|3.3|271 km SE of Sand Point, Alaska
+2026-09-27T18:27:09|20.492|-154.202|15.2|3.0|117 km NE of Honomu, Hawaii
+2026-09-27T18:03:23|52.230|-173.830|16.9|3.3|25 km E of Atka, Alaska
+2026-09-27T15:40:01|33.843|-118.469|11.9|3.6|7 km WSW of Hermosa Beach, CA
+2026-09-27T14:21:50|37.416|-121.453|3.4|3.3|27 km WSW of Westley, CA
+2026-09-27T13:30:35|19.364|-155.081|7.6|3.1|12 km SSE of Fern Forest, Hawaii
+2026-09-27T12:53:05|62.647|-152.116|5|3.0|71 km WNW of Petersville, Alaska

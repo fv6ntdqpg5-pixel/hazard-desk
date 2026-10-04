@@ -1,0 +1,10 @@
+# source: earthquake.usgs.gov fdsnws, M2.5-2.99, lat 32..42.1, lon -125.5..-114, since 2026-09-27T12:40Z. time|lat|lon|depth_km|mag|place
+2026-10-03T13:58:29|38.109|-116.058|0.1|2.7|58 km NNW of Rachel, Nevada
+2026-10-03T06:58:44|38.891|-120.083|7.1|2.9|10 km WSW of South Lake Tahoe, CA
+2026-10-02T09:13:41|38.907|-115.290|3.4|3.0|19 km W of Preston, Nevada
+2026-09-30T21:07:19|38.778|-122.933|4.0|3.0|8 km ESE of Cloverdale, CA
+2026-09-30T20:48:14|38.766|-122.701|1.8|2.6|1 km SW of Anderson Springs, CA
+2026-09-29T16:06:37|38.399|-122.424|8.3|2.6|6 km W of Yountville, CA
+2026-09-29T12:18:44|37.398|-118.605|8.6|2.5|2 km SSW of Round Valley, CA
+2026-09-27T19:10:36|39.324|-123.270|-0.4|2.6|9 km NW of Redwood Valley, CA
+2026-09-27T14:40:46|37.421|-121.455|2.7|2.6|26 km WSW of Westley, CA
