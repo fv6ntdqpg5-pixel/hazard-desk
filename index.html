@@ -584,7 +584,7 @@ function renderStatus(){
   $('stamp').innerHTML=liveN?(sl?'Warnings checked <b>'+ago(live.cells||live.short)+'</b>, every 60 s':'<b>Warning feed not responding.</b> Use weather.gov'):'Data as of <b>'+fD.format(new Date(SNAP.generated))+'</b>';
   var note=$('note');
   if(liveN){note.hidden=true}else{note.hidden=false;note.className='note'+(age>6*36e5?' old':'');
-    note.innerHTML='<b>This is a snapshot from '+fD.format(new Date(SNAP.generated))+' ('+ago(SNAP.generated)+').</b> Warnings that have ended since then are removed automatically, but new ones do not appear until the next refresh. For warnings in effect this minute, check <a href="https://www.weather.gov/" target="_blank" rel="noopener">weather.gov</a>.'}
+    note.innerHTML='<b>This is a snapshot from '+fD.format(new Date(SNAP.generated))+' ('+ago(SNAP.generated)+').</b> Warnings that have ended since then are removed automatically, but new ones do not appear until the next refresh. For warnings in effect this minute, check <a href="https://www.weather.gov/" target="_blank" rel="noopener">weather.gov</a>.'+(/vercel\.app$/.test(location.hostname)?'':' <b>The live version, with tornado tracking and radar, is at <a href="https://hazard-desk.vercel.app/" target="_blank" rel="noopener">hazard-desk.vercel.app</a>.</b>')}
   var feeds=[['storms','Storms'],['outlooks','Outlooks'],['wwa','Watches and warnings'],['quakes','Earthquakes'],['volc','Volcanoes']];if(liveN)feeds.push([live.cells?'cells':'short','Tornado and storm warnings'],['lsr','Storm reports']);
   $('feeds').innerHTML=feeds.map(function(f){return '<span>'+f[1]+': '+(live[f[0]]?'live, '+ago(live[f[0]]):'snapshot, '+ago(SNAP.generated))+'</span>'}).join('');
 }
