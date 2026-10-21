@@ -72,5 +72,10 @@ for (const p of DESK.extraPages || []) {
   await page.close();
 }
 await browser.close();
-if (problems.length) { console.log(`${DESK.name}: PROBLEMS\n` + problems.map(p => '  - ' + p).join('\n')); process.exit(1); }
+if (problems.length) {
+  console.log(`${DESK.name}: PROBLEMS\n` + problems.map(p => '  - ' + p).join('\n'));
+  // On GitHub, each problem also becomes an annotation, shown on the run page and in the failure email.
+  if (process.env.GITHUB_ACTIONS) problems.forEach(p => console.log(`::error title=${DESK.name} site check::${p.replace(/\n/g, ' ')}`));
+  process.exit(1);
+}
 console.log(`${DESK.name}: check passed on phone and desktop${live ? ' (live site)' : ' (local copy; live-feed checks skipped)'}${notes.length ? '. ' + notes.join('; ') : ''}`);
