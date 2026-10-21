@@ -726,3 +726,5 @@ setInterval(function(){renderNow();renderDesk();legend();dirty=true},10*60e3);
 startLive();
 })();
 </script>
+
+<script>/* Only ordinary web, email and phone links are followed: the second lock behind the data pipeline. */document.addEventListener("click",function(e){var a=e.target&&e.target.closest&&e.target.closest("a[href]");if(!a)return;var h=(a.getAttribute("href")||"").trim();if(h&&h.charAt(0)!=="#"&&h.charAt(0)!=="/"&&!/^(https?:|mailto:|tel:|[a-z0-9._-]+\.html)/i.test(h)){e.preventDefault();e.stopPropagation()}},true);</script>

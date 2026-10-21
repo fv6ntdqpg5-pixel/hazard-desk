@@ -40,6 +40,13 @@ for (const [name, vp] of [['phone', { width: 390, height: 844 }], ['desktop', { 
   await route(page);
   const resp = await page.goto(BASE + '/', { waitUntil: 'domcontentloaded', timeout: 60000 });
   if (!resp || resp.status() !== 200) problems.push(`${name}: HTTP ${resp && resp.status()}`);
+  if (live && resp && name === 'desktop') {   // security headers (vercel.json): framing, type sniffing, referrer leaks
+    const h = await resp.allHeaders();
+    if (h['x-content-type-options'] !== 'nosniff') problems.push('security header missing: X-Content-Type-Options');
+    if (!/frame-ancestors/.test(h['content-security-policy'] || '')) problems.push('security header missing: frame-ancestors (clickjacking protection)');
+    if (!h['referrer-policy']) problems.push('security header missing: Referrer-Policy');
+    if (!/max-age=\d{7,}/.test(h['strict-transport-security'] || '')) problems.push('HTTPS-only header (HSTS) missing or short');
+  }
   const checks = DESK.checks.filter(c => live || !c.liveOnly);
   const deadline = Date.now() + (live ? 45000 : 10000);
   let failed = checks;
