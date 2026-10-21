@@ -1,0 +1,29 @@
+# Site check for North America Hazard Desk: every 6 hours, and after each push. Loads the live site in a headless browser on phone and
+# desktop (tools/sitecheck.mjs, rules in tools/sitecheck.config.mjs) and FAILS if a page script throws, a section does
+# not load, the data is stale, or a sister desk is missing from the Desks row. A failed run makes GitHub email the
+# account owner. Nothing is committed, so this never triggers a deploy.
+name: site-check
+on:
+  schedule:
+    - cron: '11 1-23/6 * * *'
+  workflow_dispatch:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+concurrency: { group: site-check, cancel-in-progress: true }
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - name: Wait for a new deploy to go live
+        if: github.event_name == 'push'
+        run: sleep 120
+      - name: Check the live site
+        run: |
+          npm i --no-save --silent playwright-core@1.48.2
+          CHROME=$(which google-chrome || which chromium) node tools/sitecheck.mjs --live
