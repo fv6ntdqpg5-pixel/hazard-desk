@@ -68,7 +68,7 @@ async function tsunami(code) {
       if (loc && !out.region) out.region = loc[1].trim();
       if (co && out.lat == null) { out.lat = +co[1] * (co[2] === 'SOUTH' ? -1 : 1); out.lon = +co[3] * (co[4] === 'WEST' ? -1 : 1); }
       const kind = /TSUNAMI (WARNING|ADVISORY|WATCH)\b/.exec(txt.slice(0, 600)) || /(Warning|Advisory|Watch|Threat)/.exec(out.category || '');
-      out.level = /HAZARDOUS TSUNAMI WAVES ARE FORECAST|TSUNAMI THREAT FORECAST\.\.\.[\s\S]{0,40}\n[\s\S]{0,200}METERS/.test(txt) && !out.final ? 'Threat' : kind ? kind[1][0] + kind[1].slice(1).toLowerCase() : (out.final ? 'Final / information' : 'Information');
+      out.level = out.final ? 'Final' : /HAZARDOUS TSUNAMI WAVES ARE FORECAST|TSUNAMI THREAT FORECAST\.\.\.[\s\S]{0,40}\n[\s\S]{0,200}METERS/.test(txt) && !out.final ? 'Threat' : kind ? kind[1][0] + kind[1].slice(1).toLowerCase() : (out.final ? 'Final / information' : 'Information');
     }
   }
   return out;

@@ -235,6 +235,7 @@ footer .feeds{font-family:var(--font-mono);font-size:12px;display:flex;flex-wrap
 (function(){
 var $=function(id){return document.getElementById(id)};
 function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function kmh(s){return String(s==null?'':s).replace(/(\d+(?:\.\d+)?) km\/h/g,function(m,n){return m+', '+Math.round(n*0.621371)+' mph'})}
 function safeUrl(u){return /^https:\/\//.test(u||'')?u:null}
 var fD=new Intl.DateTimeFormat(undefined,{weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'});
 function when(ms){return ms?fD.format(new Date(ms)):''}
@@ -327,12 +328,12 @@ function identify(x,y){var h=hits.filter(function(p){return Math.hypot(p.x-x,p.y
 /* details */
 function link(u,t){u=safeUrl(u);return u?'<a href="'+esc(u)+'" target="_blank" rel="noopener">'+esc(t)+'</a>':''}
 function show(k,d){var h='<button class="x" aria-label="Close">&times;</button>';
-  if(k==='storm')h+='<h3>'+esc(d.title||d.name)+'</h3><p><span class="al '+esc(d.alert)+'">'+esc(d.alert)+' alert</span> '+esc(d.severity)+'</p><p>'+esc(d.countries)+'</p><p>Track: solid line observed, dashed line forecast ('+esc(d.source||'warning center')+'). Shaded zones: where GDACS estimates winds of 60, 90 and 120 km/h (37, 56 and 75 mph).</p><p>'+link(d.report,'GDACS report')+'</p>';
+  if(k==='storm')h+='<h3>'+esc(d.title||d.name)+'</h3><p><span class="al '+esc(d.alert)+'">'+esc(d.alert)+' alert</span> '+esc(kmh(d.severity))+'</p><p>'+esc(d.countries)+'</p><p>Track: solid line observed, dashed line forecast ('+esc(d.source||'warning center')+'). Shaded zones: where GDACS estimates winds of 60, 90 and 120 km/h (37, 56 and 75 mph).</p><p>'+link(d.report,'GDACS report')+'</p>';
   else if(k==='quake')h+='<h3>M'+d.m.toFixed(1)+' · '+esc(d.place)+'</h3><p>'+esc(when(d.t))+' ('+ago(d.t)+'), depth '+Math.round(d.depth)+' km</p>'+(d.alert?'<p>USGS impact alert: <b>'+esc(d.alert)+'</b></p>':'')+(d.tsu?'<p>USGS flags this event for possible tsunami relevance. Check the tsunami messages.</p>':'')+'<p>'+link(d.url,'USGS event page')+'</p>';
   else if(k==='erupt')h+='<h3>'+esc(d.name)+'</h3><p>Erupting. The Smithsonian Global Volcanism Program lists this eruption as continuing'+(d.since?', since '+esc(d.since.slice(0,4)):'')+'.</p><p>'+link('https://volcano.si.edu/volcano.cfm?vn='+d.num,'Smithsonian volcano page')+'</p>';
   else if(k==='usvolc')h+='<h3>'+esc(d.name)+'</h3><p>USGS alert level <b>'+esc(d.alert)+'</b>, aviation color code <b>'+esc(d.color)+'</b>'+(d.updated?' · '+esc(when(utc(d.updated))):'')+'</p><p>'+link(d.url,'USGS notice')+'</p>';
   else if(k==='gvolc')h+='<h3>'+esc(d.title)+'</h3><p><span class="al '+esc(d.alert)+'">'+esc(d.alert)+' alert</span> '+esc(d.countries)+'</p><p>'+link(d.report,'GDACS report')+'</p>';
-  else if(k==='flood')h+='<h3>'+esc(d.title)+'</h3><p><span class="al '+esc(d.alert)+'">'+esc(d.alert)+' alert</span> since '+esc((d.from||'').slice(0,10))+'</p><p>'+esc(d.severity)+'</p><p>'+link(d.report,'GDACS report')+'</p>';
+  else if(k==='flood')h+='<h3>'+esc(d.title)+'</h3><p><span class="al '+esc(d.alert)+'">'+esc(d.alert)+' alert</span> since '+esc((d.from||'').slice(0,10))+'</p><p>'+esc(kmh(d.severity))+'</p><p>'+link(d.report,'GDACS report')+'</p>';
   else if(k==='tsu')h+='<h3>'+esc(d.level||'Tsunami message')+(d.region?' · '+esc(d.region):'')+'</h3><p>'+esc(d.center)+' · '+esc(when(utc(d.updated)))+(d.magnitude?' · M'+esc(d.magnitude):'')+'</p>'+(d.threat?'<p><b>Threat:</b> '+esc(d.threat)+'</p>':'')+(d.evaluation?'<p>'+esc(d.evaluation)+'</p>':'')+'<p>'+link(d.bulletin,'Full message')+'</p>';
   var p=$('pop');p.innerHTML=h;p.hidden=false;p.querySelector('.x').onclick=function(){p.hidden=true}}
 
@@ -341,7 +342,7 @@ function li(k,d,title,sub){return '<li><button data-k="'+k+'" data-i="'+esc(d.__
 var REG={};function reg(k,d,i){d.__i=k+i;REG[k+i]={k:k,d:d};return d}
 function lists(){var D=W_||{};REG={};
   var st=(D.storms||[]).slice().sort(function(a,b){return 'GOR'.indexOf(b.alert[0])-'GOR'.indexOf(a.alert[0])});
-  $('dStorms').innerHTML=D.storms==null?'<li class="empty">Storm feed not reachable right now.</li>':st.length?st.map(function(s,i){reg('storm',s,i);return li('storm',s,'<span class="al '+esc(s.alert)+'">'+esc(s.alert)+'</span> '+esc(s.name),esc(s.severity)+(s.countries?' · '+esc(s.countries):''))}).join(''):'<li class="empty">No active tropical storms in any ocean basin.</li>';
+  $('dStorms').innerHTML=D.storms==null?'<li class="empty">Storm feed not reachable right now.</li>':st.length?st.map(function(s,i){reg('storm',s,i);return li('storm',s,'<span class="al '+esc(s.alert)+'">'+esc(s.alert)+'</span> '+esc(s.name),esc(kmh(s.severity))+(s.countries?' · '+esc(s.countries):''))}).join(''):'<li class="empty">No active tropical storms in any ocean basin.</li>';
   var ts=(D.tsunami||[]).filter(function(m){return m.ok&&m.title});
   $('dTsu').innerHTML=ts.length?ts.map(function(m,i){reg('tsu',m,i);var t=utc(m.updated);return li('tsu',m,esc(m.level||'Message')+(m.region?' · '+esc(m.region):''),esc(m.center)+' · '+(t?ago(t):'')+(tsuActive(m)?' · <b>active</b>':m.final?' · final, no threat':''))}).join(''):'<li class="empty">Tsunami feeds not reachable right now.</li>';
   var qs=(Q||[]).slice().sort(function(a,b){return b.m-a.m}).slice(0,10);
@@ -354,7 +355,7 @@ function lists(){var D=W_||{};REG={};
   ['dStorms','dTsu','dQuakes','dVolc','dFloods'].forEach(function(id){[].forEach.call($(id).querySelectorAll('button[data-i]'),function(b){b.onclick=function(){var r=REG[b.dataset.i];if(!r)return;var d=r.d;if(d.lon!=null&&!isNaN(d.lon))goTo(d.lon,d.lat,r.k==='storm'?3:5);show(r.k,d)}})})}
 function rightNow(){var D=W_||{},out=[];
   (D.tsunami||[]).forEach(function(m){if(tsuActive(m))out.push({w:100,c:'#1D4FA3',t:'Tsunami '+(m.level||'message').toLowerCase()+(m.region?': '+m.region:''),s:m.center,k:'tsu',d:m})});
-  (D.storms||[]).forEach(function(s){out.push({w:{Red:80,Orange:60,Green:30}[s.alert]||20,c:ALC[s.alert],t:s.name+' · '+s.alert+' alert',s:s.severity+(s.countries?' · '+s.countries:''),k:'storm',d:s})});
+  (D.storms||[]).forEach(function(s){out.push({w:{Red:80,Orange:60,Green:30}[s.alert]||20,c:ALC[s.alert],t:s.name+' · '+s.alert+' alert',s:kmh(s.severity)+(s.countries?' · '+s.countries:''),k:'storm',d:s})});
   (Q||[]).forEach(function(q){if(q.m>=6.5&&Date.now()-q.t<48*3600e3||q.alert==='red'||q.alert==='orange')out.push({w:50+q.m,c:'#C62828',t:'M'+q.m.toFixed(1)+' earthquake · '+q.place,s:ago(q.t)+(q.alert?' · USGS impact alert '+q.alert:''),k:'quake',d:q})});
   (D.gdacsVolc||[]).forEach(function(v){out.push({w:{Red:70,Orange:45,Green:15}[v.alert]||10,c:ALC[v.alert],t:v.title,s:v.alert+' alert · '+v.countries,k:'gvolc',d:v})});
   (D.floods||[]).forEach(function(f){out.push({w:{Red:55,Orange:35}[f.alert]||10,c:ALC[f.alert],t:f.title,s:f.alert+' alert · since '+(f.from||'').slice(0,10),k:'flood',d:f})});
