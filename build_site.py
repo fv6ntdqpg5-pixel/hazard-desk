@@ -41,8 +41,8 @@ wsrc = open(os.path.join(HERE, 'world_page.html'), encoding='utf-8').read()
 bdk = src[src.index('<!--BDK-->'):src.index('<!--/BDK-->') + len('<!--/BDK-->')]
 wcut = wsrc.index('<div class="wrap">')
 whead, wbody = wsrc[:wcut].rstrip(), wsrc[wcut:].replace('<!--BDK-->', bdk, 1)
-WDESC = ('World map of tropical storms, earthquakes, tsunami messages, erupting volcanoes, major floods and sea '
-         'surface temperature. Public agency data, no ads.')
+WDESC = ('World map of tropical storms, earthquakes, tsunami messages, volcanoes and giant calderas, wildfires, floods, '
+         'space weather and sea surface temperature. Public agency data, no ads.')
 wdoc = (doc.replace(DESC, WDESC).replace('content="North America Hazard Desk"', 'content="World Hazard Desk"')
         .replace(head, head.replace('<title>North America Hazard Desk</title>', '<title>World Hazard Desk</title>') + '\n' + whead))
 wdoc = wdoc[:wdoc.index('<body>') + len('<body>')] + '\n' + wbody.rstrip() + '\n</body>\n</html>\n'

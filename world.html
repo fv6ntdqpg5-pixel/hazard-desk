@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="World map of tropical storms, earthquakes, tsunami messages, erupting volcanoes, major floods and sea surface temperature. Public agency data, no ads.">
+<meta name="description" content="World map of tropical storms, earthquakes, tsunami messages, volcanoes and giant calderas, wildfires, floods, space weather and sea surface temperature. Public agency data, no ads.">
 <meta property="og:title" content="World Hazard Desk">
-<meta property="og:description" content="World map of tropical storms, earthquakes, tsunami messages, erupting volcanoes, major floods and sea surface temperature. Public agency data, no ads.">
+<meta property="og:description" content="World map of tropical storms, earthquakes, tsunami messages, volcanoes and giant calderas, wildfires, floods, space weather and sea surface temperature. Public agency data, no ads.">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%2316202A'/%3E%3Cpath d='M6 8h20l-3 5H9zM10 15h12l-2.5 4.500h-7zM13.500 21.500h5L16 27z' fill='%23FF3B30'/%3E%3C/svg%3E">
@@ -174,6 +174,10 @@ footer .feeds{font-family:var(--font-mono);font-size:12px;display:flex;flex-wrap
 .wdesk .empty{color:var(--muted);font-size:14px}
 .sstkey{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted)}
 .sstkey .bar{width:140px;height:10px;border-radius:2px;border:1px solid var(--rule)}
+#dSpace p{margin:6px 0}.swrow{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.swc{border:1px solid var(--rule);border-radius:6px;padding:6px 8px;background:var(--panel-2)}.swc b{display:block;font-family:var(--font-display);font-size:24px;line-height:1}.swc span{font-size:12px;color:var(--muted)}.swc.mid{border-color:#E8C11C}.swc.hi{border-color:#C62828;background:color-mix(in srgb,#C62828 10%,var(--panel))}
+.swal{list-style:none;margin:0;padding:0}.swal li{border-top:0;padding:2px 0;font-size:13px}
+.cal-note{font-size:13px;color:var(--muted);margin:0 0 6px}.cdot{display:inline-block;width:10px;height:10px;border-radius:50%;border:2px solid #6A3FB5;margin-right:6px;vertical-align:-1px}
+.wdesk li small b{color:var(--ink)}
 .tsu{border-left:4px solid var(--crit);background:var(--panel);padding:10px 14px}
 .tsu b{font-family:var(--font-display);font-size:19px;letter-spacing:.04em;text-transform:uppercase}
 </style>
@@ -187,7 +191,7 @@ footer .feeds{font-family:var(--font-mono);font-size:12px;display:flex;flex-wrap
   <header class="mast">
     <div>
       <h1>World Hazard Desk</h1>
-      <p>Tropical storms, earthquakes, tsunami messages, erupting volcanoes, major floods and sea temperature around the world. Public agency data, no ads.</p>
+      <p>Tropical storms, earthquakes, tsunami messages, volcanoes, wildfires, floods, space weather and sea temperature around the world. Public agency data, no ads.</p>
       <nav class="views" aria-label="Hazard Desk views"><a href="/">North America</a><span aria-current="page">World</span></nav>
     </div>
     <div class="status" aria-live="polite">
@@ -221,11 +225,14 @@ footer .feeds{font-family:var(--font-mono);font-size:12px;display:flex;flex-wrap
       <section class="desk wdesk"><h3>Strongest earthquakes, past 7 days</h3><ul id="dQuakes"></ul></section>
       <section class="desk wdesk"><h3>Volcanoes erupting or on alert</h3><ul id="dVolc"></ul></section>
       <section class="desk wdesk"><h3>Major floods</h3><ul id="dFloods"></ul></section>
+      <section class="desk wdesk"><h3>Large wildfires</h3><ul id="dFires"></ul></section>
+      <section class="desk wdesk" id="spaceDesk"><h3>Space weather</h3><div id="dSpace"><p class="empty">Reading NOAA&hellip;</p></div></section>
+      <section class="desk wdesk"><h3>Supervolcanoes and giant calderas</h3><p class="cal-note">A supervolcano is one that has had a magnitude 8 eruption (VEI 8, more than 1,000 cubic km). Three below have; the VEI 7 calderas are included because they are the same kind of system and are often called supervolcanoes. Status comes live from the agency that watches each one. None of these is a forecast.</p><ul id="dCal"></ul></section>
     </div>
   </div>
 
   <footer>
-    <p><b>Sources.</b> Tropical storms, floods and volcano alerts: <a href="https://www.gdacs.org/" rel="noopener" target="_blank">GDACS</a>, the Global Disaster Alert and Coordination System of the United Nations and the European Commission, with storm tracks from the national and joint warning centers. Erupting volcanoes: the Smithsonian Institution's <a href="https://volcano.si.edu/" rel="noopener" target="_blank">Global Volcanism Program</a>. U.S. volcano alert levels: <a href="https://volcanoes.usgs.gov/" rel="noopener" target="_blank">USGS</a>. Earthquakes: <a href="https://earthquake.usgs.gov/" rel="noopener" target="_blank">USGS</a>, magnitude 4.5 and up. Tsunami messages: NOAA's <a href="https://www.tsunami.gov/" rel="noopener" target="_blank">tsunami warning centers</a>. Sea temperature: NASA <a href="https://earthdata.nasa.gov/gibs" rel="noopener" target="_blank">GIBS</a>, MUR daily analysis from JPL.</p>
+    <p><b>Sources.</b> Tropical storms, floods and volcano alerts: <a href="https://www.gdacs.org/" rel="noopener" target="_blank">GDACS</a>, the Global Disaster Alert and Coordination System of the United Nations and the European Commission, with storm tracks from the national and joint warning centers. Erupting volcanoes: the Smithsonian Institution's <a href="https://volcano.si.edu/" rel="noopener" target="_blank">Global Volcanism Program</a>. U.S. volcano alert levels: <a href="https://volcanoes.usgs.gov/" rel="noopener" target="_blank">USGS</a>. Earthquakes: <a href="https://earthquake.usgs.gov/" rel="noopener" target="_blank">USGS</a>, magnitude 4.5 and up. Tsunami messages: NOAA's <a href="https://www.tsunami.gov/" rel="noopener" target="_blank">tsunami warning centers</a>. Sea temperature: NASA <a href="https://earthdata.nasa.gov/gibs" rel="noopener" target="_blank">GIBS</a>, MUR daily analysis from JPL. Wildfires: the EU <a href="https://gwis.jrc.ec.europa.eu/" rel="noopener" target="_blank">Global Wildfire Information System</a> via GDACS. Space weather and aurora: NOAA <a href="https://www.swpc.noaa.gov/" rel="noopener" target="_blank">Space Weather Prediction Center</a>. Caldera status: USGS, <a href="https://www.geonet.org.nz/" rel="noopener" target="_blank">GeoNet</a> (New Zealand), <a href="https://www.ingv.it/" rel="noopener" target="_blank">INGV</a> (Italy) and the Smithsonian.</p>
     <p><b>Not an official warning service.</b> This page summarizes public data and only helps while it is open. A tsunami message from NOAA's centers is advice to national authorities outside the United States; each country decides its own warnings. Storm wind zones are GDACS estimates, not official forecast cones.</p>
     <p>&copy; 2026 Randy Barnhill. All rights reserved. Built with AI.</p>
   </footer>
@@ -242,8 +249,8 @@ function when(ms){return ms?fD.format(new Date(ms)):''}
 function ago(ms){var m=Math.round((Date.now()-ms)/60000);if(m<1)return 'just now';if(m<60)return m+' min ago';var h=Math.round(m/60);if(h<48)return h+' h ago';return Math.round(h/24)+' days ago'}
 function utc(s){if(!s)return null;var t=Date.parse(/Z|[+-]\d\d:?\d\d$/.test(s)?s:s.replace(' ','T')+'Z');return isNaN(t)?null:t}
 var ALC={Green:'#2E8B3A',Orange:'#E07B00',Red:'#C62828'};
-var state={layers:{storms:1,quakes:1,volc:1,tsu:1,floods:1},sst:'off'};
-try{var sv=JSON.parse(localStorage.getItem('worlddesk')||'{}');if(sv.layers)state.layers=sv.layers;if(sv.sst)state.sst=sv.sst}catch(e){}
+var state={layers:{storms:1,quakes:1,volc:1,tsu:1,floods:1,fires:1,cal:1,aurora:0},sst:'off'};
+try{var sv=JSON.parse(localStorage.getItem('worlddesk')||'{}');if(sv.layers)Object.keys(sv.layers).forEach(function(k){if(k in state.layers)state.layers[k]=sv.layers[k]});if(sv.sst)state.sst=sv.sst}catch(e){}
 function save(){try{localStorage.setItem('worlddesk',JSON.stringify({layers:state.layers,sst:state.sst}))}catch(e){}}
 var W_=null,Q=null,ok={world:false,quakes:false};
 
@@ -288,6 +295,12 @@ function draw(tn){if(!W)return;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle=c
   setT();ctx.lineJoin='round';ctx.fillStyle=css.land;cpaths.forEach(function(c){ctx.fill(c.p)});
   ctx.setTransform(dpr,0,0,dpr,0,0);drawSST();setT();ctx.strokeStyle=css['land-edge'];ctx.lineWidth=0.6/view.k;ctx.globalAlpha=.7;cpaths.forEach(function(c){ctx.stroke(c.p)});ctx.globalAlpha=1;
   ctx.setTransform(dpr,0,0,dpr,0,0);hits=[];var z=view.k/k0,L=state.layers,D=W_||{};
+  // aurora: NOAA OVATION chance of visible aurora overhead, 1-degree cells
+  if(L.aurora&&D.space&&D.space.aurora)D.space.aurora.cells.forEach(function(c){var a=sx(c[0]-.5,c[1]+.5),b=sx(c[0]+.5,c[1]-.5);if(b[0]<0||a[0]>W||b[1]<0||a[1]>H)return;ctx.fillStyle='rgba(40,200,90,'+Math.min(.75,.12+c[2]/110)+')';ctx.fillRect(a[0],a[1],b[0]-a[0]+.5,b[1]-a[1]+.5)});
+  // giant calderas
+  if(L.cal&&D.calderas)D.calderas.forEach(function(c){wrapDraw(c.lon,c.lat,function(x,y){ctx.beginPath();ctx.arc(x,y,9,0,7);ctx.strokeStyle='#6A3FB5';ctx.lineWidth=2;ctx.stroke();ctx.beginPath();ctx.arc(x,y,4,0,7);ctx.fillStyle=calCol(c);ctx.fill();ctx.lineWidth=1;ctx.strokeStyle='#6A3FB5';ctx.stroke();hits.push({x:x,y:y,r:12,k:'cal',d:c})})});
+  // wildfires, sized by burned area
+  if(L.fires&&D.fires)D.fires.forEach(function(f){if(f.lon==null)return;var r=Math.max(3.5,Math.min(13,Math.sqrt((f.ha||5000)/5000)*3.5));wrapDraw(f.lon,f.lat,function(x,y){ctx.beginPath();ctx.moveTo(x,y-r);ctx.lineTo(x+r,y);ctx.lineTo(x,y+r);ctx.lineTo(x-r,y);ctx.closePath();ctx.fillStyle=rgba('#D9480F',.55);ctx.fill();ctx.strokeStyle=f.alert==='Green'?'#8A2C06':ALC[f.alert];ctx.lineWidth=f.alert==='Green'?1:2;ctx.stroke();hits.push({x:x,y:y,r:Math.max(r,8),k:'fire',d:f})})});
   // floods
   if(L.floods&&D.floods)D.floods.forEach(function(f){if(f.lon==null)return;wrapDraw(f.lon,f.lat,function(x,y){ctx.beginPath();ctx.rect(x-6,y-6,12,12);ctx.fillStyle=rgba(ALC[f.alert]||'#3F8FD9',.35);ctx.fill();ctx.strokeStyle=ALC[f.alert]||'#3F8FD9';ctx.lineWidth=1.6;ctx.stroke();hits.push({x:x,y:y,r:10,k:'flood',d:f})})});
   // storms: wind zones, then track
@@ -308,6 +321,9 @@ function draw(tn){if(!W)return;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle=c
     if(act){var u=((tn||0)/1400)%1;ctx.beginPath();ctx.arc(x,y,10+u*26,0,7);ctx.strokeStyle=rgba('#1D4FA3',1-u);ctx.lineWidth=2.5;ctx.stroke()}
     ctx.beginPath();ctx.arc(x,y,6,0,7);ctx.fillStyle=act?'#1D4FA3':rgba('#1D4FA3',.4);ctx.fill();hits.push({x:x,y:y,r:12,k:'tsu',d:m})})});
 }
+function calCol(c){var col=((c.status&&c.status.color)||'').toUpperCase();return {GREEN:'#2E8B3A',YELLOW:'#E8C11C',ORANGE:'#E07B00',RED:'#C62828'}[col]||(c.erupting?'#F08A24':'#B9B2CC')}
+function acres(ha){return ha?Math.round(ha).toLocaleString()+' ha ('+Math.round(ha*2.471).toLocaleString()+' acres)':''}
+var SCL=['none','minor','moderate','strong','severe','extreme'];
 function tsuActive(m){var t=utc(m.updated);return m.ok&&!m.final&&t&&Date.now()-t<24*3600e3&&/Warning|Threat|Advisory|Watch/.test(m.level||'')}
 function frame(tn){var live=W_&&W_.tsunami&&W_.tsunami.some(tsuActive);if(dirty||live){dirty=false;draw(tn)}requestAnimationFrame(frame)}
 
@@ -333,9 +349,26 @@ function show(k,d){var h='<button class="x" aria-label="Close">&times;</button>'
   else if(k==='erupt')h+='<h3>'+esc(d.name)+'</h3><p>Erupting. The Smithsonian Global Volcanism Program lists this eruption as continuing'+(d.since?', since '+esc(d.since.slice(0,4)):'')+'.</p><p>'+link('https://volcano.si.edu/volcano.cfm?vn='+d.num,'Smithsonian volcano page')+'</p>';
   else if(k==='usvolc')h+='<h3>'+esc(d.name)+'</h3><p>USGS alert level <b>'+esc(d.alert)+'</b>, aviation color code <b>'+esc(d.color)+'</b>'+(d.updated?' · '+esc(when(utc(d.updated))):'')+'</p><p>'+link(d.url,'USGS notice')+'</p>';
   else if(k==='gvolc')h+='<h3>'+esc(d.title)+'</h3><p><span class="al '+esc(d.alert)+'">'+esc(d.alert)+' alert</span> '+esc(d.countries)+'</p><p>'+link(d.report,'GDACS report')+'</p>';
+  else if(k==='fire')h+='<h3>'+esc(d.title)+'</h3><p><span class="al '+esc(d.alert)+'">'+esc(d.alert)+' alert</span> burned area so far: '+esc(acres(d.ha))+'</p><p>Burning since '+esc((d.from||'').slice(0,10))+'. Mapped by satellite by the EU Global Wildfire Information System; shown here through GDACS.</p><p>'+link(d.report,'GDACS report')+'</p>';
+  else if(k==='cal')h+=calHtml(d,true);
   else if(k==='flood')h+='<h3>'+esc(d.title)+'</h3><p><span class="al '+esc(d.alert)+'">'+esc(d.alert)+' alert</span> since '+esc((d.from||'').slice(0,10))+'</p><p>'+esc(kmh(d.severity))+'</p><p>'+link(d.report,'GDACS report')+'</p>';
   else if(k==='tsu')h+='<h3>'+esc(d.level||'Tsunami message')+(d.region?' · '+esc(d.region):'')+'</h3><p>'+esc(d.center)+' · '+esc(when(utc(d.updated)))+(d.magnitude?' · M'+esc(d.magnitude):'')+'</p>'+(d.threat?'<p><b>Threat:</b> '+esc(d.threat)+'</p>':'')+(d.evaluation?'<p>'+esc(d.evaluation)+'</p>':'')+'<p>'+link(d.bulletin,'Full message')+'</p>';
   var p=$('pop');p.innerHTML=h;p.hidden=false;p.querySelector('.x').onclick=function(){p.hidden=true}}
+
+function calStatus(c){var s=c.status,o=[];
+  if(s)o.push((s.src==='USGS'?'USGS alert level <b>'+esc(s.level)+'</b>, aviation color '+esc(s.color):esc(s.level)+' ('+esc(s.color)+')'+(s.text?': '+esc(s.text):''))+'');
+  if(c.erupting)o.push('<b>Erupting</b>: Sakurajima, inside the caldera, is listed by the Smithsonian as in continuing eruption'+(c.erupting.since?' since '+esc(String(c.erupting.since).slice(0,4)):''));
+  if(c.quakes7d)o.push(esc(c.quakes7d.n)+' earthquake'+(c.quakes7d.n===1?'':'s')+' located by INGV in the past 7 days'+(c.quakes7d.max!=null?', largest M'+esc(c.quakes7d.max):''));
+  if(!o.length)o.push('No live status feed. '+esc(c.agency)+' publishes updates on its own site.');
+  return o.join('<br>')}
+function calHtml(c,pop){return (pop?'<h3>'+esc(c.name)+'</h3>':'')+'<p><small>'+esc(c.country)+' · largest eruptions VEI '+c.vei+'</small></p><p>'+esc(c.past)+'.</p><p>'+calStatus(c)+'</p><p>'+link(c.url,c.agency)+'</p>'}
+function spaceHtml(sp){if(!sp)return '<p class="empty">NOAA space weather feed not reachable right now.</p>';var h='';
+  if(sp.scales&&sp.scales.now){var n=sp.scales.now;h+='<div class="swrow">'+[['G','Geomagnetic storm',n.G],['S','Solar radiation storm',n.S],['R','Radio blackout',n.R]].map(function(x){return '<div class="swc '+(x[2]>=3?'hi':x[2]>=1?'mid':'')+'"><b>'+x[0]+x[2]+'</b><span>'+x[1]+': '+SCL[x[2]]+'</span></div>'}).join('')+'</div>'}
+  if(sp.kp)h+='<p>Planetary K-index (Kp) <b>'+sp.kp.value.toFixed(2)+'</b> as of '+esc(when(utc(sp.kp.time)))+'; highest in the past 24 h '+sp.kp.max24.toFixed(2)+'. Kp 5 is a minor (G1) storm; Kp 9 is extreme.</p>';
+  if(sp.scales&&sp.scales.ahead&&sp.scales.ahead.length)h+='<p><small>NOAA outlook: '+sp.scales.ahead.map(function(a){return esc(a.day.slice(5))+' geomagnetic '+(a.G?'G'+a.G:'quiet')+(a.rMinor!=null?', '+a.rMinor+'% chance of a minor radio blackout':'')}).join('; ')+'.</small></p>';
+  if(sp.alerts&&sp.alerts.length)h+='<p><small><b>NOAA messages, past 48 h:</b></small></p><ul class="swal">'+sp.alerts.slice(0,5).map(function(a){return '<li><small>'+esc(when(Date.parse(a.t)))+'</small> '+esc(a.head.charAt(0)+a.head.slice(1).toLowerCase())+'</li>'}).join('')+'</ul>';
+  if(sp.aurora)h+='<p><button class="go" id="auroraBtn">'+(state.layers.aurora?'Hide':'Show')+' the aurora forecast on the map</button> <small>(chance of aurora overhead, NOAA OVATION model, for '+esc(when(Date.parse(sp.aurora.forecast)))+')</small></p>';
+  return h+'<p>'+link('https://www.swpc.noaa.gov/','NOAA Space Weather Prediction Center')+'</p>'}
 
 /* lists */
 function li(k,d,title,sub){return '<li><button data-k="'+k+'" data-i="'+esc(d.__i)+'"><b>'+title+'</b><small>'+sub+'</small></button></li>'}
@@ -352,25 +385,30 @@ function lists(){var D=W_||{};REG={};
   if(D.eruptions)vv.push('<li><small>'+D.eruptions.length+' eruptions listed as continuing by the Smithsonian Global Volcanism Program are marked on the map. Tap a triangle for details.</small></li>');
   $('dVolc').innerHTML=vv.length?vv.join(''):'<li class="empty">Volcano feeds not reachable right now.</li>';
   $('dFloods').innerHTML=D.floods==null?'<li class="empty">Flood feed not reachable right now.</li>':D.floods.length?D.floods.map(function(f,i){reg('flood',f,i);return li('flood',f,'<span class="al '+esc(f.alert)+'">'+esc(f.alert)+'</span> '+esc(f.title),'since '+esc((f.from||'').slice(0,10)))}).join(''):'<li class="empty">No floods at Orange or Red alert.</li>';
-  ['dStorms','dTsu','dQuakes','dVolc','dFloods'].forEach(function(id){[].forEach.call($(id).querySelectorAll('button[data-i]'),function(b){b.onclick=function(){var r=REG[b.dataset.i];if(!r)return;var d=r.d;if(d.lon!=null&&!isNaN(d.lon))goTo(d.lon,d.lat,r.k==='storm'?3:5);show(r.k,d)}})})}
+  $('dFires').innerHTML=D.fires==null?'<li class="empty">Wildfire feed not reachable right now.</li>':D.fires.length?D.fires.slice().sort(function(a,b){return 'GOR'.indexOf(b.alert[0])-'GOR'.indexOf(a.alert[0])||(b.ha||0)-(a.ha||0)}).slice(0,12).map(function(f,i){reg('fire',f,i);return li('fire',f,'<span class="al '+esc(f.alert)+'">'+esc(f.alert)+'</span> '+esc(f.title),esc(acres(f.ha))+' · since '+esc((f.from||'').slice(0,10)))}).join('')+(D.fires.length>12?'<li><small>'+D.fires.length+' fires in all are marked on the map. GDACS lists fires of roughly 5,000 ha (12,000 acres) and up.</small></li>':''):'<li class="empty">No large wildfires listed right now.</li>';
+  $('dCal').innerHTML=D.calderas?D.calderas.map(function(c,i){reg('cal',c,i);return '<li><button data-k="cal" data-i="'+esc(c.__i)+'"><b><i class="cdot" style="background:'+calCol(c)+'"></i>'+esc(c.name)+'</b><small>'+esc(c.country)+' · VEI '+c.vei+'</small><small>'+calStatus(c)+'</small></button></li>'}).join(''):'<li class="empty">Not reachable right now.</li>';
+  $('dSpace').innerHTML=W_?spaceHtml(D.space):'<p class="empty">Reading NOAA&hellip;</p>';var ab=$('auroraBtn');if(ab)ab.onclick=function(){state.layers.aurora=state.layers.aurora?0:1;save();controls();lists();dirty=true;if(state.layers.aurora){view.cy=proj(0,55)[1];dirty=true}};
+  ['dStorms','dTsu','dQuakes','dVolc','dFloods','dFires','dCal'].forEach(function(id){[].forEach.call($(id).querySelectorAll('button[data-i]'),function(b){b.onclick=function(){var r=REG[b.dataset.i];if(!r)return;var d=r.d;if(d.lon!=null&&!isNaN(d.lon))goTo(d.lon,d.lat,r.k==='storm'?3:5);show(r.k,d)}})})}
 function rightNow(){var D=W_||{},out=[];
   (D.tsunami||[]).forEach(function(m){if(tsuActive(m))out.push({w:100,c:'#1D4FA3',t:'Tsunami '+(m.level||'message').toLowerCase()+(m.region?': '+m.region:''),s:m.center,k:'tsu',d:m})});
   (D.storms||[]).forEach(function(s){out.push({w:{Red:80,Orange:60,Green:30}[s.alert]||20,c:ALC[s.alert],t:s.name+' · '+s.alert+' alert',s:kmh(s.severity)+(s.countries?' · '+s.countries:''),k:'storm',d:s})});
   (Q||[]).forEach(function(q){if(q.m>=6.5&&Date.now()-q.t<48*3600e3||q.alert==='red'||q.alert==='orange')out.push({w:50+q.m,c:'#C62828',t:'M'+q.m.toFixed(1)+' earthquake · '+q.place,s:ago(q.t)+(q.alert?' · USGS impact alert '+q.alert:''),k:'quake',d:q})});
   (D.gdacsVolc||[]).forEach(function(v){out.push({w:{Red:70,Orange:45,Green:15}[v.alert]||10,c:ALC[v.alert],t:v.title,s:v.alert+' alert · '+v.countries,k:'gvolc',d:v})});
+  (D.fires||[]).forEach(function(f){if(f.alert!=='Green')out.push({w:{Red:58,Orange:38}[f.alert],c:ALC[f.alert],t:f.title,s:f.alert+' alert · '+acres(f.ha),k:'fire',d:f})});
+  var sp=D.space&&D.space.scales&&D.space.scales.now;if(sp){[['G','Geomagnetic storm'],['S','Solar radiation storm'],['R','Radio blackout']].forEach(function(x){var v=sp[x[0]];if(v>=2)out.push({w:30+v*10,c:'#6A3FB5',t:x[1]+' '+x[0]+v+' ('+SCL[v]+')',s:'NOAA Space Weather Prediction Center',k:'space',d:{}})})}
   (D.floods||[]).forEach(function(f){out.push({w:{Red:55,Orange:35}[f.alert]||10,c:ALC[f.alert],t:f.title,s:f.alert+' alert · since '+(f.from||'').slice(0,10),k:'flood',d:f})});
   out.sort(function(a,b){return b.w-a.w});out=out.slice(0,8);
   $('now').innerHTML=out.length?out.map(function(o,i){return '<li><button data-n="'+i+'"><span class="bar" style="background:'+esc(o.c)+'"></span><span><span class="t">'+esc(o.t)+'</span><span class="w">'+esc(o.s)+'</span></span></button></li>'}).join(''):'<li><span class="empty">Nothing major right now.</span></li>';
-  [].forEach.call($('now').querySelectorAll('button'),function(b){b.onclick=function(){var o=out[+b.dataset.n];if(o.d.lon!=null&&!isNaN(o.d.lon))goTo(o.d.lon,o.d.lat,o.k==='storm'?3:5);show(o.k,o.d)}});
+  [].forEach.call($('now').querySelectorAll('button'),function(b){b.onclick=function(){var o=out[+b.dataset.n];if(o.k==='space'){$('spaceDesk').scrollIntoView({behavior:'smooth'});return}if(o.d.lon!=null&&!isNaN(o.d.lon))goTo(o.d.lon,o.d.lat,o.k==='storm'?3:5);show(o.k,o.d)}});
   var act=(D.tsunami||[]).filter(tsuActive);var bn=$('tsuBanner');if(act.length){var m=act[0];bn.hidden=false;bn.innerHTML='<b>Tsunami '+esc((m.level||'').toLowerCase())+'</b> '+esc(m.region||'')+' · '+esc(m.center)+' · '+esc(when(utc(m.updated)))+(m.threat?'<br>'+esc(m.threat):'')+' '+link(m.bulletin,'Full message')}else bn.hidden=true}
 
 /* controls */
-var LAY=[['storms','Tropical storms','#C62828'],['quakes','Earthquakes','#B5523B'],['tsu','Tsunami','#1D4FA3'],['volc','Volcanoes','#F08A24'],['floods','Floods','#3F8FD9']];
+var LAY=[['storms','Tropical storms','#C62828'],['quakes','Earthquakes','#B5523B'],['tsu','Tsunami','#1D4FA3'],['volc','Volcanoes','#F08A24'],['cal','Calderas','#6A3FB5'],['fires','Wildfires','#D9480F'],['aurora','Aurora','#2BB85A'],['floods','Floods','#3F8FD9']];
 function controls(){$('layers').innerHTML=LAY.map(function(l){return '<button class="chip" aria-pressed="'+(!!state.layers[l[0]])+'" data-l="'+l[0]+'" ><span class="sw" style="background:'+l[2]+'"></span>'+l[1]+'</button>'}).join('');
   [].forEach.call($('layers').querySelectorAll('button'),function(b){b.onclick=function(){state.layers[b.dataset.l]=state.layers[b.dataset.l]?0:1;save();controls();dirty=true}});
   var S=[['off','Off'],['temp','Temperature'],['anom','Vs. normal']];$('sst').innerHTML=S.map(function(s){return '<button aria-pressed="'+(state.sst===s[0])+'" data-s="'+s[0]+'">'+s[1]+'</button>'}).join('');
   [].forEach.call($('sst').querySelectorAll('button'),function(b){b.onclick=function(){state.sst=b.dataset.s;sstDay=1;sstImg=null;save();controls();sstKey();sstLoad();dirty=true}});
-  $('legend').innerHTML='<span><b>Map</b></span><span><i class="dot" style="background:#C62828"></i>Quake past day</span><span><i class="dot" style="background:#E07B00"></i>1&ndash;3 days</span><span><i class="dot" style="background:#8C6D3F"></i>3&ndash;7 days</span><span><i style="background:#F08A24"></i>Erupting volcano</span><span><i class="dot" style="background:#1D4FA3"></i>Tsunami message</span><span><i style="background:#2E8B3A"></i><i style="background:#E07B00"></i><i style="background:#C62828"></i>GDACS alert Green / Orange / Red</span><span>Storm track: solid observed, dashed forecast</span>'}
+  $('legend').innerHTML='<span><b>Map</b></span><span><i class="dot" style="background:#C62828"></i>Quake past day</span><span><i class="dot" style="background:#E07B00"></i>1&ndash;3 days</span><span><i class="dot" style="background:#8C6D3F"></i>3&ndash;7 days</span><span><i style="background:#F08A24"></i>Erupting volcano</span><span><i class="dot" style="background:#1D4FA3"></i>Tsunami message</span><span><i style="background:#2E8B3A"></i><i style="background:#E07B00"></i><i style="background:#C62828"></i>GDACS alert Green / Orange / Red</span><span>Storm track: solid observed, dashed forecast</span><span><i style="background:#D9480F;transform:rotate(45deg)"></i>Wildfire (size = area burned)</span><span><i class="dot" style="background:#fff;border:2px solid #6A3FB5"></i>Giant caldera</span>'+(state.layers.aurora?'<span><i style="background:rgba(40,200,90,.6)"></i>Aurora possible overhead</span>':'')}
 
 /* data */
 function status(){var p=$('modePill');var good=ok.world&&ok.quakes;p.className='pill'+(good?' live':'');$('modeText').textContent=good?'Live':ok.world||ok.quakes?'Partly live':'Feeds unavailable';$('stamp').textContent=W_?'Updated '+when(utc(W_.generated)):''}
