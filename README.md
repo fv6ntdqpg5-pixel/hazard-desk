@@ -53,3 +53,9 @@ hidden once it is more than 12 hours old.
 This page is an independent summary of public data. It only helps while it is open, and the
 NWS feed can lag a new warning by a minute or two. Keep Wireless Emergency Alerts on and follow
 weather.gov and local officials.
+
+## World view
+
+`/world.html` (source `world_page.html`, built by `build_site.py`) covers tropical storms, earthquakes, tsunami messages,
+volcanoes, giant calderas, wildfires, floods, space weather and sea temperature worldwide, from `api/world.js` plus USGS
+and NASA GIBS in the browser. See HANDOFF.md for sources, decisions and open items.
