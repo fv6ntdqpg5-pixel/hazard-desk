@@ -12,7 +12,8 @@
 // Earthquakes and sea temperature are read straight from USGS and NASA in the browser.
 // © 2026 Randy Barnhill. All rights reserved.
 const UA = 'Mozilla/5.0 (compatible; HazardDesk/1.0; +https://hazard-desk.vercel.app)';
-async function get(url, as = 'json', timeout = 12000) {
+async function get(url, as = 'json', timeout = 12000, tries = 2) {
+  for (let i = 1; i < tries; i++) { const r = await get(url, as, timeout, 1); if (r.ok || (r.status && r.status < 500 && r.status !== 429)) return r; await new Promise(z => setTimeout(z, 700)); }
   try {
     const r = await fetch(url, { headers: { 'User-Agent': UA, Accept: as === 'json' ? 'application/json' : '*/*' }, signal: AbortSignal.timeout(timeout) });
     if (!r.ok) return { ok: false, status: r.status };
