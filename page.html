@@ -48,6 +48,9 @@ button{font:inherit;color:inherit}
 .torn button:focus-visible{outline:2px solid #FFFFFF;outline-offset:2px}
 .torn span{font-size:13.5px;flex-basis:100%}
 .pill.event i{background:var(--crit);box-shadow:0 0 0 3px color-mix(in srgb,var(--crit) 25%,transparent)}
+.mast nav.views{display:flex;gap:6px;margin-top:8px}
+.mast nav.views a,.mast nav.views span{font-family:var(--font-display);font-weight:600;font-size:15px;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;color:var(--ink);border:1px solid var(--rule);border-radius:999px;padding:3px 12px;background:var(--panel)}
+.mast nav.views span{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .note{border-left:4px solid var(--warn);background:var(--panel);padding:9px 14px;font-size:14px;max-width:none}
 .note.old{border-left-color:var(--crit)}
 .note b{font-weight:600}
@@ -152,6 +155,7 @@ footer .feeds{font-family:var(--font-mono);font-size:12px;display:flex;flex-wrap
     <div>
       <h1>North America Hazard Desk</h1>
       <p>Hurricanes, tornadoes, severe storms, flooding rain, fire weather, snow, earthquakes and volcanoes for the United States, Canada, Mexico and the waters around them. Public agency data, no ads.</p>
+      <nav class="views" aria-label="Hazard Desk views"><span aria-current="page">North America</span><a href="/world.html">World</a></nav>
     </div>
     <div class="status" aria-live="polite">
       <span class="pill" id="modePill"><i></i><span id="modeText">Snapshot</span></span>
