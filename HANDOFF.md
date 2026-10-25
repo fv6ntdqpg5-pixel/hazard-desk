@@ -92,3 +92,5 @@ Aira ~30 ka, Campanian Ignimbrite ~39 ka).
   fail locally (blocked), which is expected.
 - `.sw` is the layer-chip swatch class; don't reuse it (space weather boxes are `.swc`).
 - Saved layer choices live in localStorage `worlddesk`; new layers merge into saved state by key.
+
+- **Oct 25: "Built by Randy Barnhill" credit line live** (Randy: self-marketing). Small line under the Desks bar on every desk (class `rbby`, just after `<!--/BDK-->`; on Hazard World it sits right after `<!--BDK-->` because build_site.py copies only the BDK block). It links to the About the Builder page at https://www.thewireandledger.com/builder (bio, the five desks as a portfolio, "Work with me", Email button; the address is assembled in script against scrapers). On The Wire & Ledger the line sits under the tagline.
