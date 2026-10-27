@@ -94,3 +94,9 @@ Aira ~30 ka, Campanian Ignimbrite ~39 ka).
 - Saved layer choices live in localStorage `worlddesk`; new layers merge into saved state by key.
 
 - **Oct 25: "Built by Randy Barnhill" credit line live** (Randy: self-marketing). Small line under the Desks bar on every desk (class `rbby`, just after `<!--/BDK-->`; on Hazard World it sits right after `<!--BDK-->` because build_site.py copies only the BDK block). It links to the About the Builder page at https://www.thewireandledger.com/builder (bio, the five desks as a portfolio, "Work with me", Email button; the address is assembled in script against scrapers). On The Wire & Ledger the line sits under the tagline.
+
+## Oct 27, 2026: World map markers (preview: branch caldera-markers)
+- `wrapDraw` now draws one copy of each point (the copy nearest the map's middle). Before, points near the dateline
+  (Taupō, Pacific quakes) showed twice on the full-world view, one copy cut in half at the edge.
+- Caldera rings scale with zoom (radius 4.5 to 9 px, `view.k*3.3`) so Yellowstone, Long Valley and Valles don't pile up
+  on a phone; VEI 8 calderas draw last so Yellowstone is never covered. Desktop size unchanged.
