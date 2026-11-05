@@ -100,3 +100,5 @@ Aira ~30 ka, Campanian Ignimbrite ~39 ka).
   (Taupō, Pacific quakes) showed twice on the full-world view, one copy cut in half at the edge.
 - Caldera rings scale with zoom (radius 4.5 to 9 px, `view.k*3.3`) so Yellowstone, Long Valley and Valles don't pile up
   on a phone; VEI 8 calderas draw last so Yellowstone is never covered. Desktop size unchanged.
+
+- **Nov 4, 2026: Global Vaccine Desk added to the Desks row** (https://global-vaccine-desk.vercel.app, chip colour #C2418F, label "Global Vaccine Desk" / "Vaccine"), last in the row after Overhead Now, on every site in the network (Randy: "Yes" to adding it everywhere).
