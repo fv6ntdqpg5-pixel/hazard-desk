@@ -270,6 +270,23 @@ can't move back up in the map again".
   (non-passive `preventDefault`) and sets `overscroll-behavior`. **Not verifiable here; needs Randy's phone.** If it still
   fails, ask which app the page is open in (Safari itself, or a link opened inside another app).
 
+## 4k. Radar loop (PREVIEW on branch `radar-loop`, waiting for Randy's Go)
+
+- "Radar loop" button at the top left of the map (`#rl`, shown when radar is on and live). It replays the past hour of
+  NOAA's MRMS radar: about one scan every 6 minutes, up to 11 frames, for the area on screen. Play / pause, a slider, and
+  the scan time with its age on every frame. The words "Past hour, observed. Not a forecast." stay under it.
+- Scan times are NOAA's own: the `time` list in the layer's WMS GetCapabilities
+  (`opengeo.ncep.noaa.gov/geoserver/conus/conus_bref_qcd/ows`, verified Nov 12: 60 times, about 2 minutes apart, two hours
+  back, CORS open). Each frame is the same GetMap request the single radar image uses, plus `TIME=`.
+- Backup when NOAA's list or image fails: Iowa State's fixed layers `nexrad-n0q-900913-m05m` … `-m50m` (verified in its
+  capabilities). Those have no exact times, so frames are labeled "about N min before the latest scan" and the note says
+  "backup source, times approximate".
+- Frames are warped with the existing `warp()` at a capped pixel ratio (1.5) to keep phone memory down. Moving or zooming
+  the map reloads the frames for the new view; new scans are picked up every 5 minutes. With "reduce motion" set on the
+  device it does not auto-play; the slider still works.
+- Tested with mock radar images and a mock time list in the real format. **Not yet seen against NOAA's live images.**
+  The research probe was re-armed for this and removed again from `probe-nws`.
+
 ## 5. Open list
 
 1. **NASA FIRMS fire detections** (every hotspot, not just big fires): needs `FIRMS_MAP_KEY` in Vercel; aggregate
