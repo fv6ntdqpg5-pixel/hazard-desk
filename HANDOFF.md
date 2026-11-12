@@ -287,6 +287,18 @@ can't move back up in the map again".
 - Tested with mock radar images and a mock time list in the real format. **Not yet seen against NOAA's live images.**
   The research probe was re-armed for this and removed again from `probe-nws`.
 
+## 4l. Weather symbols and a brighter forecast (PREVIEW on branch `wx-icons`, waiting for Randy's Go)
+
+Randy, Nov 12: "How do we brighten this up and add little weather symbols" in the weather section.
+- `wxIco(kind,size)` draws eleven small pictures as inline SVG (sun, moon, partly sunny, partly cloudy night, cloud, rain,
+  snow, rain-and-snow, thunderstorm, fog, wind). No image files and no emoji (emoji look different on every phone).
+- The picture is chosen from the forecast's own words: `wxKind(text,night)` for the Weather Service and Environment Canada,
+  `wmoKind(code,night)` for the model's weather code. Night comes from the forecast's own day/night flag or from that
+  place's sunrise and sunset (`nightAt`). If no word matches, no picture is shown. The words always stay beside the picture.
+- Where: beside the big temperature in "Right now", above each hour's temperature, beside each day's name, and in the weather
+  bar. Highs are warm-colored and lows cool-colored (`--hi`, `--lo`) with the words "High" and "Low" kept; rain bars are blue.
+- Each picture has its own shape, so it does not depend on color.
+
 ## 5. Open list
 
 1. **NASA FIRMS fire detections** (every hotspot, not just big fires): needs `FIRMS_MAP_KEY` in Vercel; aggregate
