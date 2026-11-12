@@ -1,4 +1,4 @@
-<title>North America Hazard Desk</title>
+<title>Hazard Desk</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <style>
 /* Layout: a working chart table. One large map of the continent and both oceans, a ranked "right now" list above it,
@@ -54,6 +54,21 @@ button{font:inherit;color:inherit}
 .note{border-left:4px solid var(--warn);background:var(--panel);padding:9px 14px;font-size:14px;max-width:none}
 .note.old{border-left-color:var(--crit)}
 .note b{font-weight:600}
+
+/* world lists and pop-ups (from the former World page) */
+.al{display:inline-block;font-family:var(--font-display);font-weight:700;font-size:13px;letter-spacing:.06em;border-radius:4px;padding:0 6px;color:#fff;line-height:1.45}
+.al.Green{background:#2E8B3A}.al.Orange{background:#E07B00}.al.Red{background:#C62828}
+.wl{list-style:none;margin:0;padding:0}.wl li{border-top:1px solid var(--rule);padding:7px 0}.wl li:first-child{border-top:0}
+.wl li button{all:unset;cursor:pointer;display:block;width:100%}.wl li button:hover b{color:var(--accent)}.wl li button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wl li small{display:block;color:var(--muted);font-size:13px}.wl li small b{color:var(--ink)}
+.wl .empty,.desk .empty{color:var(--muted);font-size:14px}
+.sstkey{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--muted)}
+.sstkey .bar{width:140px;height:10px;border-radius:2px;border:1px solid var(--rule)}
+.swrow{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.swc{border:1px solid var(--rule);border-radius:6px;padding:6px 8px;background:var(--panel-2)}.swc b{display:block;font-family:var(--font-display);font-size:24px;line-height:1}.swc span{font-size:12px;color:var(--muted)}.swc.mid{border-color:#E8C11C}.swc.hi{border-color:#C62828;background:color-mix(in srgb,#C62828 10%,var(--panel))}
+.swal{list-style:none;margin:0;padding:0}.swal li{padding:2px 0;font-size:13px}
+.cal-note{font-size:13px;color:var(--muted);margin:0 0 6px}.cdot{display:inline-block;width:10px;height:10px;border-radius:50%;border:2px solid #6A3FB5;margin-right:6px;vertical-align:-1px}
+.tsu{border-left:4px solid var(--crit);background:var(--panel);padding:10px 14px}
+.tsu b{font-family:var(--font-display);font-size:19px;letter-spacing:.04em;text-transform:uppercase}
 
 /* your spot */
 .spot{background:var(--panel);border:1px solid var(--rule);border-top:4px solid var(--ink);border-radius:6px;padding:14px 16px 16px;display:flex;flex-direction:column;gap:12px;min-width:0}
@@ -184,14 +199,13 @@ footer .feeds{font-family:var(--font-mono);font-size:12px;display:flex;flex-wrap
 <div class="wrap">
 <!--BDK-->
 <style>.bdk{display:flex;flex-wrap:wrap;align-items:center;gap:6px 6px;padding:8px 10px;margin:0 0 12px;background:color-mix(in srgb,currentColor 4%,transparent);border:1px solid color-mix(in srgb,currentColor 12%,transparent);border-radius:12px;font-size:calc(13px * var(--fs,1));line-height:1.3;text-align:left}.bdk .bdk-l{opacity:.65;font-size:calc(11px * var(--fs,1));font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-right:4px}.bdk a,.bdk .bdk-here{display:inline-flex;align-items:center;gap:6px;color:inherit;text-decoration:none;font-weight:600;white-space:nowrap;padding:5px 11px;border-radius:999px;border:1px solid color-mix(in srgb,currentColor 20%,transparent);background:color-mix(in srgb,currentColor 3%,transparent);transition:border-color .15s,background .15s}.bdk a:hover,.bdk a:focus-visible{border-color:var(--d);background:color-mix(in srgb,var(--d) 10%,transparent)}.bdk i{width:8px;height:8px;border-radius:50%;background:var(--d);flex:none}.bdk .bdk-here{border-color:var(--d);background:color-mix(in srgb,var(--d) 12%,transparent)}.bdk .bdk-here::after{content:"you are here";font-weight:500;opacity:.6;font-size:.85em}.bdk .s{display:none}@media (max-width:640px){.bdk .f{display:none}.bdk .s{display:inline}.bdk .bdk-here::after{content:none}.bdk{gap:6px 5px}.bdk a,.bdk .bdk-here{padding:5px 9px}}</style>
-<nav class="bdk" aria-label="Sites by Randy Barnhill"><span class="bdk-l"><span class="f">Explore the desks</span><span class="s">Desks</span></span><a href="https://www.thewireandledger.com" target="_blank" rel="noopener" style="--d:#C4320A"><i></i><span class="f">The Wire &amp; Ledger</span><span class="s">Wire &amp; Ledger</span></a><a href="https://global-outbreak-desk.vercel.app" target="_blank" rel="noopener" style="--d:#1BAF7A"><i></i><span class="f">Global Outbreak Desk</span><span class="s">Outbreak</span></a><span class="bdk-here" aria-current="page" style="--d:#EB6834"><i></i><span class="f">North America Hazard Desk</span><span class="s">Hazard</span></span><a href="https://the-ledger-of-the-earth.vercel.app" target="_blank" rel="noopener" style="--d:#2A78D6"><i></i><span class="f">Earth Desk</span><span class="s">Earth</span></a><a href="https://overhead-now.vercel.app" target="_blank" rel="noopener" style="--d:#7B6CF0"><i></i>Overhead Now</a><a href="https://global-vaccine-desk.vercel.app" target="_blank" rel="noopener" style="--d:#C2418F"><i></i><span class="f">Global Vaccine Desk</span><span class="s">Vaccine</span></a></nav>
+<nav class="bdk" aria-label="Sites by Randy Barnhill"><span class="bdk-l"><span class="f">Explore the desks</span><span class="s">Desks</span></span><a href="https://www.thewireandledger.com" target="_blank" rel="noopener" style="--d:#C4320A"><i></i><span class="f">The Wire &amp; Ledger</span><span class="s">Wire &amp; Ledger</span></a><a href="https://global-outbreak-desk.vercel.app" target="_blank" rel="noopener" style="--d:#1BAF7A"><i></i><span class="f">Global Outbreak Desk</span><span class="s">Outbreak</span></a><span class="bdk-here" aria-current="page" style="--d:#EB6834"><i></i><span class="f">Hazard Desk</span><span class="s">Hazard</span></span><a href="https://the-ledger-of-the-earth.vercel.app" target="_blank" rel="noopener" style="--d:#2A78D6"><i></i><span class="f">Earth Desk</span><span class="s">Earth</span></a><a href="https://overhead-now.vercel.app" target="_blank" rel="noopener" style="--d:#7B6CF0"><i></i>Overhead Now</a><a href="https://global-vaccine-desk.vercel.app" target="_blank" rel="noopener" style="--d:#C2418F"><i></i><span class="f">Global Vaccine Desk</span><span class="s">Vaccine</span></a></nav>
 <!--/BDK-->
 <p class="rbby" style="margin:-4px 0 12px;font-size:calc(12.5px * var(--fs,1));line-height:1.4;opacity:.8">Built by <b>Randy Barnhill</b>, founder of Barnhill Industrial Group &middot; <a href="https://www.thewireandledger.com/builder" target="_blank" rel="noopener" style="color:inherit;font-weight:600">Let&rsquo;s build something &rarr;</a></p>
   <header class="mast">
     <div>
-      <h1>North America Hazard Desk</h1>
-      <p>Hurricanes, tornadoes, severe storms, flooding rain, fire weather, snow, earthquakes and volcanoes for the United States, Canada, Mexico and the waters around them. Public agency data, no ads.</p>
-      <nav class="views" aria-label="Hazard Desk views"><span aria-current="page">North America</span><a href="/world.html">World</a></nav>
+      <h1>Hazard Desk</h1>
+      <p>One map of the world's hazards: hurricanes and tropical storms, tornado and storm warnings, flooding rain, fire weather, snow, earthquakes, tsunami messages, volcanoes, wildfires and space weather. Warnings, radar and forecast outlooks cover the United States; storms, earthquakes and volcanoes cover the world. Public agency data, no ads.</p>
     </div>
     <div class="status" aria-live="polite">
       <span class="pill" id="modePill"><i></i><span id="modeText">Snapshot</span></span>
@@ -201,6 +215,7 @@ footer .feeds{font-family:var(--font-mono);font-size:12px;display:flex;flex-wrap
   </header>
 
   <div class="torn" id="torn" role="alert" hidden></div>
+  <div class="tsu" id="tsuBanner" role="alert" hidden></div>
   <div class="note" id="note" hidden></div>
 
   <section class="spot" id="spot" aria-labelledby="spotH"></section>
@@ -221,12 +236,14 @@ footer .feeds{font-family:var(--font-mono);font-size:12px;display:flex;flex-wrap
         <span class="lbl">View</span>
         <div class="seg" id="views" role="group" aria-label="Map view"></div>
       </div>
+      <div class="bar-row"><span class="lbl">Sea temperature</span><div class="seg" id="sst" role="group" aria-label="Sea temperature"></div><span class="sstkey" id="sstKey" hidden></span></div>
       <div class="mapbox" id="mapbox">
-        <canvas id="map" aria-label="Map of current hazards across North America. Use the desks beside the map for the same information as text."></canvas>
-        <div class="zoom"><button id="zin" aria-label="Zoom in">+</button><button id="zout" aria-label="Zoom out">&minus;</button><button id="zreset" aria-label="Reset view">ALL</button></div>
+        <canvas id="map" aria-label="World map of current hazards, opening on North America. The lists beside the map give the same information as text."></canvas>
+        <div class="zoom"><button id="zin" aria-label="Zoom in">+</button><button id="zout" aria-label="Zoom out">&minus;</button><button id="zreset" aria-label="Back to North America" title="Back to North America">NA</button></div>
         <div class="pop" id="pop" hidden></div>
       </div>
       <div class="legend" id="legend"></div>
+      <p class="sub" style="margin:0;max-width:80ch">Outside the United States this map is thinner. Tornado, severe storm and flood warnings, radar and forecast outlooks are U.S. only, because no free worldwide equivalent exists. For warnings where you are, follow your national weather and civil protection services.</p>
     </div>
 
     <div class="desks">
@@ -237,13 +254,15 @@ footer .feeds{font-family:var(--font-mono);font-size:12px;display:flex;flex-wrap
 
   <footer>
     <div class="feeds" id="feeds"></div>
-    <p>Sources: NOAA National Hurricane Center and Central Pacific Hurricane Center (storms, forecast cones, tropical outlooks), NWS (warnings and watches), Storm Prediction Center (severe storm, tornado and fire weather outlooks), NOAA MRMS radar, Iowa Environmental Mesonet (storm reports), Weather Prediction Center (excessive rainfall and heavy snow outlooks), USGS Earthquake Hazards Program, and the USGS volcano observatories. Canadian and Mexican national weather warnings are not included yet; storms, earthquakes and volcanoes cover all three countries. Town names for "Your spot" are from <a href="https://www.geonames.org/" target="_blank" rel="noopener">GeoNames</a> (CC BY 4.0).</p>
+    <p><b>Sources, United States and North America.</b> NOAA National Hurricane Center and Central Pacific Hurricane Center (storms, forecast cones, tropical outlooks), NWS (warnings and watches), Storm Prediction Center (severe storm, tornado and fire weather outlooks), NOAA MRMS radar, Iowa Environmental Mesonet (storm reports), Weather Prediction Center (excessive rainfall and heavy snow outlooks), USGS Earthquake Hazards Program, and the USGS volcano observatories. Canadian and Mexican national weather warnings are not included yet.</p>
+    <p><b>Sources, world.</b> Tropical storms outside the Hurricane Center's area, floods and volcano alerts: <a href="https://www.gdacs.org/" rel="noopener" target="_blank">GDACS</a>, the Global Disaster Alert and Coordination System of the United Nations and the European Commission, with storm tracks from the national and joint warning centers. Erupting volcanoes: the Smithsonian Institution's <a href="https://volcano.si.edu/" rel="noopener" target="_blank">Global Volcanism Program</a>. Earthquakes outside North America: <a href="https://earthquake.usgs.gov/" rel="noopener" target="_blank">USGS</a>, magnitude 4.5 and up. Tsunami messages: NOAA's <a href="https://www.tsunami.gov/" rel="noopener" target="_blank">tsunami warning centers</a>. Sea temperature: NASA <a href="https://earthdata.nasa.gov/gibs" rel="noopener" target="_blank">GIBS</a>, MUR daily analysis from JPL. Wildfires: the EU <a href="https://gwis.jrc.ec.europa.eu/" rel="noopener" target="_blank">Global Wildfire Information System</a> via GDACS. Space weather and aurora: NOAA <a href="https://www.swpc.noaa.gov/" rel="noopener" target="_blank">Space Weather Prediction Center</a>. Caldera status: USGS, <a href="https://www.geonet.org.nz/" rel="noopener" target="_blank">GeoNet</a> (New Zealand), <a href="https://www.ingv.it/" rel="noopener" target="_blank">INGV</a> (Italy) and the Smithsonian. Town names for "Your spot" are from <a href="https://www.geonames.org/" target="_blank" rel="noopener">GeoNames</a> (CC BY 4.0).</p>
     <p>A web page only helps while it is open. Keep Wireless Emergency Alerts turned on in your phone and have a second way to get warnings, such as a NOAA Weather Radio. The NWS feed itself can run a minute or two behind a new warning.</p>
-    <p>This is an independent summary, not an official warning service. For decisions about life and property, follow your local National Weather Service office at <a href="https://www.weather.gov/" target="_blank" rel="noopener">weather.gov</a>, the National Hurricane Center at <a href="https://www.nhc.noaa.gov/" target="_blank" rel="noopener">nhc.noaa.gov</a>, and local emergency officials.</p>
+    <p><b>Not an official warning service.</b> This is an independent summary. For decisions about life and property, follow your local National Weather Service office at <a href="https://www.weather.gov/" target="_blank" rel="noopener">weather.gov</a>, the National Hurricane Center at <a href="https://www.nhc.noaa.gov/" target="_blank" rel="noopener">nhc.noaa.gov</a>, and local emergency officials. A tsunami message from NOAA's centers is advice to national authorities outside the United States; each country decides its own warnings. Storm wind zones outside the Hurricane Center's area are GDACS estimates, not official forecast cones.</p>
   </footer>
 </div>
 
 <script src="basemap.js"></script>
+<script src="world-countries.js"></script>
 <script src="data.js"></script>
 <script>
 (function(){
@@ -297,7 +316,7 @@ var VOLC = {'kilauea':[19.421,-155.287],'mauna loa':[19.475,-155.608],'great sit
 function volcPos(name){var n=String(name).toLowerCase();for(var k in VOLC){if(n.indexOf(k)>=0)return VOLC[k]}return null}
 
 var LANDMARKS=[['West Yellowstone',-111.1,44.66,9],['Old Faithful',-110.83,44.46,9],['Mammoth Hot Springs',-110.7,44.98,9],['Norris Geyser Basin',-110.7,44.73,9],['Yellowstone Lake',-110.36,44.46,9],['Hebgen Lake',-111.26,44.78,9],['Cody',-109.06,44.53,9],['Bozeman',-111.04,45.68,9],['Jackson',-110.76,43.48,9],['Gardiner',-110.71,45.03,9]];
-var VIEWS = {all:{name:'All',box:[-158,-60,12,58]},gulf:{name:'Gulf',box:[-99,-76,18,33.5]},central:{name:'Central',box:[-106,-76,25,49]},atl:{name:'Atlantic',box:[-100,-42,8,46]},
+var VIEWS = {all:{name:'North America',box:[-158,-60,12,58]},world:{name:'World',box:[-180,180,-58,74]},gulf:{name:'Gulf',box:[-99,-76,18,33.5]},central:{name:'Central',box:[-106,-76,25,49]},atl:{name:'Atlantic',box:[-100,-42,8,46]},
   west:{name:'West',box:[-127,-112,31.5,43]},ys:{name:'Yellowstone',box:[-112.3,-109.1,43.6,45.6]},north:{name:'North',box:[-127,-66,37,57]},pac:{name:'Pacific',box:[-185,-104,8,64]}};
 var DESKS = [
  {id:'gulf',name:'Florida & Gulf',view:'gulf',basin:'at',box:[-99,-74,17,36],
@@ -310,13 +329,16 @@ var DESKS = [
  {id:'north',name:'Snow & North',view:'north',box:[-127,-66,37,50],
   cities:[['Seattle',47.61,-122.33],['Spokane',47.66,-117.43],['Boise',43.62,-116.2],['Salt Lake City',40.76,-111.89],['Denver',39.74,-104.99],['Billings',45.78,-108.5],['Bismarck',46.81,-100.78],['Minneapolis',44.98,-93.27],['Duluth',46.79,-92.1],['Green Bay',44.51,-88.01],['Milwaukee',43.04,-87.91],['Chicago',41.88,-87.63],['Detroit',42.33,-83.05],['Cleveland',41.5,-81.69],['Buffalo',42.89,-78.88],['Burlington',44.48,-73.21],['Boston',42.36,-71.06],['Portland, ME',43.66,-70.26]]},
  {id:'pac',name:'Pacific & Mexico',view:'pac',basin:'ep',box:[-185,-95,5,65],
-  cities:[['Honolulu',21.31,-157.86],['Hilo',19.72,-155.08],['Anchorage',61.22,-149.9],['Cabo San Lucas',22.89,-109.91],['Mazatlán',23.22,-106.42],['Puerto Vallarta',20.65,-105.23],['Acapulco',16.85,-99.82]]}
+  cities:[['Honolulu',21.31,-157.86],['Hilo',19.72,-155.08],['Anchorage',61.22,-149.9],['Cabo San Lucas',22.89,-109.91],['Mazatlán',23.22,-106.42],['Puerto Vallarta',20.65,-105.23],['Acapulco',16.85,-99.82]]},
+ {id:'world',name:'World',view:'world',box:[-180,180,-60,80],cities:[]},
+ {id:'space',name:'Space & supervolcanoes',view:'world',box:[-180,180,-60,80],cities:[]}
 ];
-var LAYERS = [['radar','Radar','#3FA060'],['storms','Hurricanes','#E4572E'],['wwa','Warnings','#C71585'],['torn','Tornado risk','#2E9E3A'],['spc','Severe storms','#F2D04B'],['ero','Flooding rain','#3F8FD9'],['fire','Fire weather','#F2A65A'],['quakes','Earthquakes','#B5523B'],['volc','Volcanoes','#F08A24']];
-var on = {radar:true,torn:true,storms:true,wwa:true,spc:true,ero:true,fire:true,quakes:true,volc:true};
+var LAYERS = [['radar','Radar','#3FA060'],['storms','Hurricanes','#E4572E'],['wwa','Warnings','#C71585'],['torn','Tornado risk','#2E9E3A'],['spc','Severe storms','#F2D04B'],['ero','Flooding rain','#3F8FD9'],['fire','Fire weather','#F2A65A'],['quakes','Earthquakes','#B5523B'],['volc','Volcanoes','#F08A24'],['tsu','Tsunami','#1D4FA3'],['fires','Wildfires','#D9480F'],['floods','Major floods','#2C6FBB'],['cal','Giant calderas','#6A3FB5'],['aurora','Aurora','#2BB85A']];
+var on = {radar:true,torn:true,storms:true,wwa:true,spc:true,ero:true,fire:true,quakes:true,volc:true,tsu:true,fires:true,floods:true,cal:true,aurora:false};
+var WD=null, WQ=null, wok={world:false,quakes:false}, sst='off'; // world feeds: /api/world and the USGS M4.5+ week
 var day = 1, deskId = 'gulf', spot = null, spotPick = false, spotEdit = false, spotMsg = '';
-try{var sv=JSON.parse(localStorage.getItem('hazdesk')||'{}');if(sv.on)for(var k in on)if(k in sv.on)on[k]=!!sv.on[k];if(sv.desk)deskId=sv.desk;if(sv.spot&&isFinite(sv.spot.lat)&&isFinite(sv.spot.lon))spot={lat:+sv.spot.lat,lon:+sv.spot.lon,name:String(sv.spot.name||''),cc:String(sv.spot.cc||'')}}catch(e){}
-function save(){try{localStorage.setItem('hazdesk',JSON.stringify({on:on,desk:deskId,spot:spot}))}catch(e){}}
+try{var sv=JSON.parse(localStorage.getItem('hazdesk')||'{}');if(sv.on)for(var k in on)if(k in sv.on)on[k]=!!sv.on[k];if(sv.desk)deskId=sv.desk;if(sv.sst==='temp'||sv.sst==='anom')sst=sv.sst;if(sv.spot&&isFinite(sv.spot.lat)&&isFinite(sv.spot.lon))spot={lat:+sv.spot.lat,lon:+sv.spot.lon,name:String(sv.spot.name||''),cc:String(sv.spot.cc||'')}}catch(e){}
+function save(){try{localStorage.setItem('hazdesk',JSON.stringify({on:on,desk:deskId,spot:spot,sst:sst}))}catch(e){}}
 
 /* ---------- time ---------- */
 var now = function(){return Date.now()};
@@ -331,14 +353,11 @@ function ago(ms){var m=Math.round((now()-ms)/60000);if(m<1)return 'just now';if(
 function span(a,b){if(!a&&!b)return '';if(!a)return 'until '+tz(b);if(a<=now())return 'until '+tz(b);return t(a)+' to '+tz(b)}
 
 /* ---------- geometry ---------- */
-var D2R=Math.PI/180, L0=-100*D2R, P0=45*D2R, S0=Math.sin(P0), C0=Math.cos(P0);
-function proj(lon,lat){
-  var dl=lon*D2R-L0; dl=Math.atan2(Math.sin(dl),Math.cos(dl));
-  var p=lat*D2R, sp=Math.sin(p), cp=Math.cos(p), cd=Math.cos(dl);
-  var c=1+S0*sp+C0*cp*cd; if(c<1e-6)c=1e-6;
-  var k=Math.sqrt(2/c);
-  return [k*cp*Math.sin(dl), -k*(C0*sp-S0*cp*cd)];
-}
+var D2R=Math.PI/180, TAU=2*Math.PI, LON0=-100, LATMAX=84*D2R, YMAX=Math.log(Math.tan(Math.PI/4+LATMAX/2));
+// One flat world map (Mercator). x runs east from 100°W, so North America sits in the middle of the sheet; the world
+// repeats every TAU in x and is drawn up to three times side by side, so panning never reaches an edge.
+function proj(lon,lat){var p=Math.max(-LATMAX,Math.min(LATMAX,lat*D2R));return [dlon(lon,LON0)*D2R,-Math.log(Math.tan(Math.PI/4+p/2))]}
+function nearX(x,ref){return x+TAU*Math.round((ref-x)/TAU)} // the copy of x nearest to ref
 function dlon(a,b){var d=a-b;while(d>180)d-=360;while(d<-180)d+=360;return d}
 function distKm(la1,lo1,la2,lo2){var a=Math.sin((la2-la1)*D2R/2),b=Math.sin(dlon(lo2,lo1)*D2R/2);var h=a*a+Math.cos(la1*D2R)*Math.cos(la2*D2R)*b*b;return 12742*Math.asin(Math.min(1,Math.sqrt(h)))}
 function inRing(lon,lat,r){var c=false;for(var i=0,j=r.length-1;i<r.length;j=i++){var xi=dlon(r[i][0],lon),yi=r[i][1],xj=dlon(r[j][0],lon),yj=r[j][1];if(((yi>lat)!==(yj>lat))&&(0<(xj-xi)*(lat-yi)/(yj-yi)+xi))c=!c}return c}
@@ -373,15 +392,19 @@ function cityRisks(lat,lon,d){
 
 /* ---------- map ---------- */
 var cv=$('map'),ctx=cv.getContext('2d'),box=$('mapbox'),W=0,H=0,dpr=1,view={cx:0,cy:0,k:1},k0=1,dirty=true,paths=null,css={};
-function ringPath(p,r,flat){if(flat){var a=proj(r[0],r[1]);p.moveTo(a[0],a[1]);for(var i=2;i<r.length;i+=2){a=proj(r[i],r[i+1]);p.lineTo(a[0],a[1])}}else{var b=proj(r[0][0],r[0][1]);p.moveTo(b[0],b[1]);for(var j=1;j<r.length;j++){b=proj(r[j][0],r[j][1]);p.lineTo(b[0],b[1])}}}
+function ringPath(p,r,flat){var n=flat?r.length/2:r.length,px=0;for(var i=0;i<n;i++){var a=flat?proj(r[2*i],r[2*i+1]):proj(r[i][0],r[i][1]);if(i)a[0]=nearX(a[0],px);px=a[0];if(i)p.lineTo(a[0],a[1]);else p.moveTo(a[0],a[1])}}
 function polyPath(polys){var p=new Path2D();polys.forEach(function(rings){rings.forEach(function(r){if(r.length>2){ringPath(p,r,false);p.closePath()}})});return p}
-function buildBase(){var land=new Path2D(),st=new Path2D(),lk=new Path2D();
+// Countries the detailed North America base map already draws; the coarser world outline skips them.
+var BM_HAS={USA:1,CAN:1,MEX:1,GRL:1,CUB:1,BHS:1,JAM:1,HTI:1,DOM:1,PRI:1,BLZ:1,GTM:1,HND:1,SLV:1,NIC:1,CRI:1,PAN:1,TTO:1};
+function buildBase(){var land=new Path2D(),st=new Path2D(),lk=new Path2D(),world=new Path2D();
+  // world rings are already cut at the date line, so they are laid down by plain longitude (no wrapping inside a ring)
+  (window.COUNTRIES||[]).forEach(function(c){if(BM_HAS[c[0]])return;c[2].forEach(function(r){for(var i=0;i<r.length;i++){var x=(r[i][0]-LON0)*D2R,y=proj(0,r[i][1])[1];if(i)world.lineTo(x,y);else world.moveTo(x,y)}world.closePath()})});
   BM.land.forEach(function(c){c.r.forEach(function(r){ringPath(land,r,true);land.closePath()})});
   BM.states.forEach(function(r){ringPath(st,r,true)});
   BM.lakes.forEach(function(r){ringPath(lk,r,true);lk.closePath()});
-  return {land:land,states:st,lakes:lk}}
+  return {land:land,states:st,lakes:lk,world:world}}
 var base=buildBase();
-function windField(s,kt){var r=s.radii&&s.radii[kt];if(!r)return null;var p=new Path2D(),first=true;for(var b=0;b<=360;b+=6){var q=b<90?0:b<180?1:b<270?2:3,nm=r[q%4];if(b===360)nm=r[0];var dy=nm/60*Math.cos(b*D2R),dx=nm/60*Math.sin(b*D2R)/Math.cos(s.lat*D2R);var a=proj(s.lon+dx,s.lat+dy);if(first){p.moveTo(a[0],a[1]);first=false}else p.lineTo(a[0],a[1])}p.closePath();return p}
+function windField(s,kt){var r=s.radii&&s.radii[kt];if(!r)return null;var p=new Path2D(),first=true;for(var b=0;b<=360;b+=6){var q=b<90?0:b<180?1:b<270?2:3,nm=r[q%4];if(b===360)nm=r[0];var dy=nm/60*Math.cos(b*D2R),dx=nm/60*Math.sin(b*D2R)/Math.cos(s.lat*D2R);var a=proj(s.lon+dx,s.lat+dy);a[0]=nearX(a[0],proj(s.lon,s.lat)[0]);if(first){p.moveTo(a[0],a[1]);first=false}else p.lineTo(a[0],a[1])}p.closePath();return p}
 function buildOverlays(){
   paths={out:[],wwa:[],cones:[],tracks:[],fields:[]};
   D.outlooks.forEach(function(o){paths.out.push({o:o,p:polyPath(o.polys)})});
@@ -389,46 +412,52 @@ function buildOverlays(){
   paths.wwa.sort(function(x,y){return wwaRank(y.a.type)-wwaRank(x.a.type)});
   D.storms.forEach(function(s){
     if(s.cone&&s.cone.length)paths.cones.push({s:s,p:polyPath(s.cone)});
-    var p=new Path2D();(s.track||[]).forEach(function(pt,i){var a=proj(pt.lon,pt.lat);if(i)p.lineTo(a[0],a[1]);else p.moveTo(a[0],a[1])});paths.tracks.push({s:s,p:p});
+    var p=new Path2D(),px=0;(s.track||[]).forEach(function(pt,i){var a=proj(pt.lon,pt.lat);if(i)a[0]=nearX(a[0],px);px=a[0];if(i)p.lineTo(a[0],a[1]);else p.moveTo(a[0],a[1])});paths.tracks.push({s:s,p:p});
     var f34=windField(s,'34'),f64=windField(s,'64');if(f34)paths.fields.push({s:s,p:f34,kt:34});if(f64)paths.fields.push({s:s,p:f64,kt:64})});
   dirty=true}
 function readCss(){var g=getComputedStyle(document.documentElement);['water','land','land-edge','state','map-label','ink','muted','panel','cone','bg'].forEach(function(n){css[n]=g.getPropertyValue('--'+n).trim()})}
 function resize(){var r=box.getBoundingClientRect();if(!r.width)return;var first=!W;dpr=Math.min(window.devicePixelRatio||1,2.5);var ow=W,oh=H;W=r.width;H=r.height;cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);
-  if(first){fit(VIEWS.all.box,false);k0=view.k}else{view.k*=Math.min(W/ow,H/oh)||1}dirty=true}
-function boxExtent(b){var x0=1e9,x1=-1e9,y0=1e9,y1=-1e9;function add(lo,la){var p=proj(lo,la);x0=Math.min(x0,p[0]);x1=Math.max(x1,p[0]);y0=Math.min(y0,p[1]);y1=Math.max(y1,p[1])}
-  for(var lo=b[0];lo<=b[1];lo+=(b[1]-b[0])/24){add(lo,b[2]);add(lo,b[3])}for(var la=b[2];la<=b[3];la+=(b[3]-b[2])/24){add(b[0],la);add(b[1],la)}return [x0,x1,y0,y1]}
+  if(first){fit(VIEWS.all.box,false);k0=view.k;if(spot)fit([spot.lon-11,spot.lon+11,spot.lat-6.5,spot.lat+6.5],false)}else{view.k*=Math.min(W/ow,H/oh)||1}dirty=true}
+function boxExtent(b){return [(b[0]-LON0)*D2R,(b[1]-LON0)*D2R,proj(0,b[3])[1],proj(0,b[2])[1]]}
 var anim=null;
-function fit(b,animate){var e=boxExtent(b),k=Math.min(W/(e[1]-e[0]),H/(e[3]-e[2]))*0.96,to={cx:(e[0]+e[1])/2,cy:(e[2]+e[3])/2,k:k};
+function fit(b,animate){var e=boxExtent(b),k=Math.max(W/TAU,Math.min(W/(e[1]-e[0]),H/(e[3]-e[2]))*0.96),to={cx:nearX((e[0]+e[1])/2,view.cx),cy:(e[2]+e[3])/2,k:k};
   if(!animate||matchMedia('(prefers-reduced-motion: reduce)').matches){view=to;dirty=true;return}
   var from={cx:view.cx,cy:view.cy,k:view.k},t0=performance.now();anim=function(tn){var u=Math.min(1,(tn-t0)/550);u=u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2;view.cx=from.cx+(to.cx-from.cx)*u;view.cy=from.cy+(to.cy-from.cy)*u;view.k=Math.exp(Math.log(from.k)+(Math.log(to.k)-Math.log(from.k))*u);dirty=true;if(u>=1)anim=null}}
 function flyTo(lon,lat,span){fit([lon-span,lon+span,lat-span*0.62,lat+span*0.62],true)}
-function sx(p){return [(p[0]-view.cx)*view.k+W/2,(p[1]-view.cy)*view.k+H/2]}
-function setT(){ctx.setTransform(view.k*dpr,0,0,view.k*dpr,(W/2-view.cx*view.k)*dpr,(H/2-view.cy*view.k)*dpr)}
+function sx(p){return [(nearX(p[0],view.cx)-view.cx)*view.k+W/2,(p[1]-view.cy)*view.k+H/2]} // a point lands on the copy of the world nearest the middle of the view
+function setT(o){ctx.setTransform(view.k*dpr,0,0,view.k*dpr,(W/2-(view.cx-(o||0)*TAU)*view.k)*dpr,(H/2-view.cy*view.k)*dpr)}
+// run a drawing step once for each copy of the world that is in view; lo and hi are how far the step's shapes reach in x
+function copies(lo,hi,fn){var hw=W/2/view.k;for(var o=-1;o<=1;o++){if(view.cx+hw<o*TAU+lo||view.cx-hw>o*TAU+hi)continue;setT(o);fn()}}
+function hitPath(p,X,Y){for(var o=-1;o<=1;o++){setT(o);if(ctx.isPointInPath(p,X,Y,'evenodd'))return true}return false}
+// a line of [lon,lat] points in screen pixels, kept in one piece across the date line
+function linePts(pts){var out=[],px=null;pts.forEach(function(q){var a=proj(q[0],q[1]);a[0]=px==null?nearX(a[0],view.cx):nearX(a[0],px);px=a[0];out.push([(a[0]-view.cx)*view.k+W/2,(a[1]-view.cy)*view.k+H/2])});return out}
 function rgba(hex,a){var n=parseInt(hex.slice(1),16);return 'rgba('+(n>>16)+','+((n>>8)&255)+','+(n&255)+','+a+')'}
 var hitPts=[];
 function draw(){
   if(!W)return; var z=view.k/k0, px=1/view.k;
   var vkey=view.cx.toFixed(4)+','+view.cy.toFixed(4)+','+view.k.toFixed(1)+','+W;if(vkey!==radar.key){radar.key=vkey;radar.moved=performance.now()}
-  ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle=css.water;ctx.fillRect(0,0,W,H);
-  setT();ctx.lineJoin='round';
-  ctx.fillStyle=css.land;ctx.fill(base.land);
-  ctx.fillStyle=css.water;ctx.fill(base.lakes);
-  drawRadar();setT();ctx.lineJoin='round';
-  ctx.strokeStyle=css.state;ctx.lineWidth=0.8*px;ctx.stroke(base.states);
-  ctx.strokeStyle=css['land-edge'];ctx.lineWidth=0.9*px;ctx.stroke(base.land);ctx.lineWidth=0.6*px;ctx.stroke(base.lakes);
-  var n=now();
+  if(!anim)view.cx=nearX(view.cx,0);view.cy=Math.max(-YMAX,Math.min(YMAX,view.cy));
+  ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle=css.water;ctx.fillRect(0,0,W,H);ctx.lineJoin='round';
+  copies(-1.45,4.95,function(){ctx.fillStyle=css.land;ctx.fill(base.world)});
+  copies(-3.9,3.9,function(){ctx.fillStyle=css.land;ctx.fill(base.land);ctx.fillStyle=css.water;ctx.fill(base.lakes)});
+  drawSST();drawRadar();ctx.lineJoin='round';
+  copies(-1.45,4.95,function(){ctx.strokeStyle=css['land-edge'];ctx.globalAlpha=.6;ctx.lineWidth=0.6*px;ctx.stroke(base.world);ctx.globalAlpha=1});
+  copies(-3.9,3.9,function(){ctx.strokeStyle=css.state;ctx.lineWidth=0.8*px;ctx.stroke(base.states);
+    ctx.strokeStyle=css['land-edge'];ctx.lineWidth=0.9*px;ctx.stroke(base.land);ctx.lineWidth=0.6*px;ctx.stroke(base.lakes)});
+  var n=now();hitPts=[];
+  copies(-3.9,3.9,function(){
   // outlooks for the selected day
   ['spc','ero','fire','torn'].forEach(function(kind){if(!on[kind])return;var cfg=OUT[kind];
     paths.out.filter(function(x){return x.o.kind===kind&&x.o.day===day&&x.o.end>n}).sort(function(a,b){return cfg.order.indexOf(a.o.label)-cfg.order.indexOf(b.o.label)}).forEach(function(x){
       var col=cfg.color[x.o.label]||'#999';ctx.fillStyle=rgba(col,kind==='torn'?0.2:kind==='spc'&&x.o.label==='TSTM'?0.28:0.5);ctx.fill(x.p,'evenodd');ctx.strokeStyle=rgba(col,0.95);ctx.lineWidth=(kind==='torn'?2.4:1.3)*px;if(kind==='torn')ctx.setLineDash([7*px,4*px]);ctx.stroke(x.p);ctx.setLineDash([])})});
   if(on.wwa)paths.wwa.forEach(function(x){if(x.a.ends&&x.a.ends<n)return;var col=WWA_COLOR[x.a.type]||'#9AA5B1',soon=x.a.onset&&x.a.onset>n;ctx.fillStyle=rgba(col,soon?0.38:0.62);ctx.fill(x.p,'evenodd');var tor=x.a.type==='Tornado Warning';if(tor){ctx.strokeStyle='#FFFFFF';ctx.lineWidth=4.5*px;ctx.stroke(x.p)}ctx.strokeStyle=rgba(col,1);ctx.lineWidth=(tor?2.6:x.a.type==='Severe Thunderstorm Warning'?1.8:1)*px;ctx.setLineDash(soon?[4*px,3*px]:[]);ctx.stroke(x.p);ctx.setLineDash([])});
-  hitPts=[];
   if(on.storms){
     paths.cones.forEach(function(x){ctx.fillStyle=rgba(css.cone.length===7?css.cone:'#888888',0.12);ctx.fill(x.p,'evenodd');ctx.strokeStyle=css.cone;ctx.globalAlpha=.55;ctx.lineWidth=1.1*px;ctx.stroke(x.p);ctx.globalAlpha=1});
     paths.fields.forEach(function(x){var col=CAT_COLOR[catIndex(x.kt)];ctx.fillStyle=rgba(col,x.kt===34?0.22:0.4);ctx.fill(x.p);ctx.strokeStyle=rgba(col,.9);ctx.lineWidth=.9*px;ctx.stroke(x.p)});
     paths.tracks.forEach(function(x){ctx.strokeStyle=css.ink;ctx.lineWidth=1.6*px;ctx.setLineDash([5*px,4*px]);ctx.stroke(x.p);ctx.setLineDash([])});
-  }
+  }});
   ctx.setTransform(dpr,0,0,dpr,0,0);
+  drawWorld(n,z);
   drawCells(n,z);
   // earthquakes
   if(on.quakes){var qs=D.quakes.slice().reverse();if(z>5&&D.yellowstone&&D.yellowstone.quakes)qs=D.yellowstone.quakes.slice().reverse().concat(qs);
@@ -442,7 +471,7 @@ function draw(){
   ctx.textBaseline='middle';
   if(on.storms)D.storms.forEach(function(s){
     (s.track||[]).forEach(function(pt,i){if(!i)return;var p=sx(proj(pt.lon,pt.lat));ctx.beginPath();ctx.arc(p[0],p[1],4.2,0,7);ctx.fillStyle=CAT_COLOR[catIndex(pt.wind)];ctx.fill();ctx.strokeStyle=css.ink;ctx.lineWidth=1.2;ctx.stroke();
-      if(z>1.5||i===s.track.length-1||i%2===0){ctx.font='500 10.5px "IBM Plex Mono",monospace';label(fH.format(new Date(pt.t)),p[0]+7,p[1]-8,css.ink)}
+      if(z>=0.62&&(z>1.5||i===s.track.length-1||i%2===0)){ctx.font='500 10.5px "IBM Plex Mono",monospace';label(fH.format(new Date(pt.t)),p[0]+7,p[1]-8,css.ink)}
       hitPts.push({x:p[0],y:p[1],r:9,type:'fc',s:s,pt:pt})});
     var c=sx(proj(s.lon,s.lat)),col=CAT_COLOR[catIndex(s.wind)],R=9;
     ctx.strokeStyle=col;ctx.lineWidth=3;ctx.lineCap='round';ctx.beginPath();ctx.arc(c[0]+R*.9,c[1],R*1.25,Math.PI*1.05,Math.PI*1.62);ctx.stroke();ctx.beginPath();ctx.arc(c[0]-R*.9,c[1],R*1.25,Math.PI*.05,Math.PI*.62);ctx.stroke();ctx.lineCap='butt';
@@ -452,11 +481,11 @@ function draw(){
   // labels
   ctx.textAlign='center';ctx.fillStyle=css['map-label'];
   ctx.font='600 '+Math.min(17,11+z*2)+'px "Barlow Condensed","Arial Narrow",sans-serif';
-  [['PACIFIC OCEAN',-140,30],['ATLANTIC OCEAN',-58,31],['GULF',-90.5,25],['CARIBBEAN SEA',-75,15],['HUDSON BAY',-85.5,59.5],['GULF OF ALASKA',-146,56]].forEach(function(l){var p=sx(proj(l[1],l[2]));spaced(l[0],p[0],p[1],2.2)});
-  if(z<3.2){ctx.font='700 '+Math.min(20,12+z*2.5)+'px "Barlow Condensed","Arial Narrow",sans-serif';ctx.globalAlpha=.7;[['UNITED STATES',-100.5,43.3],['CANADA',-105,57],['MEXICO',-102.5,23.5]].forEach(function(l){var p=sx(proj(l[1],l[2]));spaced(l[0],p[0],p[1],3)});ctx.globalAlpha=1}
+  if(z>=0.62)[['PACIFIC OCEAN',-140,30],['ATLANTIC OCEAN',-58,31],['GULF',-90.5,25],['CARIBBEAN SEA',-75,15],['HUDSON BAY',-85.5,59.5],['GULF OF ALASKA',-146,56]].forEach(function(l){var p=sx(proj(l[1],l[2]));spaced(l[0],p[0],p[1],2.2)});
+  if(z<3.2&&z>=0.62){ctx.font='700 '+Math.min(20,12+z*2.5)+'px "Barlow Condensed","Arial Narrow",sans-serif';ctx.globalAlpha=.7;[['UNITED STATES',-100.5,43.3],['CANADA',-105,57],['MEXICO',-102.5,23.5]].forEach(function(l){var p=sx(proj(l[1],l[2]));spaced(l[0],p[0],p[1],3)});ctx.globalAlpha=1}
   ctx.textAlign='left';ctx.font='500 11.5px "IBM Plex Sans",system-ui,sans-serif';
   var maxRank=z<1.5?1:z<2.6?2:z<4.5?3:z<7?5:9,used=[];
-  var pts=z>4.5?places():BM.cities;if(z>12)pts=pts.concat(LANDMARKS);
+  var pts=z>4.5?places():z<0.62?[]:BM.cities;if(z>12)pts=pts.concat(LANDMARKS);
   pts.forEach(function(c){if(c[3]>maxRank)return;var p=sx(proj(c[1],c[2]));if(p[0]<0||p[0]>W||p[1]<0||p[1]>H)return;var w=ctx.measureText(c[0]).width,bx=[p[0]+5,p[1]-7,p[0]+7+w,p[1]+7];
     for(var i=0;i<used.length;i++){var u=used[i];if(bx[0]<u[2]&&bx[2]>u[0]&&bx[1]<u[3]&&bx[3]>u[1])return}used.push(bx);
     ctx.fillStyle=css['map-label'];ctx.beginPath();ctx.arc(p[0],p[1],1.8,0,7);ctx.fill();label(c[0],p[0]+5,p[1],css['map-label'])});
@@ -464,13 +493,127 @@ function draw(){
     ctx.setLineDash([]);ctx.lineWidth=4.5;ctx.strokeStyle=css.land;ctx.beginPath();ctx.arc(q[0],q[1],9,0,7);ctx.moveTo(q[0]-16,q[1]);ctx.lineTo(q[0]+16,q[1]);ctx.moveTo(q[0],q[1]-16);ctx.lineTo(q[0],q[1]+16);ctx.stroke();
     ctx.lineWidth=2;ctx.strokeStyle=css.ink;ctx.stroke();ctx.font='600 12px "IBM Plex Sans",system-ui,sans-serif';ctx.textAlign='left';label('Your spot',q[0]+13,q[1]-12,css.ink)}}
 }
+/* ---------- world layers: the former World page, drawn on the same map ---------- */
+var ALC={Green:'#2E8B3A',Orange:'#E07B00',Red:'#C62828'},SCL=['none','minor','moderate','strong','severe','extreme'];
+function kmhMph(x){return String(x==null?'':x).replace(/(\d+(?:\.\d+)?) km\/h/g,function(m,n){return m+', '+Math.round(n*0.621371)+' mph'})}
+function safeUrl(u){return /^https:\/\//.test(u||'')?u:null}
+function link(u,t){u=safeUrl(u);return u?'<a href="'+esc(u)+'" target="_blank" rel="noopener">'+esc(t)+'</a>':''}
+function when(ms){return ms?fD.format(new Date(ms)):''}
+function acres(ha){return ha?Math.round(ha).toLocaleString('en-US')+' ha ('+Math.round(ha*2.471).toLocaleString('en-US')+' acres)':''}
+function tsuActive(m){var t=utc(m.updated);return m.ok&&!m.final&&t&&now()-t<24*3600e3&&/Warning|Threat|Advisory|Watch/.test(m.level||'')}
+function calCol(c){var col=((c.status&&c.status.color)||'').toUpperCase();return {GREEN:'#2E8B3A',YELLOW:'#E8C11C',ORANGE:'#E07B00',RED:'#C62828'}[col]||(c.erupting?'#F08A24':'#B9B2CC')}
+// A storm the Hurricane Center already covers is drawn from its own advisory (cone, forecast points), not twice.
+function wStorms(){return ((WD&&WD.storms)||[]).filter(function(w){return w.lon==null||!D.storms.some(function(n){return distKm(n.lat,n.lon,w.lat,w.lon)<400||String(w.name).toUpperCase().indexOf(String(n.name).toUpperCase())===0})})}
+// Earthquakes outside the box the North America feed covers (that feed goes down to magnitude 2.5 to 3; the world feed starts at 4.5).
+function wQuakes(){return (WQ||[]).filter(function(q){return !(live.quakes&&q.lat>=5&&q.lat<=75&&q.lon>=-180&&q.lon<=-50)})}
+function allQuakes(){return D.quakes.concat(wQuakes().map(function(q){return [q.t,q.lat,q.lon,Math.round(q.depth*10)/10,q.m,q.place]}))}
+function drawWorld(n,z){
+  if(!WD&&!WQ)return;var Wd=WD||{},wpt=function(lon,lat,fn){var p=sx(proj(lon,lat));if(p[0]>-60&&p[0]<W+60&&p[1]>-60&&p[1]<H+60)fn(p[0],p[1])},tri=function(x,y,r){ctx.beginPath();ctx.moveTo(x,y-r);ctx.lineTo(x+r*.9,y+r*.7);ctx.lineTo(x-r*.9,y+r*.7);ctx.closePath()};
+  // aurora: NOAA OVATION chance of visible aurora overhead, 1-degree cells
+  if(on.aurora&&Wd.space&&Wd.space.aurora)Wd.space.aurora.cells.forEach(function(c){var a=sx(proj(c[0]-.5,c[1]+.5)),b=sx(proj(c[0]+.5,c[1]-.5));if(b[0]<a[0]||b[0]<0||a[0]>W||b[1]<0||a[1]>H)return;ctx.fillStyle='rgba(40,200,90,'+Math.min(.75,.12+c[2]/110)+')';ctx.fillRect(a[0],a[1],b[0]-a[0]+.5,b[1]-a[1]+.5)});
+  // giant calderas: a ring, VEI 8 systems drawn last so they are never covered
+  if(on.cal&&Wd.calderas){var cr=Math.max(4.5,Math.min(9,2.2+z*3)),ci=cr*.45;Wd.calderas.slice().sort(function(a,b){return a.vei-b.vei}).forEach(function(c){wpt(c.lon,c.lat,function(x,y){ctx.beginPath();ctx.arc(x,y,cr,0,7);ctx.strokeStyle='#6A3FB5';ctx.lineWidth=cr>6?2:1.6;ctx.stroke();ctx.beginPath();ctx.arc(x,y,ci,0,7);ctx.fillStyle=calCol(c);ctx.fill();ctx.lineWidth=1;ctx.strokeStyle='#6A3FB5';ctx.stroke();hitPts.push({x:x,y:y,r:Math.max(cr+3,9),type:'w',k:'cal',d:c})})})}
+  // wildfires: a diamond, sized by burned area
+  if(on.fires&&Wd.fires)Wd.fires.forEach(function(f){if(f.lon==null)return;var r=Math.max(3.5,Math.min(13,Math.sqrt((f.ha||5000)/5000)*3.5));wpt(f.lon,f.lat,function(x,y){ctx.beginPath();ctx.moveTo(x,y-r);ctx.lineTo(x+r,y);ctx.lineTo(x,y+r);ctx.lineTo(x-r,y);ctx.closePath();ctx.fillStyle=rgba('#D9480F',.55);ctx.fill();ctx.strokeStyle=f.alert==='Green'?'#8A2C06':ALC[f.alert];ctx.lineWidth=f.alert==='Green'?1:2;ctx.stroke();hitPts.push({x:x,y:y,r:Math.max(r,8),type:'w',k:'fire',d:f})})});
+  // major floods: a square
+  if(on.floods&&Wd.floods)Wd.floods.forEach(function(f){if(f.lon==null)return;wpt(f.lon,f.lat,function(x,y){ctx.beginPath();ctx.rect(x-6,y-6,12,12);ctx.fillStyle=rgba(ALC[f.alert]||'#2C6FBB',.35);ctx.fill();ctx.strokeStyle=ALC[f.alert]||'#2C6FBB';ctx.lineWidth=1.6;ctx.stroke();hitPts.push({x:x,y:y,r:10,type:'w',k:'flood',d:f})})});
+  // storms outside the Hurricane Center's area: GDACS wind zones, then the track
+  if(on.storms)wStorms().forEach(function(s){
+    (s.zones||[]).forEach(function(zn){var q=linePts(zn.r);ctx.beginPath();q.forEach(function(p,i){if(i)ctx.lineTo(p[0],p[1]);else ctx.moveTo(p[0],p[1])});ctx.closePath();ctx.fillStyle=rgba(ALC[zn.lvl]||'#888888',.12);ctx.fill();ctx.strokeStyle=rgba(ALC[zn.lvl]||'#888888',.6);ctx.lineWidth=1;ctx.stroke()});
+    (s.track||[]).forEach(function(tk){var q=linePts(tk.pts);ctx.beginPath();q.forEach(function(p,i){if(i)ctx.lineTo(p[0],p[1]);else ctx.moveTo(p[0],p[1])});ctx.strokeStyle=css.ink;ctx.lineWidth=tk.f?1.6:2.2;ctx.setLineDash(tk.f?[5,4]:[]);ctx.stroke();ctx.setLineDash([])});
+    if(s.lon!=null)wpt(s.lon,s.lat,function(x,y){ctx.beginPath();ctx.arc(x,y,8,0,7);ctx.fillStyle=ALC[s.alert]||css.ink;ctx.fill();ctx.lineWidth=2;ctx.strokeStyle=css.panel;ctx.stroke();
+      ctx.font='600 13px "Barlow Condensed","Arial Narrow",sans-serif';ctx.textAlign='left';ctx.textBaseline='middle';label(s.name,x+11,y,css.ink);hitPts.push({x:x,y:y,r:14,type:'w',k:'storm',d:s})})});
+  // volcanoes: erupting (Smithsonian) and GDACS alerts; U.S. alert levels are drawn by the USGS layer below
+  if(on.volc&&Wd.eruptions)Wd.eruptions.forEach(function(v){wpt(v.lon,v.lat,function(x,y){tri(x,y,5.5);ctx.fillStyle='#F08A24';ctx.fill();ctx.strokeStyle='#7A3A00';ctx.lineWidth=1;ctx.stroke();hitPts.push({x:x,y:y,r:9,type:'w',k:'erupt',d:v})})});
+  if(on.volc&&Wd.gdacsVolc)Wd.gdacsVolc.forEach(function(v){if(v.lon==null)return;wpt(v.lon,v.lat,function(x,y){ctx.beginPath();ctx.arc(x,y,11,0,7);ctx.strokeStyle=ALC[v.alert]||'#999';ctx.lineWidth=2;ctx.stroke();hitPts.push({x:x,y:y,r:12,type:'w',k:'gvolc',d:v})})});
+  // earthquakes outside North America, past 7 days, newest on top
+  if(on.quakes)wQuakes().slice().sort(function(a,b){return a.t-b.t}).forEach(function(q){var r=Math.max(2.5,Math.pow(2,q.m-4.5)*2.6),age=(n-q.t)/864e5,col=age<1?'#E0402A':age<3?'#E58A2B':'#9B7B55';
+    wpt(q.lon,q.lat,function(x,y){ctx.beginPath();ctx.arc(x,y,r,0,7);ctx.fillStyle=rgba(col,.28);ctx.fill();ctx.strokeStyle=col;ctx.lineWidth=1;ctx.stroke();if(q.tsu){ctx.beginPath();ctx.arc(x,y,r+4,0,7);ctx.strokeStyle='#1D4FA3';ctx.lineWidth=1.5;ctx.stroke()}hitPts.push({x:x,y:y,r:Math.max(r,7),type:'w',k:'quake',d:q})})});
+  // tsunami: an active message pulses at its source
+  if(on.tsu&&Wd.tsunami)Wd.tsunami.forEach(function(m){if(!m.ok||m.lat==null||isNaN(m.lat))return;var act=tsuActive(m);wpt(m.lon,m.lat,function(x,y){
+    if(act){var u=noMotion?0.5:(performance.now()/1400)%1;ctx.beginPath();ctx.arc(x,y,10+u*26,0,7);ctx.strokeStyle=rgba('#1D4FA3',1-u*.8);ctx.lineWidth=2.5;ctx.stroke()}
+    ctx.beginPath();ctx.arc(x,y,6,0,7);ctx.fillStyle=act?'#1D4FA3':rgba('#1D4FA3',.4);ctx.fill();hitPts.push({x:x,y:y,r:12,type:'w',k:'tsu',d:m})})});
+}
+var noMotion=matchMedia('(prefers-reduced-motion: reduce)').matches;
+function calStatus(c){var st=c.status,o=[];
+  if(st)o.push(st.src==='USGS'?'USGS alert level <b>'+esc(st.level)+'</b>, aviation color '+esc(st.color):esc(st.level)+' ('+esc(st.color)+')'+(st.text?': '+esc(st.text):''));
+  if(c.erupting)o.push('<b>Erupting</b>: Sakurajima, inside the caldera, is listed by the Smithsonian as in continuing eruption'+(c.erupting.since?' since '+esc(String(c.erupting.since).slice(0,4)):''));
+  if(c.quakes7d)o.push(esc(c.quakes7d.n)+' earthquake'+(c.quakes7d.n===1?'':'s')+' located by INGV in the past 7 days'+(c.quakes7d.max!=null?', largest M'+esc(c.quakes7d.max):''));
+  if(!o.length)o.push('No live status feed. '+esc(c.agency)+' publishes updates on its own site.');
+  return o.join('<br>')}
+// what a tap on a world marker, or on its line in a list, shows
+function wHtml(k,d){
+  if(k==='storm')return '<h3>'+esc(d.title||d.name)+'</h3><p><span class="al '+esc(d.alert)+'">'+esc(d.alert)+' alert</span> '+esc(kmhMph(d.severity))+'</p>'+(d.countries?'<p>'+esc(d.countries)+'</p>':'')+'<p>Track: solid line observed, dashed line forecast ('+esc(d.source||'warning center')+'). Shaded zones: where GDACS estimates winds of 60, 90 and 120 km/h (37, 56 and 75 mph).</p><p>'+link(d.report,'GDACS report')+'</p>';
+  if(k==='quake')return '<h3>M'+d.m.toFixed(1)+' · '+esc(d.place)+'</h3><p>'+esc(when(d.t))+' ('+ago(d.t)+'), depth '+Math.round(d.depth)+' km</p>'+(d.alert?'<p>USGS impact alert: <b>'+esc(d.alert)+'</b></p>':'')+(d.tsu?'<p>USGS flags this event for possible tsunami relevance. Check the tsunami messages.</p>':'')+'<p>'+link(d.url,'USGS event page')+'</p>';
+  if(k==='erupt')return '<h3>'+esc(d.name)+'</h3><p>Erupting. The Smithsonian Global Volcanism Program lists this eruption as continuing'+(d.since?', since '+esc(String(d.since).slice(0,4)):'')+'.</p><p>'+link('https://volcano.si.edu/volcano.cfm?vn='+d.num,'Smithsonian volcano page')+'</p>';
+  if(k==='usvolc')return '<h3>'+esc(d.name)+'</h3><p>USGS alert level <b>'+esc(d.alert)+'</b>, aviation color code <b>'+esc(d.color)+'</b>'+(d.updated?' · '+esc(when(utc(d.updated))):'')+'</p><p>'+link(d.url,'USGS notice')+'</p>';
+  if(k==='gvolc')return '<h3>'+esc(d.title)+'</h3><p><span class="al '+esc(d.alert)+'">'+esc(d.alert)+' alert</span> '+esc(d.countries)+'</p><p>'+link(d.report,'GDACS report')+'</p>';
+  if(k==='fire')return '<h3>'+esc(d.title)+'</h3><p><span class="al '+esc(d.alert)+'">'+esc(d.alert)+' alert</span> burned area so far: '+esc(acres(d.ha))+'</p><p>Burning since '+esc((d.from||'').slice(0,10))+'. Mapped by satellite by the EU Global Wildfire Information System; shown here through GDACS.</p><p>'+link(d.report,'GDACS report')+'</p>';
+  if(k==='cal')return '<h3>'+esc(d.name)+'</h3><p><small>'+esc(d.country)+' · largest eruptions VEI '+esc(d.vei)+'</small></p><p>'+esc(d.past)+'.</p><p>'+calStatus(d)+'</p><p>'+link(d.url,d.agency)+'</p>';
+  if(k==='flood')return '<h3>'+esc(d.title)+'</h3><p><span class="al '+esc(d.alert)+'">'+esc(d.alert)+' alert</span> since '+esc((d.from||'').slice(0,10))+'</p><p>'+esc(kmhMph(d.severity))+'</p><p>'+link(d.report,'GDACS report')+'</p>';
+  if(k==='tsu')return '<h3>'+esc(d.level||'Tsunami message')+(d.region?' · '+esc(d.region):'')+'</h3><p>'+esc(d.center)+' · '+esc(when(utc(d.updated)))+(d.magnitude?' · M'+esc(d.magnitude):'')+'</p>'+(d.threat?'<p><b>Threat:</b> '+esc(d.threat)+'</p>':'')+(d.evaluation?'<p>'+esc(d.evaluation)+'</p>':'')+'<p>'+link(d.bulletin,'Full message')+'</p>';
+  return ''}
+function showPop(html){var pop=$('pop');pop.innerHTML='<button class="x" aria-label="Close">&times;</button><div class="hit">'+html+'</div>';pop.hidden=false;pop.scrollTop=0;pop.querySelector('.x').onclick=function(){pop.hidden=true}}
+function wGo(k,d){if(d.lon!=null&&!isNaN(d.lon))flyTo(d.lon,d.lat,k==='storm'?16:7);showPop(wHtml(k,d));box.scrollIntoView({block:'nearest',behavior:'smooth'})}
+var REGW={};
+function wli(k,d,i,title,sub){REGW[k+i]={k:k,d:d};return '<li><button type="button" data-wi="'+k+i+'"><b>'+title+'</b><small>'+sub+'</small></button></li>'}
+function spaceHtml(sp){if(!sp)return '<p class="empty">NOAA space weather feed not reachable right now.</p>';var h='';
+  if(sp.scales&&sp.scales.now){var c=sp.scales.now;h+='<div class="swrow">'+[['G','Geomagnetic storm',c.G],['S','Solar radiation storm',c.S],['R','Radio blackout',c.R]].map(function(x){return '<div class="swc '+(x[2]>=3?'hi':x[2]>=1?'mid':'')+'"><b>'+x[0]+x[2]+'</b><span>'+x[1]+': '+SCL[x[2]]+'</span></div>'}).join('')+'</div>'}
+  if(sp.kp)h+='<p>Planetary K-index (Kp) <b>'+sp.kp.value.toFixed(2)+'</b> as of '+esc(when(utc(sp.kp.time)))+'; highest in the past 24 h '+sp.kp.max24.toFixed(2)+'. Kp 5 is a minor (G1) storm; Kp 9 is extreme.</p>';
+  if(sp.scales&&sp.scales.ahead&&sp.scales.ahead.length)h+='<p><small>NOAA outlook: '+sp.scales.ahead.map(function(a){return esc(a.day.slice(5))+' geomagnetic '+(a.G?'G'+a.G:'quiet')+(a.rMinor!=null?', '+a.rMinor+'% chance of a minor radio blackout':'')}).join('; ')+'.</small></p>';
+  if(sp.alerts&&sp.alerts.length)h+='<p><small><b>NOAA messages, past 48 h:</b></small></p><ul class="swal">'+sp.alerts.slice(0,5).map(function(a){return '<li><small>'+esc(when(Date.parse(a.t)))+'</small> '+esc(a.head.replace(/^([A-Z ]+):/,function(m,k){return k.charAt(0)+k.slice(1).toLowerCase()+':'}))+'</li>'}).join('')+'</ul>';
+  if(sp.aurora)h+='<p><button class="go" id="auroraBtn" type="button">'+(on.aurora?'Hide':'Show')+' the aurora forecast on the map</button> <small>(areas with a 10% or higher chance of aurora overhead, NOAA OVATION model, for '+esc(when(Date.parse(sp.aurora.forecast)))+')</small></p>';
+  return h+'<p>'+link('https://www.swpc.noaa.gov/','NOAA Space Weather Prediction Center')+'</p>'}
+function worldDeskHtml(){var Wd=WD||{},h='',sec=function(t,body){return '<section><h3>'+t+'</h3><ul class="wl">'+body+'</ul></section>'};
+  if(!WD&&!WQ)h+='<p class="empty">Reading the world feeds…</p>';
+  var st=((Wd.storms)||[]).slice().sort(function(a,b){return 'GOR'.indexOf(b.alert[0])-'GOR'.indexOf(a.alert[0])});
+  h+=sec('Tropical storms, all oceans',Wd.storms==null?'<li class="empty">Storm feed not reachable right now.</li>':st.length?st.map(function(x,i){return wli('storm',x,i,'<span class="al '+esc(x.alert)+'">'+esc(x.alert)+'</span> '+esc(x.name),esc(kmhMph(x.severity))+(x.countries?' · '+esc(x.countries):''))}).join(''):'<li class="empty">No active tropical storms in any ocean basin.</li>');
+  var ts=(Wd.tsunami||[]).filter(function(m){return m.ok&&m.title});
+  h+=sec('Tsunami messages',ts.length?ts.map(function(m,i){var tt=utc(m.updated);return wli('tsu',m,i,esc(m.level||'Message')+(m.region?' · '+esc(m.region):''),esc(m.center)+' · '+(tt?ago(tt):'')+(tsuActive(m)?' · <b>active</b>':m.final?' · final, no threat':''))}).join(''):'<li class="empty">Tsunami feeds not reachable right now.</li>');
+  var qs=(WQ||[]).slice().sort(function(a,b){return b.m-a.m}).slice(0,10);
+  h+=sec('Strongest earthquakes in the world, past 7 days',WQ==null?'<li class="empty">Earthquake feed not reachable right now.</li>':qs.map(function(q,i){return wli('quake',q,i,'M'+q.m.toFixed(1)+' · '+esc(q.place),ago(q.t)+(q.alert?' · USGS impact alert '+esc(q.alert):'')+(q.tsu?' · tsunami flag':''))}).join(''));
+  var vv=[];(Wd.gdacsVolc||[]).forEach(function(v,i){vv.push(wli('gvolc',v,i,'<span class="al '+esc(v.alert)+'">'+esc(v.alert)+'</span> '+esc(v.title),esc(v.countries)))});
+  (Wd.usVolc||[]).filter(function(v){return v.color==='ORANGE'||v.color==='RED'}).forEach(function(v,i){vv.push(wli('usvolc',v,i,esc(v.name),'USGS '+esc(v.alert)+' / '+esc(v.color)))});
+  if(Wd.eruptions)vv.push('<li><small>'+Wd.eruptions.length+' eruptions listed as continuing by the Smithsonian Global Volcanism Program are marked on the map. Tap a triangle for details.</small></li>');
+  h+=sec('Volcanoes erupting or on alert',vv.length?vv.join(''):'<li class="empty">Volcano feeds not reachable right now.</li>');
+  h+=sec('Major floods',Wd.floods==null?'<li class="empty">Flood feed not reachable right now.</li>':Wd.floods.length?Wd.floods.map(function(f,i){return wli('flood',f,i,'<span class="al '+esc(f.alert)+'">'+esc(f.alert)+'</span> '+esc(f.title),'since '+esc((f.from||'').slice(0,10)))}).join(''):'<li class="empty">No floods at Orange or Red alert.</li>');
+  h+=sec('Large wildfires',Wd.fires==null?'<li class="empty">Wildfire feed not reachable right now.</li>':Wd.fires.length?Wd.fires.slice().sort(function(a,b){return 'GOR'.indexOf(b.alert[0])-'GOR'.indexOf(a.alert[0])||(b.ha||0)-(a.ha||0)}).slice(0,12).map(function(f,i){return wli('fire',f,i,'<span class="al '+esc(f.alert)+'">'+esc(f.alert)+'</span> '+esc(f.title),esc(acres(f.ha))+' · since '+esc((f.from||'').slice(0,10)))}).join('')+(Wd.fires.length>12?'<li><small>'+Wd.fires.length+' fires in all are marked on the map. GDACS lists fires of roughly 5,000 ha (12,000 acres) and up.</small></li>':''):'<li class="empty">No large wildfires listed right now.</li>');
+  return h}
+function spaceDeskHtml(){var Wd=WD||{};
+  return '<section><h3>Space weather</h3>'+(WD?spaceHtml(Wd.space):'<p class="empty">Reading NOAA…</p>')+'</section><section><h3>Supervolcanoes and giant calderas</h3><p class="cal-note">A supervolcano is one that has had a magnitude 8 eruption (VEI 8, more than 1,000 cubic km). Three below have; the VEI 7 calderas are included because they are the same kind of system and are often called supervolcanoes. Status comes live from the agency that watches each one. None of these is a forecast.</p><ul class="wl">'+
+    (Wd.calderas?Wd.calderas.map(function(c,i){REGW['cal'+i]={k:'cal',d:c};return '<li><button type="button" data-wi="cal'+i+'"><b><i class="cdot" style="background:'+calCol(c)+'"></i>'+esc(c.name)+'</b><small>'+esc(c.country)+' · VEI '+esc(c.vei)+'</small><small>'+calStatus(c)+'</small></button></li>'}).join(''):'<li class="empty">Not reachable right now.</li>')+'</ul></section>'}
+function renderTsu(){var act=((WD&&WD.tsunami)||[]).filter(tsuActive),bn=$('tsuBanner');if(act.length){var m=act[0];bn.hidden=false;bn.innerHTML='<b>Tsunami '+esc((m.level||'').toLowerCase())+'</b> '+esc(m.region||'')+' · '+esc(m.center)+' · '+esc(when(utc(m.updated)))+(m.threat?'<br>'+esc(m.threat):'')+' '+link(m.bulletin,'Full message')}else bn.hidden=true}
+function afterWorld(){renderTsu();renderNow();renderDesk();legend();if(!spotEdit)renderSpot();renderStatus();dirty=true}
+function loadWorld(){if(document.hidden)return;fetch('/api/world').then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){WD=j;wok.world=true;afterWorld()}).catch(function(){wok.world=false;afterWorld()})}
+function loadWorldQuakes(){if(document.hidden)return;fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson').then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){
+  WQ=j.features.map(function(f){var p=f.properties,c=f.geometry.coordinates;return {m:p.mag||0,place:p.place||'',t:p.time,url:p.url,tsu:!!p.tsunami,alert:p.alert,lon:c[0],lat:c[1],depth:c[2]}});wok.quakes=true;afterWorld()}).catch(function(){wok.quakes=false;afterWorld()})}
+
+/* sea temperature: NASA GIBS, MUR 1 km daily analysis, drawn in strips so it lines up with the map's projection */
+var SSTL={temp:'GHRSST_L4_MUR_Sea_Surface_Temperature',anom:'GHRSST_L4_MUR_Sea_Surface_Temperature_Anomalies'},sstParts=[],sstTimer=null,sstDay=1,sstDate='',sstSeq=0;
+function isoDay(d){return new Date(now()-d*864e5).toISOString().slice(0,10)}
+function sstKey(){var k=$('sstKey');if(sst==='off'){k.hidden=true;return}k.hidden=false;
+  k.innerHTML=sst==='anom'?'<span>Cooler</span><span class="bar" style="background:linear-gradient(90deg,#2b3b9a,#7aa6d8,#f4f4f4,#e98a5f,#9a1b1e)"></span><span>Warmer than normal</span> <span>· '+esc(sstDate)+'</span>'
+  :'<span>Cold</span><span class="bar" style="background:linear-gradient(90deg,#3b0f70,#2c6fbb,#3fb3a6,#f2d24b,#d7301f)"></span><span>Warm</span> <span>· '+esc(sstDate)+'</span>'}
+function sstLoad(){clearTimeout(sstTimer);if(sst==='off'||!W){sstParts=[];return}
+  sstTimer=setTimeout(function(){var vb=viewBox(),nn=Math.min(83,vb[3]),ss=Math.max(-83,vb[2]);if(nn<=ss)return;var w=vb[0],e=Math.min(vb[1],vb[0]+360),segs=[],seq=++sstSeq,mode=sst,dayN=sstDay;
+    // the service answers for longitudes between 180 west and 180 east, so a view across the date line is asked for in two pieces
+    var a=w;while(a<e-0.01){var b0=Math.floor((a+180)/360)*360,b=Math.min(e,b0+180);segs.push({w:a,e:b,lw:a-b0,le:b-b0});a=b}
+    var got=[],left=segs.length;
+    function done(){if(--left)return;if(seq!==sstSeq||sst!==mode)return;if(!got.length){if(sstDay<4){sstDay++;sstLoad()}else{$('sstKey').hidden=false;$('sstKey').textContent='Sea temperature is not available from NASA right now.'}return}sstParts=got;sstDate=isoDay(dayN);dirty=true;sstKey()}
+    segs.forEach(function(g){var pw=Math.max(64,Math.min(1400,Math.round(W*Math.min(dpr,1.5)*(g.e-g.w)/(e-w)))),ph=Math.min(1000,Math.max(64,Math.round(pw*(nn-ss)/(g.e-g.w)))),img=new Image();img.crossOrigin='anonymous';
+      img.onload=function(){got.push({img:img,w:g.w,e:g.e,n:nn,s:ss});done()};img.onerror=done;
+      img.src='https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi?'+new URLSearchParams({SERVICE:'WMS',REQUEST:'GetMap',VERSION:'1.1.1',LAYERS:SSTL[mode],SRS:'EPSG:4326',BBOX:[g.lw,ss,g.le,nn].map(function(v){return v.toFixed(3)}).join(','),WIDTH:pw,HEIGHT:ph,FORMAT:'image/png',TRANSPARENT:'TRUE',TIME:isoDay(dayN)})})},300)}
+function drawSST(){if(sst==='off'||!sstParts.length)return;ctx.setTransform(dpr,0,0,dpr,0,0);ctx.globalAlpha=.85;
+  sstParts.forEach(function(g){var ih=g.img.naturalHeight,iw=g.img.naturalWidth,N=Math.min(ih,160),xc=nearX(((g.w+g.e)/2-LON0)*D2R,view.cx),hw=(g.e-g.w)/2*D2R,x0=(xc-hw-view.cx)*view.k+W/2,x1=(xc+hw-view.cx)*view.k+W/2;
+    for(var i=0;i<N;i++){var y0=(proj(0,g.n-(g.n-g.s)*i/N)[1]-view.cy)*view.k+H/2,y1=(proj(0,g.n-(g.n-g.s)*(i+1)/N)[1]-view.cy)*view.k+H/2;ctx.drawImage(g.img,0,ih*i/N,iw,ih/N,x0,y0,x1-x0,y1-y0+0.6)}});ctx.globalAlpha=1}
+
 function label(s,x,y,col){ctx.lineWidth=3;ctx.strokeStyle=css.land;ctx.globalAlpha=.85;ctx.strokeText(s,x,y);ctx.globalAlpha=1;ctx.fillStyle=col;ctx.fillText(s,x,y)}
 function spaced(s,x,y,sp){var w=0,i;for(i=0;i<s.length;i++)w+=ctx.measureText(s[i]).width+sp;var cx=x-w/2;ctx.textAlign='left';for(i=0;i<s.length;i++){ctx.fillText(s[i],cx,y);cx+=ctx.measureText(s[i]).width+sp}ctx.textAlign='center'}
-function frame(tn){if(anim)anim(tn);if(dirty){dirty=false;draw()}if(radar.moved&&!anim&&performance.now()-radar.moved>700){radar.moved=0;loadRadar()}requestAnimationFrame(frame)}
+function frame(tn){if(anim)anim(tn);if(dirty||(!noMotion&&on.tsu&&WD&&WD.tsunami&&WD.tsunami.some(tsuActive))){dirty=false;draw()}if(radar.moved&&!anim&&performance.now()-radar.moved>700){radar.moved=0;loadRadar();sstLoad()}requestAnimationFrame(frame)}
 
 /* pointer: pan, pinch, wheel, click */
 var ptrs={},moved=0,pinch0=null;
-function zoomAt(x,y,f){var k=Math.max(k0*0.55,Math.min(k0*90,view.k*f));var wx=(x-W/2)/view.k+view.cx,wy=(y-H/2)/view.k+view.cy;view.k=k;view.cx=wx-(x-W/2)/k;view.cy=wy-(y-H/2)/k;dirty=true}
+function zoomAt(x,y,f){var k=Math.max(W/TAU,Math.min(k0*90,view.k*f));var wx=(x-W/2)/view.k+view.cx,wy=(y-H/2)/view.k+view.cy;view.k=k;view.cx=wx-(x-W/2)/k;view.cy=wy-(y-H/2)/k;dirty=true}
 cv.addEventListener('pointerdown',function(e){cv.setPointerCapture(e.pointerId);ptrs[e.pointerId]={x:e.offsetX,y:e.offsetY};moved=0;anim=null;var ids=Object.keys(ptrs);if(ids.length===2){var a=ptrs[ids[0]],b=ptrs[ids[1]];pinch0={d:Math.hypot(a.x-b.x,a.y-b.y),k:view.k}}cv.classList.add('drag')});
 cv.addEventListener('pointermove',function(e){var p=ptrs[e.pointerId];if(!p){hover(e.offsetX,e.offsetY);return}var dx=e.offsetX-p.x,dy=e.offsetY-p.y;moved+=Math.abs(dx)+Math.abs(dy);var ids=Object.keys(ptrs);
   if(ids.length===2&&pinch0){p.x=e.offsetX;p.y=e.offsetY;var a=ptrs[ids[0]],b=ptrs[ids[1]],d=Math.hypot(a.x-b.x,a.y-b.y);zoomAt((a.x+b.x)/2,(a.y+b.y)/2,(pinch0.k*d/pinch0.d)/view.k)}
@@ -489,12 +632,13 @@ function identify(x,y){
     else if(p.type==='quake')hits.push('<b>M'+p.q[4].toFixed(1)+' earthquake</b><br>'+esc(p.q[5])+'<br><small>'+fD.format(new Date(p.q[0]))+' ('+ago(p.q[0])+'), '+p.q[3]+' km deep</small>');
     else if(p.type==='cell')hits.push(wwaHtml(p.c));
     else if(p.type==='lsr')hits.push('<b>Tornado report</b><br>'+esc(p.r0.city)+', '+esc(p.r0.county)+' County '+esc(p.r0.st)+'<br><small>'+fD.format(new Date(p.r0.t))+(p.r0.remark?'. '+esc(p.r0.remark):'')+'</small>');
+    else if(p.type==='w')hits.push(wHtml(p.k,p.d));
     else if(p.type==='volc')hits.push('<b>'+esc(p.v.volcano_name)+' volcano</b><br>Alert level '+esc(p.v.alert_level)+', aviation color '+esc(p.v.color_code)+(p.v.notice_url?'<br><a href="'+esc(p.v.notice_url)+'" target="_blank" rel="noopener">Latest USGS notice</a>':''))});
   setT();var X=x*dpr,Y=y*dpr;
-  if(on.wwa){var seen={};paths.wwa.slice().reverse().forEach(function(w){if(w.a.ends&&w.a.ends<n)return;if(ctx.isPointInPath(w.p,X,Y,'evenodd')){var key=w.a.type+w.a.ends;if(seen[key]||pts.some(function(p){return p.c===w.a}))return;seen[key]=1;hits.push(wwaHtml(w.a))}})}
-  ['torn','spc','ero','fire'].forEach(function(kind){if(!on[kind])return;var cfg=OUT[kind],best=null;paths.out.forEach(function(o){if(o.o.kind===kind&&o.o.day===day&&o.o.end>n&&ctx.isPointInPath(o.p,X,Y,'evenodd')){if(!best||cfg.order.indexOf(o.o.label)>cfg.order.indexOf(best.label))best=o.o}});
+  if(on.wwa){var seen={};paths.wwa.slice().reverse().forEach(function(w){if(w.a.ends&&w.a.ends<n)return;if(hitPath(w.p,X,Y)){var key=w.a.type+w.a.ends;if(seen[key]||pts.some(function(p){return p.c===w.a}))return;seen[key]=1;hits.push(wwaHtml(w.a))}})}
+  ['torn','spc','ero','fire'].forEach(function(kind){if(!on[kind])return;var cfg=OUT[kind],best=null;paths.out.forEach(function(o){if(o.o.kind===kind&&o.o.day===day&&o.o.end>n&&hitPath(o.p,X,Y)){if(!best||cfg.order.indexOf(o.o.label)>cfg.order.indexOf(best.label))best=o.o}});
     if(best)hits.push('<b>'+cfg.name+': '+cfg.label[best.label]+(kind==='torn'?' chance of a tornado within 25 miles':kind==='spc'&&best.label==='TSTM'?'':' risk')+'</b><br>'+t(best.start)+' to '+tz(best.end)+'<br><small>'+cfg.src+' outlook, day '+best.day+'</small>')});
-  if(on.storms)paths.cones.forEach(function(c){if(ctx.isPointInPath(c.p,X,Y,'evenodd')&&!hits.some(function(h){return h.indexOf(esc(c.s.name))>=0}))hits.push('<b>Inside the forecast cone for '+esc(c.s.name)+'</b><br><small>The cone shows where the center will probably track over 5 days. Wind, rain and surge reach well outside it.</small>')});
+  if(on.storms)paths.cones.forEach(function(c){if(hitPath(c.p,X,Y)&&!hits.some(function(h){return h.indexOf(esc(c.s.name))>=0}))hits.push('<b>Inside the forecast cone for '+esc(c.s.name)+'</b><br><small>The cone shows where the center will probably track over 5 days. Wind, rain and surge reach well outside it.</small>')});
   var pop=$('pop');if(!hits.length){pop.hidden=true;return}
   pop.innerHTML='<button class="x" aria-label="Close">&times;</button>'+hits.map(function(h){return '<div class="hit">'+h+'</div>'}).join('');pop.hidden=false;pop.scrollTop=0;pop.querySelector('.x').onclick=function(){pop.hidden=true};
 }
@@ -507,6 +651,8 @@ function buildControls(){
   $('layers').onclick=function(e){var b=e.target.closest('.chip');if(!b)return;var k=b.dataset.l;on[k]=!on[k];save();buildControls();legend();dirty=true;if(k==='radar'&&on.radar)loadRadar()};
   $('days').innerHTML=[1,2,3].map(function(d){var w=dayWindow(d);return '<button data-d="'+d+'" aria-pressed="'+(d===day)+'">'+(d===1?'Today':d===2?'Tomorrow':fDay.format(new Date(w[0]+6*36e5)).split(',')[0])+'</button>'}).join('');
   $('days').onclick=function(e){var b=e.target.closest('button');if(!b)return;day=+b.dataset.d;buildControls();legend();dirty=true};
+  $('sst').innerHTML=[['off','Off'],['temp','Temperature'],['anom','Vs. normal']].map(function(x){return '<button aria-pressed="'+(sst===x[0])+'" data-s="'+x[0]+'">'+x[1]+'</button>'}).join('');
+  $('sst').onclick=function(e){var b=e.target.closest('button');if(!b)return;sst=b.dataset.s;sstDay=1;sstParts=[];save();buildControls();sstKey();sstLoad();dirty=true};
   if(!$('views').children.length){$('views').innerHTML=Object.keys(VIEWS).map(function(v){return '<button data-v="'+v+'" aria-pressed="'+(v==='all')+'">'+VIEWS[v].name+'</button>'}).join('');$('views').onclick=function(e){var b=e.target.closest('button');if(b)setView(b.dataset.v)}}
 }
 function legend(){var h=[],n=now();
@@ -514,6 +660,11 @@ function legend(){var h=[],n=now();
   if(on.wwa){var types={};activeWWA().forEach(function(a){types[a.type]=1});var tl=Object.keys(types).sort(function(a,b){return wwaRank(a)-wwaRank(b)});if(tl.length)h.push('<span><b>Warnings</b></span>'+tl.slice(0,9).map(function(x){return '<span><i style="background:'+(WWA_COLOR[x]||'#9AA5B1')+'"></i>'+x+'</span>'}).join('')+(tl.length>9?'<span>+'+(tl.length-9)+' more</span>':''))}
   if(on.storms&&D.storms.length)h.push('<span><b>Storm wind</b></span>'+['TD','TS','1','2','3','4','5'].map(function(x,i){return '<span><i class="dot" style="background:'+CAT_COLOR[i]+'"></i>'+x+'</span>'}).join(''));
   if(on.radar&&radar.off)h.push('<span><b>Radar</b></span><span>NOAA MRMS reflectivity, latest scan</span>');
+  if(WD){var wl=[];if(on.storms&&wStorms().length)wl.push('<span>Storm outside the Hurricane Center area: solid track observed, dashed forecast, shaded wind zones (GDACS)</span>');
+    if(on.volc&&WD.eruptions)wl.push('<span><i style="background:#F08A24"></i>Erupting volcano (triangle)</span>');if(on.tsu&&WD.tsunami)wl.push('<span><i class="dot" style="background:#1D4FA3"></i>Tsunami message</span>');
+    if(on.fires&&WD.fires)wl.push('<span><i style="background:#D9480F;transform:rotate(45deg)"></i>Wildfire (diamond, size = area burned)</span>');if(on.floods&&WD.floods&&WD.floods.length)wl.push('<span><i style="background:#2C6FBB"></i>Major flood (square)</span>');
+    if(on.cal&&WD.calderas)wl.push('<span><i class="dot" style="background:#fff;border:2px solid #6A3FB5"></i>Giant caldera (ring)</span>');if(on.aurora&&WD.space&&WD.space.aurora)wl.push('<span><i style="background:rgba(40,200,90,.6)"></i>Aurora possible overhead</span>');
+    if(wl.length)h.push('<span><b>World</b></span>'+wl.join(''))}
   if(on.quakes)h.push('<span><b>Quakes</b></span><span><i class="dot" style="background:#E0402A"></i>last 24 h</span><span><i class="dot" style="background:#E58A2B"></i>1 to 3 days</span><span><i class="dot" style="background:#9B7B55"></i>older</span>');
   $('legend').innerHTML=h.join('')}
 
@@ -539,7 +690,16 @@ function nowItems(){
   var y=D.yellowstone||{};if(y.alertLevel){var yq=(y.quakes||[]),mx=yq.reduce(function(m,q){return Math.max(m,q[4])},0);it.push({score:y.colorCode==='GREEN'?12:80,color:VOLC_COLOR[y.colorCode]||'#9AA5B1',k:'Yellowstone caldera',t:'Alert level '+y.alertLevel+' ('+String(y.colorCode).toLowerCase()+')',w:yq.length+' located quakes in the past 30 days, largest M'+mx.toFixed(1),go:function(){setDesk('ys')}})}
   var winter=activeWWA().filter(function(a){return /Winter Storm|Blizzard|Ice Storm|Lake Effect|Snow Squall/.test(a.type)});
   if(!winter.length&&D.snow&&D.snow.text&&!textStale())it.push({score:8,color:'#7B68EE',k:'Snow',t:'No winter storm warnings or watches in the United States',w:'Heavy snow outlook issued '+D.snow.issued,go:function(){setDesk('north')}});
-  it.sort(function(a,b){return b.score-a.score});return it.slice(0,14)}
+  // the rest of the world
+  var Wd=WD||{};
+  (Wd.tsunami||[]).forEach(function(m){if(tsuActive(m))it.push({score:112,color:'#1D4FA3',k:'Tsunami',t:'Tsunami '+(m.level||'message').toLowerCase()+(m.region?': '+m.region:''),w:m.center,go:function(){wGo('tsu',m)}})});
+  wStorms().forEach(function(x){it.push({score:{Red:64,Orange:48,Green:30}[x.alert]||24,color:ALC[x.alert]||'#888888',k:'Tropical storm, '+x.alert+' alert',t:x.name,w:kmhMph(x.severity)+(x.countries?' · '+x.countries:''),go:function(){wGo('storm',x)}})});
+  wQuakes().forEach(function(q){if((q.m>=6.5&&n-q.t<48*36e5)||q.alert==='red'||q.alert==='orange')it.push({score:14+(q.m-4)*14,color:'#E0402A',k:'Earthquake',t:'M'+q.m.toFixed(1)+', '+q.place,w:fD.format(new Date(q.t))+' ('+ago(q.t)+')'+(q.alert?' · USGS impact alert '+q.alert:''),go:function(){wGo('quake',q)}})});
+  (Wd.gdacsVolc||[]).forEach(function(v){if(v.alert==='Green')return;it.push({score:v.alert==='Red'?70:40,color:ALC[v.alert],k:'Volcano, '+v.alert+' alert',t:v.title,w:v.countries||'',go:function(){wGo('gvolc',v)}})});
+  (Wd.fires||[]).forEach(function(f){if(f.alert==='Green')return;it.push({score:f.alert==='Red'?55:36,color:ALC[f.alert],k:'Wildfire, '+f.alert+' alert',t:f.title,w:acres(f.ha),go:function(){wGo('fire',f)}})});
+  (Wd.floods||[]).forEach(function(f){it.push({score:f.alert==='Red'?52:33,color:ALC[f.alert]||'#2C6FBB',k:'Flood, '+f.alert+' alert',t:f.title,w:'since '+(f.from||'').slice(0,10),go:function(){wGo('flood',f)}})});
+  var sw=Wd.space&&Wd.space.scales&&Wd.space.scales.now;if(sw)[['G','Geomagnetic storm'],['S','Solar radiation storm'],['R','Radio blackout']].forEach(function(x){var v=sw[x[0]];if(v>=2)it.push({score:30+v*10,color:'#6A3FB5',k:'Space weather',t:x[1]+' '+x[0]+v+' ('+SCL[v]+')',w:'NOAA Space Weather Prediction Center',go:function(){setDesk('space')}})});
+  it.sort(function(a,b){return b.score-a.score});return it.slice(0,16)}
 var nowList=[],nowAll=false;
 function renderNow(){nowList=nowItems();var show=nowAll?nowList:nowList.slice(0,6),more=nowList.length-show.length;$('now').innerHTML=nowList.length?show.map(function(x,i){return '<li><button data-i="'+i+'"><span class="bar" style="background:'+x.color+'"></span><span><span class="k">'+esc(x.k)+'</span><span class="t">'+esc(x.t)+'</span><span class="w">'+esc(x.w)+'</span></span></button></li>'}).join('')+(more>0?'<li class="more"><button data-more="1"><span></span><span class="t">Show '+more+' more</span></button></li>':''):'<li style="padding:10px 0;color:var(--muted)">No active hazards in the data on hand.</li>'}
 $('now').onclick=function(e){var b=e.target.closest('button');if(!b)return;if(b.dataset.more){nowAll=true;renderNow();return}var x=nowList[+b.dataset.i];if(x&&x.go){x.go();box.scrollIntoView({block:'nearest',behavior:'smooth'})}};
@@ -577,6 +737,10 @@ function spotStorm(s){
   if(s.hazards)h+='<p class="sub">'+esc(s.hazards)+'</p>';
   h+='<p class="sub">The cone shows where the center will probably track, not how big the storm is; wind, surge and rain reach well outside it. Distances are to the forecast center track. Advisory '+esc(s.adv)+' issued '+tz(s.advTime)+(s.nextAdv?', next '+t(s.nextAdv):'')+'. <button class="go" data-storm="'+esc(s.id)+'">Show on map</button> &middot; <a href="'+esc(s.url||'https://www.nhc.noaa.gov/')+'" target="_blank" rel="noopener">Official NHC advisory</a></p></div>';
   return {far:false,html:h,score:(inCone?0:1e6)+c.km}}
+function spotWorldStorms(){var ws=wStorms().filter(function(w){return w.lon!=null}).map(function(w){return {w:w,km:distKm(spot.lat,spot.lon,w.lat,w.lon)}}).sort(function(a,b){return a.km-b.km}),nearW=ws.filter(function(x){return x.km<=3000});
+  if(!ws.length)return '';
+  return (nearW.length?'<p style="margin-top:8px"><b>Storms outside the Hurricane Center\'s area (GDACS):</b></p><ul class="items">'+nearW.map(function(x){return '<li><span class="bar" style="background:'+(ALC[x.w.alert]||'#888888')+'"></span><span><b>'+esc(x.w.title||x.w.name)+'</b>: now about '+miles(x.km)+' miles to your '+dirOf(bearing(spot.lat,spot.lon,x.w.lat,x.w.lon))+'. '+esc(kmhMph(x.w.severity))+'.<br><span class="sub">Position and wind zones are GDACS estimates, not an official forecast for your spot. Follow your national weather service. <button class="go" type="button" data-wstorm="'+esc(x.w.id)+'">Show on map</button></span></span></li>'}).join('')+'</ul>':'')+
+    (ws.length>nearW.length?'<p class="sub">'+(ws.length-nearW.length)+' other tropical storm'+(ws.length-nearW.length>1?'s':'')+' elsewhere in the world, more than 1,860 miles from your spot. See the World tab.</p>':'')}
 function renderSpot(){
   var el=$('spot');if(!el)return;
   if(!spot||spotEdit){el.innerHTML='<div class="sphead"><h2 class="eyebrow" id="spotH">Your spot</h2></div><p class="lead">'+(spot?'Pick a new spot.':'Set your location and this page tells you what is in effect there and what is headed your way.')+'</p>'+spotSetHtml();return}
@@ -603,13 +767,13 @@ function renderSpot(){
   }
   // hurricanes and tropical storms
   var st=D.storms.map(spotStorm),close=st.filter(function(x){return !x.far}).sort(function(a,b){return a.score-b.score}),far=st.filter(function(x){return x.far});
-  h+='<section'+(close.length?' style="grid-column:1/-1"':'')+'><h3>Hurricanes and tropical storms</h3>'+(st.length?close.map(function(x){return x.html}).join('')+(far.length?(close.length?'<p><b>Farther away:</b></p>':'')+'<ul class="items">'+far.map(function(x){return x.html}).join('')+'</ul>':''):'<p class="none">'+(live.storms||!LIVE_MODE?'No active tropical storm or hurricane in the National Hurricane Center feed.':'The storm feed is not responding.')+'</p>')+'</section>';
+  h+='<section'+(close.length?' style="grid-column:1/-1"':'')+'><h3>Hurricanes and tropical storms</h3>'+(st.length?close.map(function(x){return x.html}).join('')+(far.length?(close.length?'<p><b>Farther away:</b></p>':'')+'<ul class="items">'+far.map(function(x){return x.html}).join('')+'</ul>':''):'<p class="none">'+(live.storms||!LIVE_MODE?'No active tropical storm or hurricane in the National Hurricane Center feed.':'The storm feed is not responding.')+'</p>')+spotWorldStorms()+'</section>';
   // outlook, next three days
   if(us){var ws=[1,2,3].map(dayWindow);
     h+='<section><h3>Next three days at your spot</h3><div class="tbl"><table><tbody>'+['Today','Tomorrow','Day 3'].map(function(nm,i){var r=cityRisks(lat,lon,i+1);return '<tr><td>'+nm+'<br><span class="sub">from '+fH.format(new Date(ws[i][0]))+'</span></td><td>'+(r.length?r.map(tag).join(''):'<span class="none">Outside every outlined risk area</span>')+'</td></tr>'}).join('')+'</tbody></table></div><p class="sub" style="margin-top:6px">Tornado, severe storm, flooding rain and fire weather outlooks from the Storm Prediction Center and Weather Prediction Center, plus any warning or forecast cone that covers your spot. Fire weather and tornado outlooks run two days.</p></section>'}
   // earthquakes and volcanoes
-  var qk=D.quakes.filter(function(q){return distKm(lat,lon,q[1],q[2])<=300}).sort(function(a,b){return b[4]-a[4]});
-  h+='<section><h3>Earthquakes within 185 miles, past 7 days</h3>'+(qk.length?'<ul class="items">'+qk.slice(0,4).map(function(q){var d=distKm(lat,lon,q[1],q[2]);return '<li><span class="bar" style="background:#E0402A"></span><span><b>M'+q[4].toFixed(1)+'</b>, '+miles(d)+' miles to your '+dirOf(bearing(lat,lon,q[1],q[2]))+' <span class="sub">'+esc(q[5])+'</span><br><span class="sub">'+fD.format(new Date(q[0]))+' ('+ago(q[0])+')</span></span></li>'}).join('')+'</ul>'+(qk.length>4?'<p class="sub">'+(qk.length-4)+' more, smaller.</p>':''):'<p class="none">None of magnitude 3 or more (2.5 or more in California) in the USGS feed.</p>');
+  var qk=allQuakes().filter(function(q){return distKm(lat,lon,q[1],q[2])<=300}).sort(function(a,b){return b[4]-a[4]});
+  h+='<section><h3>Earthquakes within 185 miles, past 7 days</h3>'+(qk.length?'<ul class="items">'+qk.slice(0,4).map(function(q){var d=distKm(lat,lon,q[1],q[2]);return '<li><span class="bar" style="background:#E0402A"></span><span><b>M'+q[4].toFixed(1)+'</b>, '+miles(d)+' miles to your '+dirOf(bearing(lat,lon,q[1],q[2]))+' <span class="sub">'+esc(q[5])+'</span><br><span class="sub">'+fD.format(new Date(q[0]))+' ('+ago(q[0])+')</span></span></li>'}).join('')+'</ul>'+(qk.length>4?'<p class="sub">'+(qk.length-4)+' more, smaller.</p>':''):'<p class="none">None in the USGS feeds, which list magnitude 3 and up in North America (2.5 in California) and 4.5 and up elsewhere.</p>');
   var vo=D.volcanoes.map(function(v){var ll=volcPos(v.volcano_name);return ll?{v:v,km:distKm(lat,lon,ll[0],ll[1]),brg:bearing(lat,lon,ll[0],ll[1])}:null}).filter(function(x){return x&&x.km<=500});
   if(vo.length)h+='<p style="margin-top:8px"><b>Volcanoes above normal within 310 miles:</b></p><ul class="items">'+vo.map(function(x){return '<li><span class="bar" style="background:'+(VOLC_COLOR[x.v.color_code]||'#9AA5B1')+'"></span><span><b>'+esc(x.v.volcano_name)+'</b>: alert level '+esc(x.v.alert_level)+' ('+esc(String(x.v.color_code).toLowerCase())+'), '+miles(x.km)+' miles to your '+dirOf(x.brg)+'</span></li>'}).join('')+'</ul>';
   h+='</section></div>';
@@ -630,6 +794,7 @@ $('spot').addEventListener('input',function(e){if(e.target.id==='spQ')spotSearch
 $('spot').addEventListener('keydown',function(e){if(e.target.id==='spQ'&&e.key==='Enter'){var b=$('spRes').querySelector('button[data-lat]');if(b)b.click()}});
 $('spot').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
   if(b.dataset.lat){setSpot(+b.dataset.lat,+b.dataset.lon,b.dataset.n,b.dataset.cc);return}
+  if(b.dataset.wstorm){var w0=((WD&&WD.storms)||[]).filter(function(x){return x.id===b.dataset.wstorm})[0];if(w0)wGo('storm',w0);return}
   if(b.dataset.storm){var s=D.storms.filter(function(x){return x.id===b.dataset.storm})[0];if(s){flyTo(s.lon,s.lat,14);box.scrollIntoView({block:'nearest',behavior:'smooth'})}return}
   if(b.id==='spGeo'){if(!navigator.geolocation){spotMsg='This browser cannot share a location. Search for a town or tap the map.';renderSpot();return}spotMsg='Waiting for your device to share its location…';renderSpot();
     navigator.geolocation.getCurrentPosition(function(p){spotFromPoint(p.coords.latitude,p.coords.longitude)},function(){spotMsg='Your device did not share a location. Search for a town or tap the map.';renderSpot()},{maximumAge:6e5,timeout:15e3});return}
@@ -694,19 +859,23 @@ function renderDesk(){
     h+='<section><h3>Snow and ice</h3><p class="lead">'+(storm.length?storm.length+' winter weather alert'+(storm.length>1?'s':'')+' in effect.':'No winter storm warnings or watches are in effect in the United States.')+'</p>'+alertList(wl,'No winter, freeze or frost alerts are in effect.')+'</section>';
     if(D.snow&&D.snow.text&&!textStale())h+='<section><h3>Heavy snow and icing outlook, next 3 days</h3><pre class="bulletin">'+esc('WPC, issued '+D.snow.issued+'\nValid '+D.snow.valid+'\n\n'+D.snow.text)+'</pre></section>';
     h+=cityTable(d)+'<p class="sub">Canadian snowfall and winter storm warnings from Environment Canada are not included yet.</p>';
-  }else{
+  }else if(d.id==='pac'){
     var ps=D.storms.filter(function(s){return /^(ep|cp)/.test(s.id)});
     h+='<section><h3>Hurricanes and tropical storms</h3>'+(ps.length?'<ul class="items">'+ps.map(function(s){return stormBlock(s,d)}).join('')+'</ul>':'<p class="lead">No hurricanes or tropical storms in the eastern or central Pacific.</p>')+twoBlock(['ep','cp'])+'</section>';
     h+='<section><h3>Volcanoes above normal</h3>'+(D.volcanoes.length?'<ul class="items">'+D.volcanoes.map(function(v){return '<li><span class="bar" style="background:'+(VOLC_COLOR[v.color_code]||'#9AA5B1')+'"></span><span><b>'+esc(v.volcano_name)+'</b>: alert level '+esc(v.alert_level)+', aviation color '+esc(v.color_code)+'<br><span class="sub">'+esc(String(v.obs_abbr||'').toUpperCase())+' notice '+esc(String(v.sent_utc||'').slice(0,10))+'</span> &middot; <a href="'+esc(v.notice_url)+'" target="_blank" rel="noopener">notice</a></span></li>'}).join('')+'</ul>':'<p class="none">No U.S. volcanoes above normal.</p>')+'</section>';
     var bq=D.quakes.filter(function(q){return q[4]>=4.5}).sort(function(a,b){return b[4]-a[4]});
     h+='<section><h3>Largest earthquakes, past 7 days</h3>'+quakeTable(bq,8)+'</section>';
   }
+  if(d.id==='world'){REGW={};h+=worldDeskHtml()}
+  if(d.id==='space'){REGW={};h+=spaceDeskHtml()}
   $('desk').innerHTML=h;
   $('tabs').innerHTML=DESKS.map(function(x){return '<button role="tab" data-d="'+x.id+'" aria-selected="'+(x.id===d.id)+'">'+esc(x.name)+'</button>'}).join('');
 }
 function setDesk(id){deskId=id;save();renderDesk();var d=DESKS.filter(function(x){return x.id===id})[0];if(!d)return;var tw=id==='torn'?activeWWA().filter(function(a){return a.type==='Tornado Warning'})[0]:null;if(tw){var c=centroid(tw.polys);[].forEach.call($('views').children,function(b){b.setAttribute('aria-pressed','false')});flyTo(c[0],c[1],2.2)}else setView(d.view)}
 $('tabs').onclick=function(e){var b=e.target.closest('button');if(b)setDesk(b.dataset.d)};
-$('desk').onclick=function(e){var f=e.target.closest('[data-fly]');if(f){var ll=f.dataset.fly.split(',');flyTo(+ll[0],+ll[1],1.6);box.scrollIntoView({block:'nearest',behavior:'smooth'});return}var b=e.target.closest('[data-storm]');if(!b)return;var s=D.storms.filter(function(x){return x.id===b.dataset.storm})[0];if(s){flyTo(s.lon,s.lat,14);box.scrollIntoView({block:'nearest',behavior:'smooth'})}};
+$('desk').onclick=function(e){var wb=e.target.closest('button[data-wi]');if(wb){var wr=REGW[wb.dataset.wi];if(wr)wGo(wr.k,wr.d);return}
+  if(e.target.id==='auroraBtn'){on.aurora=!on.aurora;save();buildControls();legend();renderDesk();dirty=true;if(on.aurora){setView('world');box.scrollIntoView({block:'nearest',behavior:'smooth'})}return}
+  var f=e.target.closest('[data-fly]');if(f){var ll=f.dataset.fly.split(',');flyTo(+ll[0],+ll[1],1.6);box.scrollIntoView({block:'nearest',behavior:'smooth'});return}var b=e.target.closest('[data-storm]');if(!b)return;var s=D.storms.filter(function(x){return x.id===b.dataset.storm})[0];if(s){flyTo(s.lon,s.lat,14);box.scrollIntoView({block:'nearest',behavior:'smooth'})}};
 
 /* ---------- status ---------- */
 function renderStatus(){
@@ -717,10 +886,10 @@ function renderStatus(){
   if(liveN){note.hidden=true}else{note.hidden=false;note.className='note'+(age>6*36e5?' old':'');
     note.innerHTML='<b>This is a snapshot from '+fD.format(new Date(SNAP.generated))+' ('+ago(SNAP.generated)+').</b> Warnings that have ended since then are removed automatically, but new ones do not appear until the next refresh. For warnings in effect this minute, check <a href="https://www.weather.gov/" target="_blank" rel="noopener">weather.gov</a>.'+(/vercel\.app$/.test(location.hostname)?'':' <b>The live version, with tornado tracking and radar, is at <a href="https://hazard-desk.vercel.app/" target="_blank" rel="noopener">hazard-desk.vercel.app</a>.</b>')}
   var feeds=[['storms','Storms'],['outlooks','Outlooks'],['wwa','Watches and warnings'],['quakes','Earthquakes'],['volc','Volcanoes']];if(liveN)feeds.push([live.cells?'cells':'short','Tornado and storm warnings'],['lsr','Storm reports']);
-  $('feeds').innerHTML=feeds.map(function(f){return '<span>'+f[1]+': '+(live[f[0]]?'live, '+ago(live[f[0]]):'snapshot, '+ago(SNAP.generated))+'</span>'}).join('');
+  $('feeds').innerHTML=feeds.map(function(f){return '<span>'+f[1]+': '+(live[f[0]]?'live, '+ago(live[f[0]]):'snapshot, '+ago(SNAP.generated))+'</span>'}).join('')+'<span>World feeds: '+(WD?'live, '+ago(utc(WD.generated)||now()):'not loaded')+'</span><span>World earthquakes: '+(WQ?'live':'not loaded')+'</span>';
 }
 function clock(){$('clock').textContent='Your time: '+fD.format(new Date())}
-function renderAll(){buildOverlays();buildControls();legend();renderTorn();renderSpot();renderNow();renderDesk();renderStatus()}
+function renderAll(){buildOverlays();buildControls();legend();renderTorn();renderTsu();renderSpot();renderNow();renderDesk();renderStatus()}
 
 /* ---------- live feeds (used when the page is hosted where it may call the agencies directly) ---------- */
 var ARC='https://mapservices.weather.noaa.gov';
@@ -728,7 +897,7 @@ function getJSON(u){return fetch(u,{cache:'no-store'}).then(function(r){if(!r.ok
 function arc(path,params){var q={where:'1=1',outFields:'*',f:'geojson',maxAllowableOffset:'0.02',geometryPrecision:'3'};for(var k in params)q[k]=params[k];return getJSON(ARC+path+'/query?'+new URLSearchParams(q))}
 function gPolys(g){if(!g)return [];return g.type==='Polygon'?[g.coordinates]:g.type==='MultiPolygon'?g.coordinates:[]}
 function ymdhm(s){s=String(s);return Date.UTC(+s.slice(0,4),+s.slice(4,6)-1,+s.slice(6,8),+s.slice(8,10),+s.slice(10,12))}
-function utc(s){return s?Date.parse(String(s).replace(' ','T')+'Z'):null}
+function utc(s){if(!s)return null;var t=Date.parse(/Z|[+-]\d\d:?\d\d$/.test(s)?s:String(s).replace(' ','T')+'Z');return isNaN(t)?null:t}
 function low(o){var r={};for(var k in o)r[k.toLowerCase()]=o[k];return r}
 function liveOutlooks(){
   var jobs=[],FIRE={5:'Elevated',8:'Critical',10:'Extreme'};
@@ -827,9 +996,8 @@ function startLive(){ // one cheap probe first, so a page that is not allowed to
 
 /* ---------- radar: NOAA MRMS composite, warped from lat/lon onto the map projection ---------- */
 var radar={off:null,v:null,ok:true,key:'',moved:0,src:0,seq:0};
-function inv(x,y){var yy=-y,rho=Math.sqrt(x*x+yy*yy);if(rho<1e-9)return [L0/D2R,P0/D2R];if(rho>1.99)return null;var c=2*Math.asin(rho/2),sc=Math.sin(c),cc=Math.cos(c);
-  return [(L0+Math.atan2(x*sc,rho*C0*cc-yy*S0*sc))/D2R,Math.asin(cc*S0+yy*sc*C0/rho)/D2R]}
-function viewBox(){var b=[1e9,-1e9,1e9,-1e9];for(var i=0;i<=10;i++)for(var j=0;j<=10;j++){if(i%10&&j%10)continue;var q=inv((i/10*W-W/2)/view.k+view.cx,(j/10*H-H/2)/view.k+view.cy);if(!q)continue;b[0]=Math.min(b[0],q[0]);b[1]=Math.max(b[1],q[0]);b[2]=Math.min(b[2],q[1]);b[3]=Math.max(b[3],q[1])}return b}
+function inv(x,y){var lo=x/D2R+LON0;lo=((lo+540)%360+360)%360-180;return [lo,(2*Math.atan(Math.exp(-y))-Math.PI/2)/D2R]}
+function viewBox(){var hw=W/2/view.k,c=view.cx/D2R+LON0;return [c-hw/D2R,c+hw/D2R,inv(0,view.cy+H/2/view.k)[1],inv(0,view.cy-H/2/view.k)[1]]} // west, east (can run past 180), south, north
 function radarUrl(src,w,s,e,n,iw,ih){var q='SERVICE=WMS&VERSION=1.1.1&REQUEST=GetMap&STYLES=&SRS=EPSG:4326&FORMAT=image/png&TRANSPARENT=true&BBOX='+[w,s,e,n].map(function(x){return x.toFixed(4)}).join(',')+'&WIDTH='+iw+'&HEIGHT='+ih+'&_='+Math.floor(now()/6e4);
   return src===0?'https://opengeo.ncep.noaa.gov/geoserver/conus/conus_bref_qcd/ows?LAYERS=conus_bref_qcd&'+q:'https://mesonet.agron.iastate.edu/cgi-bin/wms/nexrad/n0q.cgi?LAYERS=nexrad-n0q-900913&'+q}
 function loadRadar(){
@@ -840,7 +1008,7 @@ function loadRadar(){
   img.onerror=function(){if(seq!==radar.seq)return;if(radar.src===0){radar.src=1;loadRadar()}else{radar.ok=false;radar.off=null;buildControls();dirty=true}};
   img.src=radarUrl(radar.src,w,s,e,n,iw,ih)}
 function warp(img,w,s,e,n,v){var c=document.createElement('canvas');c.width=Math.round(v.W*v.dpr);c.height=Math.round(v.H*v.dpr);var g=c.getContext('2d'),nx=36,ny=24,iw=img.naturalWidth||img.width,ih=img.naturalHeight||img.height,P=[],i,j;
-  for(j=0;j<=ny;j++){P[j]=[];for(i=0;i<=nx;i++){var q=proj(w+(e-w)*i/nx,n-(n-s)*j/ny);P[j][i]=[((q[0]-v.cx)*v.k+v.W/2)*v.dpr,((q[1]-v.cy)*v.k+v.H/2)*v.dpr,iw*i/nx,ih*j/ny]}}
+  for(j=0;j<=ny;j++){P[j]=[];for(i=0;i<=nx;i++){var q=proj(w+(e-w)*i/nx,n-(n-s)*j/ny);q[0]=nearX(q[0],v.cx);P[j][i]=[((q[0]-v.cx)*v.k+v.W/2)*v.dpr,((q[1]-v.cy)*v.k+v.H/2)*v.dpr,iw*i/nx,ih*j/ny]}}
   function tri(a,b,d){var x0=a[2],y0=a[3],x1=b[2],y1=b[3],x2=d[2],y2=d[3],den=x0*(y1-y2)+x1*(y2-y0)+x2*(y0-y1);if(!den)return;
     var mx=(a[0]+b[0]+d[0])/3,my=(a[1]+b[1]+d[1])/3,ex=function(p){var dx=p[0]-mx,dy=p[1]-my,l=Math.hypot(dx,dy)||1;return [p[0]+dx/l*0.7,p[1]+dy/l*0.7]},A=ex(a),B=ex(b),Dd=ex(d);
     g.save();g.beginPath();g.moveTo(A[0],A[1]);g.lineTo(B[0],B[1]);g.lineTo(Dd[0],Dd[1]);g.closePath();g.clip();
@@ -864,6 +1032,8 @@ requestAnimationFrame(frame);
 setInterval(function(){clock();renderStatus()},30e3);
 setInterval(function(){if(!spotEdit)renderSpot();renderNow();renderDesk();legend();dirty=true},10*60e3);
 startLive();
+sstKey();sstLoad();loadWorld();loadWorldQuakes();setInterval(loadWorld,5*60e3);setInterval(loadWorldQuakes,5*60e3);
+document.addEventListener('visibilitychange',function(){if(!document.hidden&&(!WD||now()-(utc(WD.generated)||0)>6*60e3)){loadWorld();loadWorldQuakes()}});
 })();
 </script>
 

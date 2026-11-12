@@ -21,5 +21,17 @@
         }
       ]
     }
+  ],
+  "redirects": [
+    {
+      "source": "/world.html",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/world",
+      "destination": "/",
+      "permanent": false
+    }
   ]
 }

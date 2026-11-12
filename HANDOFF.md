@@ -95,13 +95,39 @@ Aira ~30 ka, Campanian Ignimbrite ~39 ka).
   search yet. (3) River flood and marine warnings are not in the mapped set. (4) Tested against the saved snapshot with
   the clock set back; not yet seen with live feeds (the workspace cannot reach them) or on a real phone.
 
+## 4c. One world map (preview branch `one-map`, Nov 11, 2026; not live until Randy says Go)
+
+- Randy, Nov 11: "The map is still a little weak. Thinking just a global map, no reason for the switch." He chose a flat
+  map over a globe (county-level accuracy, radar and warning outlines).
+- `page.html` is now the only page. `world_page.html` and `world.html` are deleted; `vercel.json` forwards `/world.html`
+  and `/world` to `/`. `build_site.py` builds `index.html` only. Title and H1 are "Hazard Desk" (the other desks' nav
+  bars still say "North America Hazard Desk" until Randy decides the name).
+- Map engine: the North America engine, with the projection changed from Lambert azimuthal to Mercator (`proj`, `inv`,
+  x measured east from 100°W so North America is mid-sheet). The world repeats every `TAU` in x: `copies()` draws each
+  layer on up to three side-by-side copies, `sx()` puts a point on the copy nearest the view center, `ringPath` and
+  `linePts` keep shapes in one piece across the date line, `hitPath` tests taps on every copy. World land comes from
+  `world-countries.js` (skipping countries the detailed `basemap.js` already draws, `BM_HAS`).
+- World layers ported from the World page: `drawWorld`, `wHtml` (pop-ups), `worldDeskHtml` and `spaceDeskHtml` (two new
+  tabs: World, Space & supervolcanoes), world items in "Right now", tsunami banner, sea temperature (`sstLoad`, asked in
+  two pieces when the view crosses the date line). `wStorms()` drops a GDACS storm the Hurricane Center already covers;
+  `wQuakes()` drops world-feed quakes inside the North America feed's box. "Your spot" now also lists quakes and GDACS
+  storms worldwide.
+- Views: North America (default; a set spot opens on the spot), World, then the regional views as before.
+- **Bug found and fixed in `api/world.js`:** every tsunami bulletin's header names the "TSUNAMI WARNING CENTER", and
+  the parser read that as a warning. A no-threat information statement (M4.6 near Puerto Rico, Nov 8) was labeled
+  "Warning" and would have raised the red tsunami banner for 24 hours. The center's name no longer counts, and "there
+  is no tsunami threat" now marks a message final. This fix is in this branch; the live World page still has the bug.
+- Tested with the saved North America snapshot and a saved copy of the live `/api/world` answer. Not yet seen with live
+  North America feeds (radar, warnings) on the new projection: the workspace cannot reach them.
+- Step 2, not started: dark restyle, larger map, fewer control rows.
+
 ## 5. Open list
 
 1. **NASA FIRMS fire detections** (every hotspot, not just big fires): needs `FIRMS_MAP_KEY` in Vercel; aggregate
    server-side to a grid (a world day of VIIRS is tens of thousands of rows).
 2. Campi Flegrei official alert level (Italian Civil Protection) has no machine-readable feed; Toba (PVMBG) and Valles
    likewise. Revisit if a feed appears.
-3. Possible: merge NA and World into one map engine (large refactor; only if Randy wants one map).
+3. (Done on branch `one-map`, see 4c.) One map engine for North America and the world.
 4. World page has no snapshot fallback (`data.js` is NA-only); if `/api/world` fails the lists say "not reachable".
 
 ## 6. Gotchas

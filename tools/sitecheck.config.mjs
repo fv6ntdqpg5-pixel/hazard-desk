@@ -1,7 +1,7 @@
-// What a healthy North America Hazard Desk looks like. Warnings, quakes and storms load live in the reader's browser;
+// What a healthy Hazard Desk looks like (one page, one world map since Nov 2026). Warnings, quakes and storms load live in the reader's browser;
 // the saved snapshot is only a fallback, so the live check insists on "Live".
 export default {
-  name: 'North America Hazard Desk', url: 'https://hazard-desk.vercel.app',
+  name: 'Hazard Desk', url: 'https://hazard-desk.vercel.app',
   checks: [
     { label: 'map legend drawn', test: () => (document.getElementById('legend')?.children.length || 0) >= 3 },
     { label: '"Right now" panel filled', test: () => (document.getElementById('now')?.children.length || 0) >= 1 },
