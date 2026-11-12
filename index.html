@@ -286,10 +286,11 @@ footer .feeds{font-family:var(--font-mono);font-size:12px;display:flex;flex-wrap
 <!--/BDK-->
 <p class="rbby" style="margin:-4px 0 12px;font-size:calc(12.5px * var(--fs,1));line-height:1.4;opacity:.8">Built by <b>Randy Barnhill</b>, founder of Barnhill Industrial Group &middot; <a href="https://www.thewireandledger.com/builder" target="_blank" rel="noopener" style="color:inherit;font-weight:600">Let&rsquo;s build something &rarr;</a></p>
 <script>/* Desk network: the light or dark look chosen on one desk carries to the next. A link to another desk gets ?theme=
-   added when it is tapped, and each desk reads that from its own address. Each desk still has its own switch. */
+   added when it is tapped, but only once the visitor has chosen a look with a switch; each desk reads that from its own
+   address. A visitor who never chose gets each desk's own default. Each desk still has its own switch. */
 (function(C){var H=document.documentElement,R=/^(www\.)?thewireandledger\.com$|^(hazard-desk|global-outbreak-desk|overhead-now|global-vaccine-desk|the-ledger-of-the-earth)\.vercel\.app$/;
 function now(){if(C.fixed){try{return localStorage.getItem(C.key)||''}catch(e){return ''}}var a=H.getAttribute('data-theme');return a==='light'||a==='dark'?a:C.def||(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')}
-document.addEventListener('click',function(e){var a=e.target&&e.target.closest&&e.target.closest('a[href]');if(!a)return;var u;try{u=new URL(a.href)}catch(x){return}if(u.origin===location.origin||!R.test(u.hostname))return;var t=now();if(t==='light'||t==='dark'){u.searchParams.set('theme',t);a.href=u.toString()}},true);
+document.addEventListener('click',function(e){var a=e.target&&e.target.closest&&e.target.closest('a[href]');if(!a)return;var u;try{u=new URL(a.href)}catch(x){return}if(u.origin===location.origin||!R.test(u.hostname))return;var t='';try{t=localStorage.getItem(C.key)||''}catch(x){}if(t==='light'||t==='dark'){u.searchParams.set('theme',t);a.href=u.toString()}},true);
 if(C.btn){var p=document.querySelector('.rbby,.credit');if(p){var b=document.createElement('button');b.type='button';b.style.cssText='font:inherit;font-weight:600;margin-left:10px;border:1px solid currentColor;background:transparent;color:inherit;border-radius:999px;padding:2px 10px;cursor:pointer';
   var lab=function(){var l=now()==='light';b.textContent=l?'\u263E Dark look':'\u2600 Light look';b.setAttribute('aria-label','Switch to the '+(l?'dark':'light')+' look')};
   b.onclick=function(){var t=now()==='light'?'dark':'light';H.setAttribute('data-theme',t);try{localStorage.setItem(C.key,t)}catch(e){}lab();try{window.dispatchEvent(new Event('resize'))}catch(e){}};lab();p.appendChild(b)}}
