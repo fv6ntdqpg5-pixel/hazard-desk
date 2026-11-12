@@ -187,6 +187,15 @@ body.mapfull{overflow:hidden}
 .mapbox canvas{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab;touch-action:none;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .mapbox{overscroll-behavior:contain}
 .mapbox canvas.drag{cursor:grabbing}
+.rl{position:absolute;left:10px;top:10px;right:60px;display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;z-index:2;pointer-events:none;font-size:13px}
+.rl>*{pointer-events:auto}
+.rl button{font:inherit;font-weight:600;border:1px solid var(--rule);background:var(--panel);color:var(--ink);border-radius:8px;height:38px;min-width:40px;padding:0 12px;cursor:pointer}
+.rl.open{background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:5px 6px;pointer-events:auto;max-width:520px}
+.rl.open button{border-color:transparent;background:var(--panel-2);padding:0 8px}
+.rl input{flex:1 1 110px;min-width:90px;height:30px;accent-color:var(--ink)}
+.rlt{font-weight:600;font-variant-numeric:tabular-nums;flex:1 1 150px}
+.rln{flex-basis:100%;color:var(--muted);font-size:11.5px;line-height:1.3}
+.mapbox.full .rl{top:calc(env(safe-area-inset-top,0px) + 10px)}
 .zoom{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;border:1px solid var(--rule);border-radius:8px;overflow:hidden;background:var(--panel)}
 .zoom button{border:0;background:transparent;width:40px;height:38px;font-size:18px;line-height:1;cursor:pointer;border-bottom:1px solid var(--rule)}
 .zoom button:last-child{border-bottom:0}
@@ -299,6 +308,7 @@ footer .feeds{font-family:var(--font-mono);font-size:12px;display:flex;flex-wrap
     <div class="mapcol">
       <div class="mapbox" id="mapbox">
         <canvas id="map" aria-label="World map of current hazards, opening on North America. The lists on this page give the same information as text."></canvas>
+        <div class="rl" id="rl" hidden></div>
         <div class="zoom"><button id="zin" aria-label="Zoom in">+</button><button id="zout" aria-label="Zoom out">&minus;</button><button id="zreset" aria-label="Back to North America" title="Back to North America">NA</button><button id="zfull" aria-label="Fill the screen with the map" aria-pressed="false" title="Full screen">&#10530;</button></div>
         <div class="pop" id="pop" hidden></div>
       </div>
@@ -696,7 +706,7 @@ function drawSST(){if(sst==='off'||!sstParts.length)return;ctx.setTransform(dpr,
 
 function label(s,x,y,col){ctx.lineWidth=3;ctx.strokeStyle=css.land;ctx.globalAlpha=.85;ctx.strokeText(s,x,y);ctx.globalAlpha=1;ctx.fillStyle=col;ctx.fillText(s,x,y)}
 function spaced(s,x,y,sp){var w=0,i;for(i=0;i<s.length;i++)w+=ctx.measureText(s[i]).width+sp;var cx=x-w/2;ctx.textAlign='left';for(i=0;i<s.length;i++){ctx.fillText(s[i],cx,y);cx+=ctx.measureText(s[i]).width+sp}ctx.textAlign='center'}
-function frame(tn){if(anim)anim(tn);if(dirty||(!noMotion&&on.tsu&&WD&&WD.tsunami&&WD.tsunami.some(tsuActive))){dirty=false;draw()}if(radar.moved&&!anim&&performance.now()-radar.moved>700){radar.moved=0;loadRadar();sstLoad()}requestAnimationFrame(frame)}
+function frame(tn){if(anim)anim(tn);if(dirty||(!noMotion&&on.tsu&&WD&&WD.tsunami&&WD.tsunami.some(tsuActive))){dirty=false;draw()}if(radar.moved&&!anim&&performance.now()-radar.moved>700){radar.moved=0;loadRadar();if(rl.on)rlLoad();sstLoad()}requestAnimationFrame(frame)}
 
 /* pointer: pan, pinch, wheel, click */
 var ptrs={},moved=0,pinch0=null;
@@ -744,7 +754,7 @@ function setView(v){fit(VIEWS[v].box,true);[].forEach.call($('views').children,f
 function buildControls(){
   $('layers').innerHTML='<span class="lbl">Show</span>'+LAYERS.filter(function(l){return l[0]!=='radar'||(LIVE_MODE&&radar.ok)}).map(function(l){return '<button class="chip" data-l="'+l[0]+'" aria-pressed="'+on[l[0]]+'"><span class="sw" style="background:'+(on[l[0]]?l[2]:'')+'"></span>'+l[1]+'</button>'}).join('');
   $('layN').textContent=LAYERS.filter(function(l){return on[l[0]]}).length+' of '+LAYERS.length+' layers on';
-  $('layers').onclick=function(e){var b=e.target.closest('.chip');if(!b)return;var k=b.dataset.l;on[k]=!on[k];save();buildControls();legend();dirty=true;if(k==='radar'&&on.radar)loadRadar()};
+  $('layers').onclick=function(e){var b=e.target.closest('.chip');if(!b)return;var k=b.dataset.l;on[k]=!on[k];save();buildControls();legend();dirty=true;if(k==='radar'&&on.radar)loadRadar();if(k==='radar'){if(!on.radar&&rl.on)rlStop();else rlUi()}};
   $('days').innerHTML=[1,2,3].map(function(d){var w=dayWindow(d);return '<button data-d="'+d+'" aria-pressed="'+(d===day)+'">'+(d===1?'Today':d===2?'Tomorrow':fDay.format(new Date(w[0]+6*36e5)).split(',')[0])+'</button>'}).join('');
   $('days').onclick=function(e){var b=e.target.closest('button');if(!b)return;day=+b.dataset.d;buildControls();legend();dirty=true};
   $('sst').innerHTML=[['off','Off'],['temp','Temperature'],['anom','Vs. normal']].map(function(x){return '<button aria-pressed="'+(sst===x[0])+'" data-s="'+x[0]+'">'+x[1]+'</button>'}).join('');
@@ -755,7 +765,7 @@ function legend(){var h=[],n=now();
   ['torn','spc','ero','fire'].forEach(function(kind){if(!on[kind])return;var cfg=OUT[kind],have=cfg.order.filter(function(l){return D.outlooks.some(function(o){return o.kind===kind&&o.day===day&&o.label===l&&o.end>n})});if(have.length)h.push('<span><b>'+cfg.name+'</b></span>'+have.map(function(l){return '<span><i style="background:'+cfg.color[l]+'"></i>'+cfg.label[l]+'</span>'}).join(''))});
   if(on.wwa){var types={};activeWWA().forEach(function(a){types[a.type]=1});var tl=Object.keys(types).sort(function(a,b){return wwaRank(a)-wwaRank(b)});if(tl.length)h.push('<span><b>Warnings</b></span>'+tl.slice(0,9).map(function(x){return '<span><i style="background:'+(WWA_COLOR[x]||'#9AA5B1')+'"></i>'+x+'</span>'}).join('')+(tl.length>9?'<span>+'+(tl.length-9)+' more</span>':''))}
   if(on.storms&&D.storms.length)h.push('<span><b>Storm wind</b></span>'+['TD','TS','1','2','3','4','5'].map(function(x,i){return '<span><i class="dot" style="background:'+CAT_COLOR[i]+'"></i>'+x+'</span>'}).join(''));
-  if(on.radar&&radar.off)h.push('<span><b>Radar</b></span><span>NOAA MRMS reflectivity, latest scan</span>');
+  if(on.radar&&radar.off)h.push('<span><b>Radar</b></span><span>NOAA MRMS reflectivity, '+(rl.on?'past hour replayed':'latest scan')+'</span>');
   if(WD){var wl=[];if(on.storms&&wStorms().length)wl.push('<span>Storm outside the Hurricane Center area: solid track observed, dashed forecast, shaded wind zones (GDACS)</span>');
     if(on.volc&&WD.eruptions)wl.push('<span><i style="background:#F08A24"></i>Erupting volcano (triangle)</span>');if(on.tsu&&WD.tsunami)wl.push('<span><i class="dot" style="background:#1D4FA3"></i>Tsunami message</span>');
     if(on.fires&&WD.fires)wl.push('<span><i style="background:#D9480F;transform:rotate(45deg)"></i>Wildfire (diamond, size = area burned)</span>');if(on.floods&&WD.floods&&WD.floods.length)wl.push('<span><i style="background:#2C6FBB"></i>Major flood (square)</span>');
@@ -1332,7 +1342,7 @@ function tickFast(){if(document.hidden)return;lastFast=now();ticks++;fast().then
 function tickSlow(){if(document.hidden)return;lastSlow=now();slow().then(renderAll)}
 function startLive(){ // one cheap probe first, so a page that is not allowed to call out stays quiet
   getJSON('https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&limit=1&minmagnitude=6').then(function(){
-    Promise.all([slow(),fast()]).then(function(r){if(!(r[1]||r[0].some(Boolean)))return;LIVE_MODE=true;lastSlow=lastFast=now();renderAll();loadRadar();
+    Promise.all([slow(),fast()]).then(function(r){if(!(r[1]||r[0].some(Boolean)))return;LIVE_MODE=true;lastSlow=lastFast=now();renderAll();loadRadar();rlUi();
       setInterval(tickFast,60e3);setInterval(tickSlow,5*60e3);
       document.addEventListener('visibilitychange',function(){if(document.hidden)return;if(now()-lastFast>50e3)tickFast();if(now()-lastSlow>4*60e3)tickSlow()})})},function(){});
 }
@@ -1347,8 +1357,8 @@ function loadRadar(){
   if(!LIVE_MODE||!on.radar||!radar.ok||!W)return;var vb=viewBox(),w=Math.max(vb[0],-130),e=Math.min(vb[1],-60),s=Math.max(vb[2],20),n=Math.min(vb[3],55);
   if(e-w<0.3||n-s<0.3){radar.off=null;dirty=true;return}
   var iw=Math.min(1400,Math.round(W*dpr)),ih=Math.max(64,Math.min(1400,Math.round(iw*(n-s)/((e-w)*Math.cos((n+s)/2*D2R))))),seq=++radar.seq,v0={cx:view.cx,cy:view.cy,k:view.k,W:W,H:H,dpr:dpr};
-  var img=new Image();img.onload=function(){if(seq!==radar.seq)return;try{radar.off=warp(img,w,s,e,n,v0);radar.v=v0;dirty=true;legend()}catch(err){radar.off=null}};
-  img.onerror=function(){if(seq!==radar.seq)return;if(radar.src===0){radar.src=1;loadRadar()}else{radar.ok=false;radar.off=null;buildControls();dirty=true}};
+  var img=new Image();img.onload=function(){if(seq!==radar.seq)return;try{radar.off=warp(img,w,s,e,n,v0);radar.v=v0;dirty=true;legend();rlUi(true)}catch(err){radar.off=null}};
+  img.onerror=function(){if(seq!==radar.seq)return;if(radar.src===0){radar.src=1;loadRadar()}else{radar.ok=false;radar.off=null;buildControls();if(rl.on)rlStop();else rlUi();dirty=true}};
   img.src=radarUrl(radar.src,w,s,e,n,iw,ih)}
 function warp(img,w,s,e,n,v){var c=document.createElement('canvas');c.width=Math.round(v.W*v.dpr);c.height=Math.round(v.H*v.dpr);var g=c.getContext('2d'),nx=36,ny=24,iw=img.naturalWidth||img.width,ih=img.naturalHeight||img.height,P=[],i,j;
   for(j=0;j<=ny;j++){P[j]=[];for(i=0;i<=nx;i++){var q=proj(w+(e-w)*i/nx,n-(n-s)*j/ny);q[0]=nearX(q[0],v.cx);P[j][i]=[((q[0]-v.cx)*v.k+v.W/2)*v.dpr,((q[1]-v.cy)*v.k+v.H/2)*v.dpr,iw*i/nx,ih*j/ny]}}
@@ -1360,8 +1370,49 @@ function warp(img,w,s,e,n,v){var c=document.createElement('canvas');c.width=Math
     g.drawImage(img,0,0);g.restore()}
   for(j=0;j<ny;j++)for(i=0;i<nx;i++){tri(P[j][i],P[j][i+1],P[j+1][i]);tri(P[j][i+1],P[j+1][i+1],P[j+1][i])}
   return c}
-function drawRadar(){if(!LIVE_MODE||!on.radar||!radar.off||!radar.v)return;var v=radar.v,sc=view.k/v.k;
-  ctx.setTransform(sc*dpr/v.dpr,0,0,sc*dpr/v.dpr,(W/2-v.W/2*sc+(v.cx-view.cx)*view.k)*dpr,(H/2-v.H/2*sc+(v.cy-view.cy)*view.k)*dpr);ctx.globalAlpha=0.72;ctx.drawImage(radar.off,0,0);ctx.globalAlpha=1}
+
+/* ---------- radar loop: the past hour of NOAA's own radar scans, replayed ----------
+   The scan times come from NOAA's list for this radar layer and are shown as issued. Nothing is predicted: the loop only
+   replays what has already been observed. If NOAA's list cannot be read, the backup source's fixed 5-minute steps are used
+   and labeled as approximate. */
+var rl={on:false,play:false,frames:[],i:0,seq:0,timer:0,need:0,got:0,msg:'',at:0,approx:false};
+var RL_CAPS='https://opengeo.ncep.noaa.gov/geoserver/conus/conus_bref_qcd/ows?service=WMS&version=1.1.1&request=GetCapabilities';
+function rlTimes(){return fetch(RL_CAPS,{cache:'no-store'}).then(function(r){if(!r.ok)throw new Error('caps');return r.text()}).then(function(x){var m=/<Extent[^>]*name="time"[^>]*>([^<]+)</.exec(x);if(!m)throw new Error('no times');
+    var all=m[1].split(',').map(function(s){return s.trim()}).filter(function(s){return !isNaN(Date.parse(s))}).sort(function(a,b){return Date.parse(a)-Date.parse(b)}),out=[],last=Infinity;
+    for(var i=all.length-1;i>=0&&out.length<11;i--){var t=Date.parse(all[i]);if(Date.parse(all[all.length-1])-t>62*60e3)break;if(last-t>=5.4*60e3){out.unshift(all[i]);last=t}} // about one scan every 6 minutes, newest first, back one hour
+    if(out.length<3)throw new Error('few');return out})}
+function rlLoad(){
+  if(!rl.on||!LIVE_MODE||!on.radar||!radar.ok||!W)return;var vb=viewBox(),w=Math.max(vb[0],-130),e=Math.min(vb[1],-60),s=Math.max(vb[2],20),n=Math.min(vb[3],55),seq=++rl.seq;
+  if(e-w<0.3||n-s<0.3){rl.frames=[];rl.msg='Radar covers the United States. Move the map there to see the loop.';rlUi();return}
+  var d2=Math.min(dpr,1.5),iw=Math.min(1000,Math.round(W*d2)),ih=Math.max(64,Math.min(1000,Math.round(iw*(n-s)/((e-w)*Math.cos((n+s)/2*D2R))))),v0={cx:view.cx,cy:view.cy,k:view.k,W:W,H:H,dpr:d2};
+  rl.msg='Loading the past hour…';rl.at=now();rlUi();
+  var go=function(list){if(seq!==rl.seq)return;var fr=list.map(function(x){return {t:x.t,label:x.label,off:null,v:v0}}),next=0;rl.need=list.length;rl.got=0;
+    var one=function(){if(seq!==rl.seq||next>=list.length)return;var k=next++,img=new Image();
+      img.onload=function(){if(seq!==rl.seq)return;try{fr[k].off=warp(img,w,s,e,n,v0)}catch(err){}fin()};img.onerror=function(){if(seq===rl.seq)fin()};
+      function fin(){rl.got++;if(rl.got>=rl.need){var ok=fr.filter(function(f){return f.off});rl.frames=ok;rl.i=ok.length-1;rl.msg=ok.length>=2?'':'The radar loop did not load. The latest scan is still shown.';if(ok.length>=2&&rl.play)rlRun()}rlUi();dirty=true;one()}
+      img.src=list[k].url};
+    one();one();one()};
+  var q=function(src){return radarUrl(src,w,s,e,n,iw,ih)};
+  var backup=function(){rl.approx=true;var L=[];for(var m=50;m>=0;m-=5)L.push({t:null,label:m?'about '+m+' min before the latest scan':'latest scan',url:q(1).replace('LAYERS=nexrad-n0q-900913&','LAYERS=nexrad-n0q-900913'+(m?'-m'+(m<10?'0':'')+m+'m':'')+'&')});go(L)};
+  if(radar.src!==0){backup();return}
+  rlTimes().then(function(ts){rl.approx=false;go(ts.map(function(t){return {t:Date.parse(t),label:'',url:q(0)+'&TIME='+encodeURIComponent(t)}}))},function(){if(seq===rl.seq)backup()})}
+function rlRun(){clearTimeout(rl.timer);if(!rl.on||!rl.play||rl.frames.length<2)return;
+  rl.timer=setTimeout(function(){if(!rl.on||!rl.play)return;if(!document.hidden){rl.i=(rl.i+1)%rl.frames.length;dirty=true;rlUi(true)}rlRun()},rl.i===rl.frames.length-1?1600:420)}
+function rlLabel(){var f=rl.frames[rl.i];if(!f)return rl.msg;return f.t?'Radar at '+fHM.format(new Date(f.t))+' &middot; '+ago(f.t):'Radar, '+f.label}
+function rlUi(light){var el=$('rl');if(!el||!rl)return;var can=LIVE_MODE&&on.radar&&radar.ok;el.hidden=!can;if(!can)return;
+  if(!rl.on){el.className='rl';el.innerHTML='<button type="button" data-r="start">&#9654; Radar loop</button>';return}
+  var n=rl.frames.length;if(light&&el.querySelector('input')&&+el.querySelector('input').max===n-1){el.querySelector('input').value=rl.i;el.querySelector('.rlt').innerHTML=rlLabel();return}
+  el.className='rl open';el.innerHTML='<button type="button" data-r="play" aria-label="'+(rl.play?'Pause the radar loop':'Play the radar loop')+'"'+(n<2?' disabled':'')+'>'+(rl.play?'&#10073;&#10073;':'&#9654;')+'</button>'+
+    (n>=2?'<input type="range" min="0" max="'+(n-1)+'" step="1" value="'+rl.i+'" aria-label="Radar time, past hour">':'')+'<span class="rlt" role="status">'+(n>=2?rlLabel():esc(rl.msg)+(rl.need&&rl.got<rl.need?' '+rl.got+' of '+rl.need:''))+'</span><button type="button" data-r="stop" aria-label="Close the radar loop">&times;</button>'+
+    (n>=2?'<span class="rln">Past hour, observed'+(rl.approx?' (backup source, times approximate)':'')+'. Not a forecast.</span>':'')}
+function rlStop(){rl.on=false;rl.play=false;clearTimeout(rl.timer);rl.seq++;rl.frames=[];rl.msg='';rlUi();legend();dirty=true}
+$('rl').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;var r=b.dataset.r;
+  if(r==='start'){rl.on=true;rl.play=!noMotion;rlLoad();legend()}else if(r==='stop')rlStop();else if(r==='play'){rl.play=!rl.play;if(rl.play)rlRun();else clearTimeout(rl.timer);rlUi()}});
+$('rl').addEventListener('input',function(e){if(e.target.type!=='range')return;rl.play=false;clearTimeout(rl.timer);rl.i=+e.target.value;dirty=true;var b=$('rl').querySelector('[data-r="play"]');if(b){b.innerHTML='&#9654;';b.setAttribute('aria-label','Play the radar loop')}$('rl').querySelector('.rlt').innerHTML=rlLabel()});
+['pointerdown','pointermove','wheel','touchstart'].forEach(function(t){$('rl').addEventListener(t,function(e){e.stopPropagation()})});
+setInterval(function(){if(rl.on&&!document.hidden&&now()-rl.at>5*60e3)rlLoad();else if(rl.on)rlUi(true)},60e3); // new scans every five minutes; the "ago" text every minute
+function drawRadar(){if(!LIVE_MODE||!on.radar)return;var f=rl.on&&rl.frames[rl.i]&&rl.frames[rl.i].off?rl.frames[rl.i]:null,img0=f?f.off:radar.off,v=f?f.v:radar.v;if(!img0||!v)return;var sc=view.k/v.k;
+  ctx.setTransform(sc*dpr/v.dpr,0,0,sc*dpr/v.dpr,(W/2-v.W/2*sc+(v.cx-view.cx)*view.k)*dpr,(H/2-v.H/2*sc+(v.cy-view.cy)*view.k)*dpr);ctx.globalAlpha=0.72;ctx.drawImage(img0,0,0);ctx.globalAlpha=1}
 
 /* ---------- boot ---------- */
 readCss();
