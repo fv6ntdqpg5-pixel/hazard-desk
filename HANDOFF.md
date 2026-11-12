@@ -157,6 +157,32 @@ Aira ~30 ka, Campanian Ignimbrite ~39 ka).
   (`earliestArrivalTimeTSWindsGIS` in CurrentStorms.json); reading it would give an official arrival time. Storm surge
   watch/warning and peak surge files are listed there too.
 
+## 4f. Local weather for a U.S. spot (LIVE Nov 11, 2026 on Randy's Go)
+
+- Randy, Nov 11: make this "more of a local weather site like AccuWeather as well": checking a hurricane or tornado
+  from your own location without ads. He approved the plan: U.S. first from the National Weather Service; no 30- or
+  90-day daily forecasts (none are reliable); official wind chill / heat index for "feels like".
+- All of it is read by the browser straight from `api.weather.gov` (CORS is open; no key). Module `LW` in `page.html`:
+  `lwLoad`, `lwPoint` (grid lookup, cached 12 h in localStorage `wxpt`), `lwObs` (nearest of four stations with a
+  temperature from the last 3 h), `lwAlertHtml`, `lwNowHtml`, `lwHourlyHtml`, `lwDailyHtml`, `lwSections`.
+  Refresh: alerts every 2 min, station reading every 10, forecast every 30.
+- "Your spot" for a U.S. spot now leads with the Weather Service's own list of every alert at the point (all types,
+  which closes the "river flood and marine warnings are not mapped" gap), each with "What to do" (the alert's
+  instruction) and the full text folded. Then Right now, Next 24 hours (a sideways-scrolling table), Next 7 days (day and
+  night paired; tap for the full wording), then storms, the severe weather outlook and quakes as before. The older
+  polygon method remains the fallback and still supplies nearby warnings and projected arrival times.
+- Times in the local sections use the spot's time zone from the Weather Service. Re-rendering keeps open sections
+  open and the hourly table's scroll position.
+- Privacy line changed: for a U.S. spot the browser sends the coordinates (two decimals) to the Weather Service;
+  nothing comes to this site.
+- A point outside NWS coverage answers 404 and the panel says so. Coordinates are sent without trailing zeros because
+  the Weather Service redirects 43.10 to 43.1.
+- Built against real answers fetched through a throwaway branch `probe-nws` (`api/probe.js`, api.weather.gov only),
+  emptied after this went live (the probe file is removed from the branch; the branch itself could not be deleted
+  from the build workspace and can be deleted in GitHub). Not yet seen in a real browser against the live Weather Service.
+- Not built yet: radar loop; Canada (ECCC open data); the rest of the world (decision pending: model forecast labeled
+  as such, or nothing); notifications when the page is closed.
+
 ## 5. Open list
 
 1. **NASA FIRMS fire detections** (every hotspot, not just big fires): needs `FIRMS_MAP_KEY` in Vercel; aggregate
