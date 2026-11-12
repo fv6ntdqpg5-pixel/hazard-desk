@@ -66,12 +66,14 @@ async function tsunami(code) {
       const sec = name => { const m = new RegExp(name + '[^\\n]*\\n-+\\n([\\s\\S]*?)(\\n\\n\\n|\\n[A-Z][A-Z .]+\\n-{4,})').exec(txt); return m ? m[1].replace(/\s+/g, ' ').trim() : ''; };
       out.threat = sec('TSUNAMI THREAT FORECAST') || sec('TSUNAMI THREAT');
       out.evaluation = sec('EVALUATION');
-      out.final = /FINAL|NO LONGER A TSUNAMI THREAT|THREAT FROM THIS EARTHQUAKE HAS NOW PASSED|NOT EXPECTED TO GENERATE A TSUNAMI|NO TSUNAMI DANGER/i.test(txt);
+      out.final = /FINAL|NO LONGER A TSUNAMI THREAT|THREAT FROM THIS EARTHQUAKE HAS NOW PASSED|NOT EXPECTED TO GENERATE A TSUNAMI|NO TSUNAMI DANGER|THERE IS NO TSUNAMI THREAT|NO TSUNAMI THREAT TO|A TSUNAMI IS NOT EXPECTED/i.test(txt);
       const mag = /MAGNITUDE\s+([\d.]+)/.exec(txt), loc = /LOCATION\s+([^\n]+)/.exec(txt), co = /COORDINATES\s+([\d.]+)\s+(NORTH|SOUTH)\s+([\d.]+)\s+(EAST|WEST)/.exec(txt);
       if (mag) out.magnitude = +mag[1];
       if (loc && !out.region) out.region = loc[1].trim();
       if (co && out.lat == null) { out.lat = +co[1] * (co[2] === 'SOUTH' ? -1 : 1); out.lon = +co[3] * (co[4] === 'WEST' ? -1 : 1); }
-      const kind = /TSUNAMI (WARNING|ADVISORY|WATCH)\b/.exec(txt.slice(0, 600)) || /(Warning|Advisory|Watch|Threat)/.exec(out.category || '');
+      // Nov 11, 2026: every bulletin's header names the issuing "TSUNAMI WARNING CENTER", which used to be read as a warning.
+      // A no-threat information statement for a M4.6 near Puerto Rico was labeled "Warning" that way. The center's name no longer counts.
+      const kind = /TSUNAMI (WARNING|ADVISORY|WATCH)\b(?!\s+CENTER)/.exec(txt.slice(0, 600)) || /(Warning|Advisory|Watch|Threat)/.exec(out.category || '');
       out.level = out.final ? 'Final' : /HAZARDOUS TSUNAMI WAVES ARE FORECAST|TSUNAMI THREAT FORECAST\.\.\.[\s\S]{0,40}\n[\s\S]{0,200}METERS/.test(txt) && !out.final ? 'Threat' : kind ? kind[1][0] + kind[1].slice(1).toLowerCase() : (out.final ? 'Final / information' : 'Information');
     }
   }

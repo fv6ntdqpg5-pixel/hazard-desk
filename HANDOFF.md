@@ -95,6 +95,13 @@ Aira ~30 ka, Campanian Ignimbrite ~39 ka).
   search yet. (3) River flood and marine warnings are not in the mapped set. (4) Tested against the saved snapshot with
   the clock set back; not yet seen with live feeds (the workspace cannot reach them) or on a real phone.
 
+## 4d. Tsunami label fix (LIVE Nov 11, 2026 on Randy's "Go on the tsunami fix")
+
+- `api/world.js`: every tsunami bulletin's header names the issuing "TSUNAMI WARNING CENTER", and the parser read that
+  as a warning. A no-threat information statement (M4.6 near Puerto Rico, Nov 8) was labeled "Warning" and would have
+  raised the red tsunami banner for 24 hours. The center's name no longer counts, and "there is no tsunami threat" now
+  marks a message final. Put live on its own, ahead of the one-map work.
+
 ## 5. Open list
 
 1. **NASA FIRMS fire detections** (every hotspot, not just big fires): needs `FIRMS_MAP_KEY` in Vercel; aggregate
