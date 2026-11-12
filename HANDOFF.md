@@ -178,7 +178,8 @@ Aira ~30 ka, Campanian Ignimbrite ~39 ka).
 - A point outside NWS coverage answers 404 and the panel says so. Coordinates are sent without trailing zeros because
   the Weather Service redirects 43.10 to 43.1.
 - Built against real answers fetched through a throwaway branch `probe-nws` (`api/probe.js`, api.weather.gov only),
-  deleted after this went live. Not yet seen in a real browser against the live Weather Service.
+  emptied after this went live (the probe file is removed from the branch; the branch itself could not be deleted
+  from the build workspace and can be deleted in GitHub). Not yet seen in a real browser against the live Weather Service.
 - Not built yet: radar loop; Canada (ECCC open data); the rest of the world (decision pending: model forecast labeled
   as such, or nothing); notifications when the page is closed.
 
