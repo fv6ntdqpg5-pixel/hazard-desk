@@ -209,6 +209,35 @@ Randy, Nov 11: "Add Canada / Show computer model everywhere else".
   cannot reach them); Open-Meteo's browser access (CORS) in particular is unverified until Randy opens the preview.
 - Not done: Canadian and Mexican warnings drawn on the map; French text; a °C/°F switch; Mexico's official forecast (no open feed found).
 
+## 4h. Tracking: pick a storm or warning and watch it (PREVIEW on branch `track`, waiting for Randy's Go)
+
+Randy, Nov 11: anyone must be able to "pinpoint/select" a hurricane, tornado or severe storm "and watch it. This could help save a life".
+
+- Module "tracking" near the end of `page.html` (`trk`, `trkStart`, `trkFind`, `trkCheck`, `trkRender`). No new feed and no
+  new estimate: it repeats what the feeds already say about one chosen thing and measures it against "Your spot".
+- What can be tracked: an NHC storm (`storm:<id>`), a GDACS storm outside NHC's area (`wstorm:<id>`), and a Tornado, Severe
+  Thunderstorm or Flash Flood Warning (`cell:<key>`). "Track this" buttons (`data-tk`) are in the map popup, the red tornado
+  banner (tapping a banner line now opens that warning with the button), and the "Your spot" storm and warning lists.
+- A warning's identity is its VTEC event (office.hazard.significance.number, `vtecKey`), added to `liveCells` as `key`, so it
+  survives the Weather Service's updates. If that event is gone and another warning of the same kind is within 25 miles
+  (40 km), the card switches to it and says so in words. If nothing matches, the card says it is no longer in effect and
+  that this is not an all-clear. If the 60-second feed is stale the card says it cannot confirm, never "ended".
+- The card (`#trk`) is fixed to the bottom of the screen, above the full-screen map too. Compact on phones (More / Less).
+  It shows: covers your spot or distance to the nearest edge, projected arrival at the spot (same straight-line method as
+  before), in effect until, storm motion, towns along the path; for hurricanes category, movement, distance, closest forecast
+  approach, advisory. Changes (new advisory, extended, upgraded tags, now covers your spot, ended, replaced) are announced in
+  the card with a marker and time, a tone (Web Audio, "Sound on/off") and vibration where the phone allows. Three tones when
+  a warning starts covering the spot.
+- Map: frames the warned area plus the spot (if within 75 miles), dashed white outline on the warning, dashed ring and a
+  "TRACKING" label on storms; turns radar on for warnings. Panning or zooming stops the auto-centering ("Re-center map").
+- Screen Wake Lock keeps the phone awake while tracking, where the browser supports it; the card says which.
+- The choice is saved in localStorage `haztrk` and restored on reload (sound stays off until tapped: browsers require a tap).
+- Limits, stated on the card: no live tornado position exists, only the warning area and stated motion; it works only while
+  the page is open; outside the U.S. only hurricanes can be tracked.
+- Tested in a browser with a constructed Tornado Warning in the real feed format (no real tornado warning was available to
+  save): start, update (extended + observed + now covers spot), replacement by a new warning, end, reload, stop, map pan;
+  and with the saved hurricane. **Not yet seen against a live warning.** Sound and wake lock cannot be tested here at all.
+
 ## 5. Open list
 
 1. **NASA FIRMS fire detections** (every hotspot, not just big fires): needs `FIRMS_MAP_KEY` in Vercel; aggregate
