@@ -95,6 +95,25 @@ button{font:inherit;color:inherit}
 .verdict.warn{border-left-color:var(--crit)}
 .verdict.watch{border-left-color:var(--warn)}
 .verdict.clear{border-left-color:var(--ok)}
+.wxnow{display:flex;align-items:center;gap:14px;margin:0 0 8px}
+.wxt{font-family:var(--font-display);font-weight:700;font-size:58px;line-height:.95;font-variant-numeric:tabular-nums}
+.hr{overflow-x:auto;border:1px solid var(--rule);border-radius:6px}
+.hr table{width:auto;min-width:100%;font-size:13px;border-collapse:separate;border-spacing:0}
+.hr th{position:sticky;left:0;background:var(--panel-2);z-index:1;border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);padding:6px 7px;font-size:11px;white-space:normal;max-width:62px;line-height:1.2;vertical-align:middle}
+.hr td{min-width:52px;text-align:center;white-space:nowrap;padding:6px 6px;border-bottom:1px solid var(--rule);border-right:1px solid var(--rule);font-weight:400;vertical-align:middle}
+.hr tr:last-child td,.hr tr:last-child th{border-bottom:0}
+.hr tr.t td{font-weight:600;font-size:15px}
+.hr tr.sky td{white-space:normal;font-size:11.5px;min-width:74px;color:var(--muted);line-height:1.25}
+.hr .newday{border-left:2px solid var(--ink)}
+.pbar{display:block;height:5px;border-radius:2px;background:var(--rule);margin:3px auto 0;width:36px;overflow:hidden}
+.pbar i{display:block;height:100%;background:var(--accent)}
+.wxdays{list-style:none;margin:0;padding:0}
+.wxdays li{border-top:1px solid var(--rule)}.wxdays li:first-child{border-top:0}
+.wxdays summary{display:grid;grid-template-columns:minmax(84px,1.1fr) minmax(104px,auto) minmax(0,3fr);gap:4px 12px;align-items:baseline;padding:8px 0;cursor:pointer}
+.wxdays .dn{font-weight:600}.wxdays .dt{font-variant-numeric:tabular-nums;white-space:nowrap}.wxdays .ds{color:var(--muted);font-size:13.5px}
+@media (max-width:520px){.wxdays summary{grid-template-columns:1fr auto}.wxdays .ds{grid-column:1/-1}}
+.wxdays details p{margin:0 0 8px}
+.spgrid .wide{grid-column:1/-1}
 .spgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:14px 26px}
 .spgrid section{min-width:0}
 .spstorm{border:1px solid var(--rule);border-radius:6px;padding:10px 12px;margin:0 0 8px}
@@ -271,7 +290,7 @@ footer .feeds{font-family:var(--font-mono);font-size:12px;display:flex;flex-wrap
 
   <footer>
     <div class="feeds" id="feeds"></div>
-    <p><b>Sources, United States and North America.</b> NOAA National Hurricane Center and Central Pacific Hurricane Center (storms, forecast cones, tropical outlooks), NWS (warnings and watches), Storm Prediction Center (severe storm, tornado and fire weather outlooks), NOAA MRMS radar, Iowa Environmental Mesonet (storm reports), Weather Prediction Center (excessive rainfall and heavy snow outlooks), USGS Earthquake Hazards Program, and the USGS volcano observatories. Canadian and Mexican national weather warnings are not included yet.</p>
+    <p><b>Sources, United States and North America.</b> Local alerts, current conditions and the hourly and 7-day forecast for your spot: the National Weather Service, read by your browser from api.weather.gov. NOAA National Hurricane Center and Central Pacific Hurricane Center (storms, forecast cones, tropical outlooks), NWS (warnings and watches), Storm Prediction Center (severe storm, tornado and fire weather outlooks), NOAA MRMS radar, Iowa Environmental Mesonet (storm reports), Weather Prediction Center (excessive rainfall and heavy snow outlooks), USGS Earthquake Hazards Program, and the USGS volcano observatories. Canadian and Mexican national weather warnings are not included yet.</p>
     <p><b>Sources, world.</b> Tropical storms outside the Hurricane Center's area, floods and volcano alerts: <a href="https://www.gdacs.org/" rel="noopener" target="_blank">GDACS</a>, the Global Disaster Alert and Coordination System of the United Nations and the European Commission, with storm tracks from the national and joint warning centers. Erupting volcanoes: the Smithsonian Institution's <a href="https://volcano.si.edu/" rel="noopener" target="_blank">Global Volcanism Program</a>. Earthquakes outside North America: <a href="https://earthquake.usgs.gov/" rel="noopener" target="_blank">USGS</a>, magnitude 4.5 and up. Tsunami messages: NOAA's <a href="https://www.tsunami.gov/" rel="noopener" target="_blank">tsunami warning centers</a>. Sea temperature: NASA <a href="https://earthdata.nasa.gov/gibs" rel="noopener" target="_blank">GIBS</a>, MUR daily analysis from JPL. Wildfires: the EU <a href="https://gwis.jrc.ec.europa.eu/" rel="noopener" target="_blank">Global Wildfire Information System</a> via GDACS. Space weather and aurora: NOAA <a href="https://www.swpc.noaa.gov/" rel="noopener" target="_blank">Space Weather Prediction Center</a>. Caldera status: USGS, <a href="https://www.geonet.org.nz/" rel="noopener" target="_blank">GeoNet</a> (New Zealand), <a href="https://www.ingv.it/" rel="noopener" target="_blank">INGV</a> (Italy) and the Smithsonian. Town names for "Your spot" are from <a href="https://www.geonames.org/" target="_blank" rel="noopener">GeoNames</a> (CC BY 4.0).</p>
     <p>A web page only helps while it is open. Keep Wireless Emergency Alerts turned on in your phone and have a second way to get warnings, such as a NOAA Weather Radio. The NWS feed itself can run a minute or two behind a new warning.</p>
     <p><b>Not an official warning service.</b> This is an independent summary. For decisions about life and property, follow your local National Weather Service office at <a href="https://www.weather.gov/" target="_blank" rel="noopener">weather.gov</a>, the National Hurricane Center at <a href="https://www.nhc.noaa.gov/" target="_blank" rel="noopener">nhc.noaa.gov</a>, and local emergency officials. A tsunami message from NOAA's centers is advice to national authorities outside the United States; each country decides its own warnings. Storm wind zones outside the Hurricane Center's area are GDACS estimates, not official forecast cones.</p>
@@ -740,7 +759,7 @@ function etaAt(a,lat,lon){var m=a.motion;if(!m||m.kt<3||a.type==='Flash Flood Wa
 var NAT={CA:['Canada','Environment and Climate Change Canada','https://weather.gc.ca/warnings/index_e.html'],MX:['Mexico','Servicio Meteorológico Nacional','https://smn.conagua.gob.mx/']};
 function spotUS(){return !spot.cc||spot.cc==='US'||spot.cc==='PR'||spot.cc==='VI'}
 function spotName(){return spot.name||(Math.abs(spot.lat).toFixed(2)+'°'+(spot.lat>=0?'N':'S')+' '+Math.abs(spot.lon).toFixed(2)+'°'+(spot.lon>=0?'E':'W'))}
-function spotSetHtml(){return '<div class="spset"><button class="spbtn" id="spGeo" type="button">Use my location</button><div class="spsearch"><input id="spQ" type="search" placeholder="Search a town or city" autocomplete="off" aria-label="Search for a town or city in North America"><ul class="spres" id="spRes" hidden></ul></div><button class="spbtn alt" id="spTap" type="button" aria-pressed="'+(spotPick?'true':'false')+'">'+(spotPick?'Now tap your spot on the map':'Tap it on the map')+'</button>'+(spot?'<button class="spbtn alt" id="spCancel" type="button">Cancel</button>':'')+'</div>'+(spotMsg?'<p class="sub" role="status">'+esc(spotMsg)+'</p>':'')+'<p class="sub">Your spot is saved only in this browser. It is not sent to this site or to anyone else.</p>'}
+function spotSetHtml(){return '<div class="spset"><button class="spbtn" id="spGeo" type="button">Use my location</button><div class="spsearch"><input id="spQ" type="search" placeholder="Search a town or city" autocomplete="off" aria-label="Search for a town or city in North America"><ul class="spres" id="spRes" hidden></ul></div><button class="spbtn alt" id="spTap" type="button" aria-pressed="'+(spotPick?'true':'false')+'">'+(spotPick?'Now tap your spot on the map':'Tap it on the map')+'</button>'+(spot?'<button class="spbtn alt" id="spCancel" type="button">Cancel</button>':'')+'</div>'+(spotMsg?'<p class="sub" role="status">'+esc(spotMsg)+'</p>':'')+'<p class="sub">Your spot is saved only in this browser and is never sent to this site. For a spot in the United States, your browser sends its coordinates (to about half a mile) to the National Weather Service to get the local forecast and alerts.</p>'}
 // which of a storm position's wind radii covers a point: 64, 50 or 34 (knots), or 0. NHC gives the radii by quarter of the storm, in nautical miles.
 function windAt(lat,lon,pt,radii){if(!radii)return 0;var d=distKm(lat,lon,pt.lat,pt.lon),q=bearing(pt.lat,pt.lon,lat,lon),qi=q<90?0:q<180?1:q<270?2:3,hit=0;['64','50','34'].forEach(function(k){var r=radii[k];if(!hit&&r&&d<=r[qi]*1.852)hit=+k});return hit}
 var WINDLONG={64:'hurricane-force (74 mph or more)',50:'58 mph or more',34:'tropical-storm-force (39 mph or more)'},WINDSHORT={64:'74+ mph',50:'58+ mph',34:'39+ mph'};
@@ -767,9 +786,78 @@ function spotStorm(s){
   if(s.dissipated)h+='<p class="sub" style="margin-top:6px">The Hurricane Center forecasts the storm to have dissipated by '+tz(s.dissipated)+'.</p>';
   if(s.watches||(s.watchesParas&&s.watchesParas.length))h+='<p style="margin-top:8px"><b>Coastal watches and warnings, as issued by the Hurricane Center:</b></p>'+paras(s.watchesParas,s.watches);
   if(s.hazards||(s.hazardsParas&&s.hazardsParas.length))h+='<p style="margin-top:8px"><b>Hazards affecting land, as issued:</b></p>'+paras(s.hazardsParas,s.hazards,'sub');
-  if(s.discussionParas&&s.discussionParas.length)h+='<details style="margin:8px 0"><summary><b>Discussion and outlook, as issued</b></summary>'+paras(s.discussionParas,'','sub')+'</details>';
+  if(s.discussionParas&&s.discussionParas.length)h+='<details data-k="disc'+esc(s.id)+'" style="margin:8px 0"><summary><b>Discussion and outlook, as issued</b></summary>'+paras(s.discussionParas,'','sub')+'</details>';
   h+='<p class="sub">The cone shows where the center will probably track, not how big the storm is; wind, surge and rain reach well outside it. Distances are to the forecast center track. Advisory '+esc(s.adv)+' issued '+tz(s.advTime)+(s.nextAdv?', next '+t(s.nextAdv):'')+'. <button class="go" data-storm="'+esc(s.id)+'">Show on map</button> &middot; <a href="'+esc(s.tcpUrl||s.url||'https://www.nhc.noaa.gov/')+'" target="_blank" rel="noopener">Official NHC advisory</a></p></div>';
   return {far:false,html:h,score:(inCone?0:1e6)+c.km}}
+/* ---------- local weather for a U.S. spot: the National Weather Service's own alerts, station reading and point forecast ----------
+   Read by the browser straight from api.weather.gov. Nothing is computed here except unit changes (°C to °F, km/h to mph). */
+var LW=null,NWS='https://api.weather.gov';
+function lwKey(){return spot?String(Math.round(spot.lat*100)/100)+','+String(Math.round(spot.lon*100)/100):''} // no trailing zeros: the Weather Service redirects 43.10 to 43.1
+function lwOn(){return !!(LW&&spot&&LW.key===lwKey())}
+function nwsGet(u){return fetch(u).then(function(r){if(!r.ok){var e=new Error('NWS '+r.status);e.status=r.status;throw e}return r.json()})}
+function lwPoint(L){
+  try{var c=JSON.parse(localStorage.getItem('wxpt')||'null');if(c&&c.key===L.key&&now()-c.t<12*36e5){L.pt=c.pt;return Promise.resolve(c.pt)}}catch(e){}
+  return nwsGet(NWS+'/points/'+L.key).then(function(j){var p=j.properties||{},rl=(p.relativeLocation&&p.relativeLocation.properties)||{},as=p.astronomicalData||{};
+    L.pt={forecast:p.forecast,hourly:p.forecastHourly,stations:p.observationStations,city:rl.city||'',state:rl.state||'',tz:p.timeZone||'',office:p.cwa||'',sunrise:as.sunrise||null,sunset:as.sunset||null,st:null};
+    if(!/^https:\/\/api\.weather\.gov\//.test(L.pt.forecast||'')||!/^https:\/\/api\.weather\.gov\//.test(L.pt.hourly||''))throw new Error('no forecast address');
+    lwSavePt(L);return L.pt})}
+function lwSavePt(L){try{localStorage.setItem('wxpt',JSON.stringify({key:L.key,t:now(),pt:L.pt}))}catch(e){}}
+function cToF(v){return v==null?null:v*9/5+32}
+function toMph(q){if(!q||q.value==null)return null;return /m_s-1/.test(q.unitCode||'')?q.value*2.23694:q.value*0.621371}
+// the nearest station that has a temperature reading from the last three hours (the list comes nearest first)
+function lwObs(L,p){
+  var list=p.st?Promise.resolve(p.st):(/^https:\/\/api\.weather\.gov\//.test(p.stations||'')?nwsGet(p.stations):Promise.reject(new Error('no stations'))).then(function(j){p.st=(j.features||[]).slice(0,4).map(function(f){return [f.properties.stationIdentifier,f.properties.name]});lwSavePt(L);return p.st});
+  return list.then(function(st){var i=0;function next(){if(i>=st.length)throw new Error('no reading');var id=st[i][0],nm=st[i][1];i++;
+      return nwsGet(NWS+'/stations/'+encodeURIComponent(id)+'/observations/latest').then(function(j){var o=j.properties||{},t=Date.parse(o.timestamp);if(!o.temperature||o.temperature.value==null||!t||now()-t>3*36e5)return next();
+        L.obs={name:nm,id:id,t:t,temp:cToF(o.temperature.value),text:o.textDescription||'',dir:o.windDirection?o.windDirection.value:null,wind:toMph(o.windSpeed),gust:toMph(o.windGust),hum:o.relativeHumidity?o.relativeHumidity.value:null,
+          chill:o.windChill?cToF(o.windChill.value):null,heat:o.heatIndex?cToF(o.heatIndex.value):null,dew:o.dewpoint?cToF(o.dewpoint.value):null,vis:o.visibility&&o.visibility.value!=null?o.visibility.value/1609.34:null};L.at.obs=now();delete L.err.obs},next)}
+    return next()}).then(null,function(){L.err.obs=1;L.at.obs=now()})}
+function lwLoad(what){
+  if(!spot||!spotUS())return;var key=lwKey();if(!LW||LW.key!==key)LW={key:key,at:{},err:{}};
+  var L=LW,all=!what,done=function(){if(LW===L&&!spotEdit)renderSpot()};
+  if(all||what.alerts)nwsGet(NWS+'/alerts/active?point='+key).then(function(j){L.alerts=(j.features||[]).map(function(f){return f.properties}).filter(function(a){return a&&a.status==='Actual'&&a.messageType!=='Cancel'}).sort(function(a,b){return wwaRank(a.event)-wwaRank(b.event)});L.at.alerts=now();delete L.err.alerts},function(e){if(e&&e.status===400)L.none=true;L.err.alerts=1}).then(done);
+  if(!(all||what.fc||what.obs))return;
+  (L.pt?Promise.resolve(L.pt):lwPoint(L)).then(function(p){
+    if(all||what.fc){
+      nwsGet(p.forecast).then(function(j){L.daily=(j.properties&&j.properties.periods)||[];L.fcAt=Date.parse((j.properties&&(j.properties.updateTime||j.properties.generatedAt))||'')||null;L.at.daily=now();delete L.err.daily},function(){L.err.daily=1;L.at.daily=now()-25*60e3}).then(done);
+      nwsGet(p.hourly).then(function(j){L.hourly=(j.properties&&j.properties.periods)||[];L.at.hourly=now();delete L.err.hourly},function(){L.err.hourly=1}).then(done)}
+    if(all||what.obs)lwObs(L,p).then(done,done);
+  },function(e){if(e&&e.status===404)L.none=true;else L.err.pt=1;L.at.daily=L.at.obs=now()-8*60e3;done()})}
+// once a minute: alerts every 2 minutes, the station reading every 10, the forecast every 30
+setInterval(function(){if(document.hidden||!spot||!spotUS()||spotEdit)return;if(!lwOn()){lwLoad();return}var n=now(),w={};
+  if(!LW.at.alerts||n-LW.at.alerts>110e3)w.alerts=1;if(!LW.none&&(!LW.at.obs||n-LW.at.obs>10*60e3))w.obs=1;if(!LW.none&&(!LW.at.daily||n-LW.at.daily>30*60e3))w.fc=1;
+  if(w.alerts||w.obs||w.fc)lwLoad(w)},60e3);
+document.addEventListener('visibilitychange',function(){if(!document.hidden&&spot&&spotUS()&&(!lwOn()||now()-(LW.at.alerts||0)>110e3))lwLoad(lwOn()?{alerts:1,obs:now()-(LW.at.obs||0)>10*60e3,fc:now()-(LW.at.daily||0)>30*60e3}:null)});
+function lwFmt(o){try{return new Intl.DateTimeFormat(undefined,Object.assign({timeZone:(LW.pt&&LW.pt.tz)||undefined},o))}catch(e){return new Intl.DateTimeFormat(undefined,o)}}
+function lwAlertHtml(a,i,here){var on=Date.parse(a.onset||a.effective)||null,en=Date.parse(a.ends||a.expires)||null,cell=here.filter(function(x){return x.type===a.event&&x.motion})[0],eta=cell?etaAt(cell,spot.lat,spot.lon):null;
+  return '<li><span class="bar" style="background:'+(WWA_COLOR[a.event]||'#9AA5B1')+'"></span><span><b>'+esc(a.event)+'</b><br>'+span(on,en)+(cell?'<br>'+esc(motionText(cell.motion)):'')+(eta?'<br><b>Projected to reach your spot about '+fHM.format(new Date(eta))+'</b>':'')+
+    (a.instruction?'<p style="margin:6px 0 4px"><b>What to do:</b> '+esc(String(a.instruction).replace(/\s*\n\s*/g,' '))+'</p>':'')+
+    '<details data-k="al'+i+'"><summary>Full text, as issued by '+esc(a.senderName||'the National Weather Service')+'</summary>'+(a.headline?'<p>'+esc(a.headline)+'</p>':'')+String(a.description||'').split(/\n\s*\n/).map(function(p){return '<p class="sub">'+esc(p.replace(/\s*\n\s*/g,' '))+'</p>'}).join('')+(a.areaDesc?'<p class="sub">Area: '+esc(a.areaDesc)+'</p>':'')+'</details></span></li>'}
+function lwNowHtml(){var o=LW.obs,p=LW.pt||{};if(!o)return '<p class="none">'+(LW.err.obs?'No reading from the last three hours came back from the nearest stations.':'Reading the nearest station…')+'</p>';
+  var feels=o.chill!=null?o.chill:o.heat,ft=lwFmt({hour:'numeric',minute:'2-digit'}),fact=function(k,v){return '<div><span>'+k+'</span><b>'+v+'</b></div>'};
+  return '<div class="wxnow"><span class="wxt">'+Math.round(o.temp)+'°F</span><div><b>'+esc(o.text||'')+'</b>'+(feels!=null&&Math.abs(feels-o.temp)>=2?'<br>Feels like '+Math.round(feels)+'° ('+(o.chill!=null?'wind chill':'heat index')+')':'')+'</div></div>'+
+    '<div class="spfacts">'+fact('Wind',o.wind==null?'not reported':o.wind<1?'Calm':(o.dir!=null?dirOf(o.dir)+' ':'')+Math.round(o.wind)+' mph')+(o.gust!=null?fact('Gusts',Math.round(o.gust)+' mph'):'')+(o.hum!=null?fact('Humidity',Math.round(o.hum)+'%'):'')+(o.dew!=null?fact('Dew point',Math.round(o.dew)+'°'):'')+(o.vis!=null?fact('Visibility',(o.vis>=9.9?'10+':o.vis.toFixed(o.vis<3?1:0))+' mi'):'')+
+    (p.sunrise&&p.sunset?fact('Sun','up '+ft.format(new Date(p.sunrise))+', down '+ft.format(new Date(p.sunset))):'')+'</div>'+
+    '<p class="sub">Measured at '+esc(o.name)+' at '+ft.format(new Date(o.t))+' ('+ago(o.t)+'), the nearest reporting station.</p>'}
+function lwHourlyHtml(){var H=(LW.hourly||[]).filter(function(p){return Date.parse(p.endTime)>now()}).slice(0,24);if(!H.length)return '<p class="none">'+(LW.err.hourly?'The hourly forecast did not load from the Weather Service. It is tried again every few minutes.':'Reading the hourly forecast…')+'</p>';
+  var fh=lwFmt({hour:'numeric'}),fd=lwFmt({weekday:'short'}),day=null,cls=[],pop=function(p){return p.probabilityOfPrecipitation&&p.probabilityOfPrecipitation.value!=null?p.probabilityOfPrecipitation.value:0};
+  var hrs=H.map(function(p,i){var d=new Date(p.startTime),w=fd.format(d),nd=w!==day;day=w;cls[i]=nd&&i?' class="newday"':'';return '<td'+cls[i]+'>'+(nd?'<b>'+esc(w)+'</b><br>':'')+esc(fh.format(d))+'</td>'}).join('');
+  var row=function(c,name,fn){return '<tr'+(c?' class="'+c+'"':'')+'><th scope="row">'+name+'</th>'+H.map(function(p,i){return '<td'+cls[i]+'>'+fn(p)+'</td>'}).join('')+'</tr>'};
+  return '<div class="hr" tabindex="0" role="region" aria-label="Hourly forecast, next 24 hours; scroll sideways"><table><tr><th scope="row">Hour</th>'+hrs+'</tr>'+row('t','Temp',function(p){return esc(p.temperature)+'°'})+
+    row('','Rain or snow',function(p){var v=pop(p);return v+'%<span class="pbar"><i style="width:'+Math.max(0,Math.min(100,v))+'%"></i></span>'})+
+    row('','Wind mph',function(p){return esc((p.windDirection||'')+' '+String(p.windSpeed||'').replace(/\s*mph/,''))})+row('sky','Sky',function(p){return esc(p.shortForecast||'')})+'</table></div>'}
+function lwDailyHtml(){var P=LW.daily||[];if(!P.length)return '<p class="none">'+(LW.err.daily?'The 7-day forecast did not load from the Weather Service. It is tried again every few minutes.':'Reading the 7-day forecast…')+'</p>';
+  var days=[],pop=function(p){return p&&p.probabilityOfPrecipitation&&p.probabilityOfPrecipitation.value!=null?p.probabilityOfPrecipitation.value:0};
+  P.forEach(function(p){var last=days[days.length-1];if(p.isDaytime||!last||last.night)days.push({day:p.isDaytime?p:null,night:p.isDaytime?null:p});else last.night=p});
+  return '<ul class="wxdays">'+days.map(function(d,i){var a=d.day||d.night,pp=Math.max(pop(d.day),pop(d.night));
+    return '<li><details data-k="d'+i+'"><summary><span class="dn">'+esc(a.name)+'</span><span class="dt">'+(d.day?'High <b>'+esc(d.day.temperature)+'°</b>':'')+(d.day&&d.night?' · ':'')+(d.night?'Low <b>'+esc(d.night.temperature)+'°</b>':'')+'</span><span class="ds">'+esc(a.shortForecast||'')+(pp?' · '+pp+'% chance of rain or snow':'')+'</span></summary>'+
+      (d.day?'<p class="sub"><b>'+esc(d.day.name)+':</b> '+esc(d.day.detailedForecast||'')+'</p>':'')+(d.night?'<p class="sub"><b>'+esc(d.night.name)+':</b> '+esc(d.night.detailedForecast||'')+'</p>':'')+'</details></li>'}).join('')+'</ul>'+
+    '<p class="sub" style="margin-top:6px">Tap a day for the full wording. Forecast by the National Weather Service'+(LW.pt&&LW.pt.office?' office '+esc(LW.pt.office):'')+(LW.fcAt?', updated '+lwFmt({weekday:'short',hour:'numeric',minute:'2-digit'}).format(new Date(LW.fcAt)):'')+'. The Weather Service forecasts seven days; this page does not show longer day-by-day forecasts because none are reliable.</p>'}
+function lwSections(){if(!lwOn())return '';var p=LW.pt||{},where=p.city?' <span style="text-transform:none;letter-spacing:0">for '+esc(p.city)+(p.state?', '+esc(p.state):'')+'</span>':'';
+  if(LW.none)return '<section class="wide"><h3>Local forecast</h3><p class="none">The National Weather Service has no forecast for this point. It covers the United States, its territories and nearby waters.</p></section>';
+  if(LW.err.pt&&!LW.pt)return '<section class="wide"><h3>Local forecast</h3><p class="none">The Weather Service did not answer for this point. It is tried again every few minutes; in the meantime use <a href="https://www.weather.gov/" target="_blank" rel="noopener">weather.gov</a>.</p></section>';
+  return '<section><h3>Right now'+where+'</h3>'+lwNowHtml()+'</section><section class="wide"><h3>Next 24 hours</h3>'+lwHourlyHtml()+'</section><section class="wide"><h3>Next 7 days</h3>'+lwDailyHtml()+'</section>'}
+
 function spotWorldStorms(){var ws=wStorms().filter(function(w){return w.lon!=null}).map(function(w){return {w:w,km:distKm(spot.lat,spot.lon,w.lat,w.lon)}}).sort(function(a,b){return a.km-b.km}),nearW=ws.filter(function(x){return x.km<=3000});
   if(!ws.length)return '';
   return (nearW.length?'<p style="margin-top:8px"><b>Storms outside the Hurricane Center\'s area (GDACS):</b></p><ul class="items">'+nearW.map(function(x){return '<li><span class="bar" style="background:'+(ALC[x.w.alert]||'#888888')+'"></span><span><b>'+esc(x.w.title||x.w.name)+'</b>: now about '+miles(x.km)+' miles to your '+dirOf(bearing(spot.lat,spot.lon,x.w.lat,x.w.lon))+'. '+esc(kmhMph(x.w.severity))+'.<br><span class="sub">Position and wind zones are GDACS estimates, not an official forecast for your spot. Follow your national weather service. <button class="go" type="button" data-wstorm="'+esc(x.w.id)+'">Show on map</button></span></span></li>'}).join('')+'</ul>':'')+
@@ -778,13 +866,19 @@ function renderSpot(){
   var el=$('spot');if(!el)return;
   if(!spot||spotEdit){el.innerHTML='<div class="sphead"><h2 class="eyebrow" id="spotH">Your spot</h2></div><p class="lead">'+(spot?'Pick a new spot.':'Set your location and this page tells you what is in effect there and what is headed your way.')+'</p>'+spotSetHtml();return}
   var n=now(),lat=spot.lat,lon=spot.lon,us=spotUS(),h='';
+  var keepOpen={},keepScroll=0,oldHr=el.querySelector('.hr');[].forEach.call(el.querySelectorAll('details[open][data-k]'),function(d){keepOpen[d.dataset.k]=1});if(oldHr)keepScroll=oldHr.scrollLeft;
   h+='<div class="sphead"><h2 class="eyebrow" id="spotH">Your spot</h2><span class="spname">'+esc(spotName())+'</span><button class="go" id="spMap" type="button">Show on map</button><button class="go" id="spChange" type="button">Change</button><button class="go" id="spClear" type="button">Remove</button></div>';
   // warnings covering the point, and warnings close by
   var here=[],near=[];
   activeWWA().sort(function(a,b){return wwaRank(a.type)-wwaRank(b.type)}).forEach(function(a){var d=distPolys(lon,lat,a.polys);if(d.km===0)here.push(a);else if(d.km<=65&&/Warning/.test(a.type))near.push({a:a,d:d,eta:etaAt(a,lat,lon)})});
   var hw=here.filter(function(a){return /Warning/.test(a.type)}),uniq=function(l){var o=[];l.forEach(function(a){if(o.indexOf(a.type)<0)o.push(a.type)});return o};
   var wwaLive=LIVE_MODE&&live.wwa&&n-live.wwa<20*60e3,checked=wwaLive?'Checked '+ago(shortLive()?(live.cells||live.short):live.wwa)+'.':'';
-  if(!LIVE_MODE)h+='<div class="verdict"><span class="g" aria-hidden="true">&#9632;</span><div><b>Live data has not loaded, so this cannot say what is in effect now.</b><span>What follows is from a saved snapshot taken '+fD.format(new Date(SNAP.generated))+'. For warnings in effect this minute use <a href="https://www.weather.gov/" target="_blank" rel="noopener">weather.gov</a>.</span></div></div>';
+  // the Weather Service's own list of every alert in effect at this point (all types), when it has answered in the last 10 minutes
+  var la=us&&lwOn()&&LW.alerts&&LW.at.alerts&&n-LW.at.alerts<10*60e3?LW.alerts:null,laW=la?la.filter(function(a){return /Warning/.test(a.event)}):[],uq=function(l){var o=[];l.forEach(function(a){if(o.indexOf(a.event)<0)o.push(a.event)});return o};
+  if(la&&laW.length)h+='<div class="verdict warn" role="alert"><span class="g" aria-hidden="true">&#9650;</span><div><b>In effect at your spot now: '+esc(uq(laW).join(', '))+'</b><span>Checked '+ago(LW.at.alerts)+'. What to do and the full text are below. Act on the official warning, not on this page.</span></div></div>';
+  else if(la&&la.length)h+='<div class="verdict watch"><span class="g" aria-hidden="true">&#9670;</span><div><b>No warning at your spot. In effect: '+esc(uq(la).join(', '))+'</b><span>Checked '+ago(LW.at.alerts)+'. Details are below.</span></div></div>';
+  else if(la)h+='<div class="verdict clear"><span class="g" aria-hidden="true">&#9679;</span><div><b>No Weather Service alerts are in effect at your spot.</b><span>Checked '+ago(LW.at.alerts)+', straight from the National Weather Service for this point, every alert type included.'+(near.length?' There '+(near.length>1?'are '+near.length+' warnings':'is 1 warning')+' within about 40 miles; see below.':'')+'</span></div></div>';
+  else if(!LIVE_MODE)h+='<div class="verdict"><span class="g" aria-hidden="true">&#9632;</span><div><b>Live data has not loaded, so this cannot say what is in effect now.</b><span>What follows is from a saved snapshot taken '+fD.format(new Date(SNAP.generated))+'. For warnings in effect this minute use <a href="https://www.weather.gov/" target="_blank" rel="noopener">weather.gov</a>.</span></div></div>';
   else if(!us&&NAT[spot.cc])h+='<div class="verdict"><span class="g" aria-hidden="true">&#9632;</span><div><b>Weather warnings for '+NAT[spot.cc][0]+' are not on this page yet.</b><span>The warnings and 3-day outlooks here come from the U.S. National Weather Service and stop at the border. For official warnings use <a href="'+NAT[spot.cc][2]+'" target="_blank" rel="noopener">'+NAT[spot.cc][1]+'</a>. Hurricanes, earthquakes and volcanoes below do cover your spot.</span></div></div>';
   else if(!us)h+='<div class="verdict"><span class="g" aria-hidden="true">&#9632;</span><div><b>Weather warnings for this country are not on this page.</b><span>The warnings and 3-day outlooks here come from the U.S. National Weather Service. Follow your national weather service for official warnings. Hurricanes, earthquakes and volcanoes below do cover your spot.</span></div></div>';
   else if(!wwaLive)h+='<div class="verdict watch"><span class="g" aria-hidden="true">&#9670;</span><div><b>The warning feed is not responding right now.</b><span>This page cannot confirm what is in effect at your spot. Use <a href="https://www.weather.gov/" target="_blank" rel="noopener">weather.gov</a>.</span></div></div>';
@@ -792,26 +886,29 @@ function renderSpot(){
   else if(here.length)h+='<div class="verdict watch"><span class="g" aria-hidden="true">&#9670;</span><div><b>No warning at your spot. In effect: '+esc(uniq(here).join(', '))+'</b><span>'+checked+'</span></div></div>';
   else h+='<div class="verdict clear"><span class="g" aria-hidden="true">&#9679;</span><div><b>No warnings or watches of the mapped types are in effect at your spot.</b><span>'+checked+(near.length?' There '+(near.length>1?'are '+near.length+' warnings':'is 1 warning')+' within about 40 miles; see below.':'')+' River flood and marine warnings are not mapped here.'+(spot.cc?'':' Only U.S. National Weather Service warnings are checked, so this says nothing about a spot outside the United States.')+'</span></div></div>';
   h+='<div class="spgrid">';
-  if(us&&(here.length||near.length)){
-    h+='<section><h3>Warnings and watches</h3>';
-    if(here.length)h+='<ul class="items">'+here.slice(0,8).map(function(a){var eta=etaAt(a,lat,lon);return '<li><span class="bar" style="background:'+(WWA_COLOR[a.type]||'#9AA5B1')+'"></span><span>'+wwaHtml(a)+(eta?'<br><b>Projected to reach your spot about '+fHM.format(new Date(eta))+'</b>':'')+'</span></li>'}).join('')+'</ul>';
+  if(us&&((la&&la.length)||here.length||near.length)){
+    h+='<section><h3>'+(la?'Alerts for your spot':'Warnings and watches')+'</h3>';
+    if(la&&la.length)h+='<ul class="items">'+la.slice(0,10).map(function(a,i){return lwAlertHtml(a,i,here)}).join('')+'</ul>';
+    else if(!la&&here.length)h+='<ul class="items">'+here.slice(0,8).map(function(a){var eta=etaAt(a,lat,lon);return '<li><span class="bar" style="background:'+(WWA_COLOR[a.type]||'#9AA5B1')+'"></span><span>'+wwaHtml(a)+(eta?'<br><b>Projected to reach your spot about '+fHM.format(new Date(eta))+'</b>':'')+'</span></li>'}).join('')+'</ul>';
     if(near.length)h+='<p style="margin-top:8px"><b>Close by, not covering your spot:</b></p><ul class="items">'+near.sort(function(x,y){return x.d.km-y.d.km}).slice(0,6).map(function(x){return '<li><span class="bar" style="background:'+(WWA_COLOR[x.a.type]||'#9AA5B1')+'"></span><span><b>'+esc(x.a.type)+'</b> about '+miles(x.d.km)+' miles to your '+dirOf(x.d.brg)+'<br><span class="sub">'+span(x.a.onset,x.a.ends)+(x.a.motion?'. '+esc(motionText(x.a.motion)):'')+'</span>'+(x.eta?'<br><b>On its present track it reaches your spot about '+fHM.format(new Date(x.eta))+'</b>':'')+'</span></li>'}).join('')+'</ul>';
     h+='</section>';
   }
+  if(us)h+=lwSections();
   // hurricanes and tropical storms
   var st=D.storms.map(spotStorm),close=st.filter(function(x){return !x.far}).sort(function(a,b){return a.score-b.score}),far=st.filter(function(x){return x.far});
   h+='<section'+(close.length?' style="grid-column:1/-1"':'')+'><h3>Hurricanes and tropical storms</h3>'+(st.length?close.map(function(x){return x.html}).join('')+(far.length?(close.length?'<p><b>Farther away:</b></p>':'')+'<ul class="items">'+far.map(function(x){return x.html}).join('')+'</ul>':''):'<p class="none">'+(live.storms||!LIVE_MODE?'No active tropical storm or hurricane in the National Hurricane Center feed.':'The storm feed is not responding.')+'</p>')+spotWorldStorms()+'</section>';
   // outlook, next three days
   if(us){var ws=[1,2,3].map(dayWindow);
-    h+='<section><h3>Next three days at your spot</h3><div class="tbl"><table><tbody>'+['Today','Tomorrow','Day 3'].map(function(nm,i){var r=cityRisks(lat,lon,i+1);return '<tr><td>'+nm+'<br><span class="sub">from '+fH.format(new Date(ws[i][0]))+'</span></td><td>'+(r.length?r.map(tag).join(''):'<span class="none">Outside every outlined risk area</span>')+'</td></tr>'}).join('')+'</tbody></table></div><p class="sub" style="margin-top:6px">Tornado, severe storm, flooding rain and fire weather outlooks from the Storm Prediction Center and Weather Prediction Center, plus any warning or forecast cone that covers your spot. Fire weather and tornado outlooks run two days.</p></section>'}
+    h+='<section><h3>Severe weather outlook, next three days</h3><div class="tbl"><table><tbody>'+['Today','Tomorrow','Day 3'].map(function(nm,i){var r=cityRisks(lat,lon,i+1);return '<tr><td>'+nm+'<br><span class="sub">from '+fH.format(new Date(ws[i][0]))+'</span></td><td>'+(r.length?r.map(tag).join(''):'<span class="none">Outside every outlined risk area</span>')+'</td></tr>'}).join('')+'</tbody></table></div><p class="sub" style="margin-top:6px">Tornado, severe storm, flooding rain and fire weather outlooks from the Storm Prediction Center and Weather Prediction Center, plus any warning or forecast cone that covers your spot. Fire weather and tornado outlooks run two days.</p></section>'}
   // earthquakes and volcanoes
   var qk=allQuakes().filter(function(q){return distKm(lat,lon,q[1],q[2])<=300}).sort(function(a,b){return b[4]-a[4]});
   h+='<section><h3>Earthquakes within 185 miles, past 7 days</h3>'+(qk.length?'<ul class="items">'+qk.slice(0,4).map(function(q){var d=distKm(lat,lon,q[1],q[2]);return '<li><span class="bar" style="background:#E0402A"></span><span><b>M'+q[4].toFixed(1)+'</b>, '+miles(d)+' miles to your '+dirOf(bearing(lat,lon,q[1],q[2]))+' <span class="sub">'+esc(q[5])+'</span><br><span class="sub">'+fD.format(new Date(q[0]))+' ('+ago(q[0])+')</span></span></li>'}).join('')+'</ul>'+(qk.length>4?'<p class="sub">'+(qk.length-4)+' more, smaller.</p>':''):'<p class="none">None in the USGS feeds, which list magnitude 3 and up in North America (2.5 in California) and 4.5 and up elsewhere.</p>');
   var vo=D.volcanoes.map(function(v){var ll=volcPos(v.volcano_name);return ll?{v:v,km:distKm(lat,lon,ll[0],ll[1]),brg:bearing(lat,lon,ll[0],ll[1])}:null}).filter(function(x){return x&&x.km<=500});
   if(vo.length)h+='<p style="margin-top:8px"><b>Volcanoes above normal within 310 miles:</b></p><ul class="items">'+vo.map(function(x){return '<li><span class="bar" style="background:'+(VOLC_COLOR[x.v.color_code]||'#9AA5B1')+'"></span><span><b>'+esc(x.v.volcano_name)+'</b>: alert level '+esc(x.v.alert_level)+' ('+esc(String(x.v.color_code).toLowerCase())+'), '+miles(x.km)+' miles to your '+dirOf(x.brg)+'</span></li>'}).join('')+'</ul>';
   h+='</section></div>';
-  el.innerHTML=h}
-function setSpot(lat,lon,name,cc){spot={lat:Math.round(lat*100)/100,lon:Math.round(lon*100)/100,name:name||'',cc:cc||''};spotPick=false;spotEdit=false;spotMsg='';cv.style.cursor='';save();renderSpot();dirty=true}
+  el.innerHTML=h;
+  [].forEach.call(el.querySelectorAll('details[data-k]'),function(d){if(keepOpen[d.dataset.k])d.open=true});var newHr=el.querySelector('.hr');if(newHr&&keepScroll)newHr.scrollLeft=keepScroll}
+function setSpot(lat,lon,name,cc){spot={lat:Math.round(lat*100)/100,lon:Math.round(lon*100)/100,name:name||'',cc:cc||''};spotPick=false;spotEdit=false;spotMsg='';cv.style.cursor='';save();renderSpot();dirty=true;lwLoad()}
 // the town list (places.js) is fetched only when the search box or a located point first needs it
 var PL=null,plWait=null;
 function norm(x){return String(x).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]+/g,' ').replace(/\s+/g,' ').trim()}
@@ -1079,6 +1176,7 @@ requestAnimationFrame(frame);
 setInterval(function(){clock();renderStatus()},30e3);
 setInterval(function(){if(!spotEdit)renderSpot();renderNow();renderDesk();legend();dirty=true},10*60e3);
 startLive();
+lwLoad();
 sstKey();sstLoad();loadWorld();loadWorldQuakes();setInterval(loadWorld,5*60e3);setInterval(loadWorldQuakes,5*60e3);
 document.addEventListener('visibilitychange',function(){if(!document.hidden&&(!WD||now()-(utc(WD.generated)||0)>6*60e3)){loadWorld();loadWorldQuakes()}});
 })();
