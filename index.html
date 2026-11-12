@@ -184,7 +184,8 @@ body.mapfull{overflow:hidden}
 .fold>summary span{color:var(--muted);letter-spacing:.04em;text-transform:none;font-family:var(--font-body);font-weight:400;font-size:13px;margin-left:6px}
 .fold[open]{padding-bottom:12px}
 .fold[open]>*+*{margin-top:8px}
-.mapbox canvas{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab;touch-action:none}
+.mapbox canvas{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab;touch-action:none;overscroll-behavior:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.mapbox{overscroll-behavior:contain}
 .mapbox canvas.drag{cursor:grabbing}
 .zoom{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;border:1px solid var(--rule);border-radius:8px;overflow:hidden;background:var(--panel)}
 .zoom button{border:0;background:transparent;width:40px;height:38px;font-size:18px;line-height:1;cursor:pointer;border-bottom:1px solid var(--rule)}
@@ -707,6 +708,9 @@ cv.addEventListener('pointermove',function(e){var p=ptrs[e.pointerId];if(!p){hov
   else{view.cx-=dx/view.k;view.cy-=dy/view.k;clampView();p.x=e.offsetX;p.y=e.offsetY;dirty=true}});
 function up(e){var had=ptrs[e.pointerId];delete ptrs[e.pointerId];if(Object.keys(ptrs).length<2)pinch0=null;if(!Object.keys(ptrs).length)cv.classList.remove('drag');if(had&&moved<6&&e.type==='pointerup'){if(spotPick)spotFromMap(e.offsetX,e.offsetY);else identify(e.offsetX,e.offsetY)}}
 cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
+// A finger on the map belongs to the map. Some phone browsers still take a downward drag for themselves (pull to refresh, or
+// closing an in-app browser sheet) even with touch-action:none, which made it impossible to drag the map down to look north.
+['touchstart','touchmove'].forEach(function(t){cv.addEventListener(t,function(e){if(e.cancelable)e.preventDefault()},{passive:false})});
 cv.addEventListener('wheel',function(e){e.preventDefault();zoomAt(e.offsetX,e.offsetY,Math.exp(-e.deltaY*(e.ctrlKey?0.01:0.0016)))},{passive:false});
 function setFull(f){box.classList.toggle('full',f);document.body.classList.toggle('mapfull',f);var b=$('zfull');b.setAttribute('aria-pressed',f?'true':'false');b.textContent=f?'\u00D7':'\u2922';b.setAttribute('aria-label',f?'Close the full-screen map':'Fill the screen with the map')}
 $('zfull').onclick=function(){setFull(!box.classList.contains('full'))};

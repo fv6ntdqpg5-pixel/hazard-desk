@@ -264,6 +264,11 @@ can't move back up in the map again".
   the middle of the map on the world, so it can no longer be dragged off into empty sea; (2) a fixed "Top" button
   (`#toTop`, phones and tablets only) because a finger on the map moves the map and never the page. If Randy still sees
   it, ask exactly what he was dragging and on which screen.
+- Randy then pinned it down: on his phone he can drag the map up (to look south) but not down (to look north). The code
+  has no such limit (tested both ways with a mouse), so the phone's browser is taking the downward drag for itself (pull to
+  refresh or an in-app browser's swipe-down-to-close). Fix: the map canvas now cancels `touchstart` / `touchmove`
+  (non-passive `preventDefault`) and sets `overscroll-behavior`. **Not verifiable here; needs Randy's phone.** If it still
+  fails, ask which app the page is open in (Safari itself, or a link opened inside another app).
 
 ## 5. Open list
 
