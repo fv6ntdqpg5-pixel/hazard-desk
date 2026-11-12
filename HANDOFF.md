@@ -135,6 +135,28 @@ Aira ~30 ka, Campanian Ignimbrite ~39 ka).
   raised the red tsunami banner for 24 hours. The center's name no longer counts, and "there is no tsunami threat" now
   marks a message final. Put live on its own, ahead of the one-map work.
 
+## 4e. Live Hurricane Center details (preview branch `storm-details`, Nov 11, 2026; not live until Randy says Go)
+
+- Gap being closed: live storms carried wind radii and the Hurricane Center's watch and hazard text only when the saved
+  snapshot held the same advisory, so a new storm showed a track and cone and nothing else.
+- `api/storms.js` (server side, cached 3 min): reads NHC `CurrentStorms.json`, then each storm's Public Advisory (TCP)
+  and Forecast/Advisory (TCM) from the URLs that file gives (nhc.noaa.gov only). Returns headline, location line, mph,
+  movement, the watches/warnings, hazards and discussion sections as issued (paragraphs kept), wind radii now, every
+  forecast point with its own wind radii, dissipation time and next advisory time. `?raw=1` adds the raw text for
+  debugging. Nothing is computed there.
+- Real-text lesson: NHC pads blank lines with a space, so sections never ended until `productText` strips trailing
+  spaces. Covered by `tools/test_storms.js` (run by `tools/check.sh`) against Pena advisory 22 saved as issued in
+  `tools/fixtures/` and Rachel advisory 29 in `raw/`.
+- Page: `loadNhc`, `applyNhc`, `mergeNhc` join the details to the map service's storms by bin number (a storm in the
+  advisory list but not yet in the map service is shown without a cone). The storm list's own position and strength
+  win, since an intermediate advisory can be newer than the forecast.
+- "Your spot" storm block: NHC headline, a "Winds at your spot" column from each forecast point's wind radii
+  (`windAt`), the first forecast time 39+ mph winds cover the spot, dissipation time, watch/hazard text in the
+  Hurricane Center's own paragraphs, and the discussion folded under a disclosure.
+- Not done: NHC's own "earliest reasonable arrival time of tropical-storm-force winds" product exists only as KMZ
+  (`earliestArrivalTimeTSWindsGIS` in CurrentStorms.json); reading it would give an official arrival time. Storm surge
+  watch/warning and peak surge files are listed there too.
+
 ## 5. Open list
 
 1. **NASA FIRMS fire detections** (every hotspot, not just big fires): needs `FIRMS_MAP_KEY` in Vercel; aggregate

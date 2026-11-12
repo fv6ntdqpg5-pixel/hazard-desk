@@ -21,7 +21,7 @@ const MONTHS = { JAN: 0, FEB: 1, MAR: 2, APR: 3, MAY: 4, JUN: 5, JUL: 6, AUG: 7,
 // NHC serves its text products inside a <pre> on a web page; a plain-text product passes through unchanged.
 function productText(html) {
   const m = /<pre[^>]*>([\s\S]*?)<\/pre>/i.exec(html || '');
-  return (m ? m[1] : String(html || '')).replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#0?39;/g, "'").replace(/&amp;/g, '&').replace(/\r/g, '');
+  return (m ? m[1] : String(html || '')).replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"').replace(/&#0?39;/g, "'").replace(/&amp;/g, '&').replace(/\r/g, '').replace(/[ \t]+\n/g, '\n'); // NHC pads blank lines with a space; without this a section never ends
 }
 function radiiIn(block) { const o = {}; const re = /^(\d\d) KT\.+\s*(\d+)NE\s+(\d+)SE\s+(\d+)SW\s+(\d+)NW/gm; let m; while ((m = re.exec(block))) o[m[1]] = [+m[2], +m[3], +m[4], +m[5]]; return o; }
 
@@ -44,6 +44,7 @@ function parseTcm(text) {
   o.track.push({ t: t0, lat: o.lat, lon: o.lon, wind: o.wind, gust: o.gust, radii: o.radii });
   const re = /(?:FORECAST|OUTLOOK) VALID (\d\d)\/(\d{4})Z\s+([\d.]+)([NS])\s+([\d.]+)([EW])[^\n]*\nMAX WIND\s+(\d+) KT\.\.\.GUSTS\s+(\d+) KT\.?((?:\n\d\d KT[^\n]*)*)/g;
   while ((m = re.exec(text))) { const p = ll(m[3], m[4], m[5], m[6]); o.track.push({ t: at(+m[1], m[2]), lat: p[0], lon: p[1], wind: +m[7], gust: +m[8], radii: radiiIn(m[9] || '') }); }
+  m = /(?:FORECAST|OUTLOOK) VALID (\d\d)\/(\d{4})Z\.\.\.DISSIPATED/.exec(text); if (m) o.dissipated = at(+m[1], m[2]);
   m = /NEXT ADVISORY AT (\d\d)\/(\d{4})Z/.exec(text); if (m) o.nextAdv = at(+m[1], m[2]);
   return o;
 }
@@ -57,7 +58,7 @@ function smartCase(s) {
 }
 // one titled section of the advisory (a title line, a line of dashes, then text up to the next titled section)
 function section(text, title) {
-  const m = new RegExp('(?:^|\\n)' + title + '[^\\n]*\\n-+\\n([\\s\\S]*?)(?:\\n\\n[A-Z][A-Z ]+\\n-+\\n|\\n\\$\\$|$)').exec(text);
+  const m = new RegExp('(?:^|\\n)' + title + '[^\\n]*\\n-+\\n([\\s\\S]*?)(?:\\n{2,}[A-Z][A-Z ]+\\n-+\\n|\\n\\$\\$|$)').exec(text);
   if (!m) return [];
   return m[1].split(/\n\s*\n/).map(p => p.replace(/\s*\n\s*/g, ' ').trim()).filter(Boolean);
 }
@@ -71,9 +72,11 @@ function parseTcp(text) {
   m = /PRESENT MOVEMENT\.\.\.(\w+) OR \d+ DEGREES AT (\d+) MPH/.exec(text); if (m) o.moveText = m[1] + ' at ' + m[2] + ' mph'; else if (/PRESENT MOVEMENT\.\.\.STATIONARY/.test(text)) o.moveText = 'stationary';
   o.watchesParas = section(text, 'WATCHES AND WARNINGS'); o.watches = o.watchesParas.join(' ');
   o.hazardsParas = section(text, 'HAZARDS AFFECTING LAND'); o.hazards = o.hazardsParas.join(' ');
+  o.discussionParas = section(text, 'DISCUSSION AND OUTLOOK');
   return o;
 }
 
+function parseTcpText(t) { return parseTcp(productText(t)); }
 async function storm(s, raw) {
   const tcpUrl = s.publicAdvisory && s.publicAdvisory.url, tcmUrl = (s.forecastAdvisory && s.forecastAdvisory.url) || (tcpUrl ? tcpUrl.replace(/TCP(?=[A-Z]{2}\d\.shtml)/, 'TCM') : null);
   const okUrl = u => /^https:\/\/www\.nhc\.noaa\.gov\//.test(u || '');
