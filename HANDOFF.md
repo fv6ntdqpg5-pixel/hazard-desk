@@ -1,4 +1,4 @@
-# Hazard Desk: handoff
+# Weather Desk (formerly Hazard Desk): handoff
 
 **Read this first in any new chat.** It is the current picture of the site, the rules it runs by, the decisions behind it,
 and what is still open. Last updated **November 11, 2026**. Update the "Decisions" and "Open list" sections whenever
@@ -95,7 +95,7 @@ Aira ~30 ka, Campanian Ignimbrite ~39 ka).
   search yet. (3) River flood and marine warnings are not in the mapped set. (4) Tested against the saved snapshot with
   the clock set back; not yet seen with live feeds (the workspace cannot reach them) or on a real phone.
 
-## 4c. One world map (preview branch `one-map`, Nov 11, 2026; not live until Randy says Go)
+## 4c. One world map, map-first dark layout, renamed Weather Desk (LIVE Nov 11, 2026 on Randy's Go)
 
 - Randy, Nov 11: "The map is still a little weak. Thinking just a global map, no reason for the switch." He chose a flat
   map over a globe (county-level accuracy, radar and warning outlines).
