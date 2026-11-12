@@ -180,8 +180,34 @@ Aira ~30 ka, Campanian Ignimbrite ~39 ka).
 - Built against real answers fetched through a throwaway branch `probe-nws` (`api/probe.js`, api.weather.gov only),
   emptied after this went live (the probe file is removed from the branch; the branch itself could not be deleted
   from the build workspace and can be deleted in GitHub). Not yet seen in a real browser against the live Weather Service.
-- Not built yet: radar loop; Canada (ECCC open data); the rest of the world (decision pending: model forecast labeled
-  as such, or nothing); notifications when the page is closed.
+- Not built yet: radar loop; notifications when the page is closed. Canada and the rest of the world: see 4g.
+
+## 4g. Local weather for Canada, and a labeled computer model everywhere else (PREVIEW on branch `local-world`, waiting for Randy's Go)
+
+Randy, Nov 11: "Add Canada / Show computer model everywhere else".
+
+- New module `GW` in `page.html`, right after the U.S. module `LW`. `gwWant()` picks the source: `''` = U.S. Weather Service
+  (unchanged), `'ca'` = Environment and Climate Change Canada, `'om'` = Open-Meteo model. A spot labeled U.S. where the Weather
+  Service answers "not covered" (404/400) falls through to Canada (if inside a rough Canada box) and then to the model.
+- **Canada** (`api.weather.gc.ca`, read by the browser, CORS open): nearest forecast city from
+  `collections/citypageweather-realtime/items?bbox=` (boxes widen in four steps, limit 12; the city id is cached 7 days in
+  localStorage `wxca`, refreshes use `/items/{id}`); current conditions, 24 hourly rows, the day and night periods in
+  Environment Canada's own words. Alerts from `collections/weather-alerts/items?bbox=` around the spot, kept only if the
+  published polygon contains the spot, status is not "ended" and it has not expired. Warning type drives the red verdict.
+  The city name and its distance are always shown. Canada has no time zone in the feed, so times use the device's zone and say so.
+  `properties=` is NOT supported on the citypage collection (400). ECCC calls this API experimental; the page says so.
+- **Everywhere else** (`api.open-meteo.com/v1/forecast`, `timezone=auto`): current, 24 hours, 7 days. Every heading says
+  "(computer model)"; the notes say it is not a measurement, not an agency forecast, and never carries warnings. Times are the
+  spot's own clock time as Open-Meteo wrote them (parsed as written, never shifted). If the units in the reply are not °C and
+  km/h the reply is rejected, so a number is never mislabeled. Weather-code words are the WMO table in `WMO`.
+  Licence: free for non-commercial use, CC BY 4.0, credit "Weather data by Open-Meteo.com" (in the panel and the footer).
+  If the desk ever carries ads or sells anything, this needs their paid plan.
+- Units outside the U.S.: °C and km/h first, °F and mph beside them. Refresh: Canadian alerts 5 min, forecasts 15 min.
+- Privacy line updated: coordinates (to about half a mile) go to the service that covers the spot.
+- Tested in a browser against saved real replies (Richmond Hill city page, three Vancouver rainfall warnings, Mexico City model
+  reply), plus feed-down cases and the U.S. path. **Not yet seen against the live feeds from a real browser** (this workspace
+  cannot reach them); Open-Meteo's browser access (CORS) in particular is unverified until Randy opens the preview.
+- Not done: Canadian and Mexican warnings drawn on the map; French text; a °C/°F switch; Mexico's official forecast (no open feed found).
 
 ## 5. Open list
 
