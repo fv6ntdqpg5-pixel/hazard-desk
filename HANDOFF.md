@@ -339,3 +339,21 @@ Randy: if someone picks dark (or light) on one desk, every other desk they open 
   Earth Desk and Vaccine Desk `deskTheme` plus a new "Light look / Dark look" button beside the credit line (they had no
   switch); Overhead Now has one dark look only, so it just remembers an incoming choice and passes it on.
 - LIVE Nov 12, 2026 on Randy's "Go on the look".
+
+## Nov 12, 2026: map touch fixes after Randy reported "still some bugs in the drag, expand, on the map" (PREVIEW on branch `map-touch`, waiting for Randy's Go)
+He gave no detail, so these are the faults found by reading the code and testing with touch emulation:
+- Full screen ("expand"): the page behind is now pinned (`lockPage`: body `position:fixed`) and returns to the same scroll
+  position on close. `overflow:hidden` on the body alone does not stop some phones scrolling the page under a fixed layer.
+- A first finger down now clears any touch whose end was never reported (`e.isPrimary`), and `lostpointercapture` ends a
+  touch. A leftover touch made the next one-finger drag act like a pinch (zoom or nothing instead of moving).
+- Taps forgive more finger wobble (14 px for touch, was 6), so a tap on a storm is not mistaken for a drag.
+- If Randy still sees a problem, ask: which desk, what the map did (jumped, zoomed, did not move, page moved instead), and
+  whether the page was open in Safari or inside another app. Inside the Claude app a downward swipe closes the page; no
+  website can override that.
+- Randy then answered: Weather Desk, opened from a home-screen icon on his iPhone, and the map "wouldn't move one way".
+  That could not be reproduced in emulation, so finger input was moved off pointer events: one-finger pan, two-finger pinch
+  (with pan) and taps now come from `touchstart` / `touchmove` / `touchend` with the default cancelled (`TOUCH`, `tpts`,
+  `tend`); the pointer handlers ignore `pointerType==='touch'` and still serve mouse and pen. Tested with touch emulation in
+  all four directions, pinch, lifting one of two fingers, and tap. **Only Randy's phone can confirm it.** If it is still
+  stuck, the next step is north / south / east / west buttons on the map. The Outbreak Desk still uses pointer events for
+  fingers; port this there if it fixes the Weather Desk.
