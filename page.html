@@ -88,6 +88,7 @@ button{font:inherit;color:inherit}
 .spstorm{border:1px solid var(--rule);border-radius:6px;padding:10px 12px;margin:0 0 8px}
 .spstorm h4{font-family:var(--font-display);font-weight:700;font-size:21px;letter-spacing:.02em;text-transform:uppercase;margin:0 0 4px;display:flex;align-items:center;gap:8px}
 .spstorm h4 i{width:12px;height:12px;border-radius:50%;flex:none;border:1px solid rgba(128,128,128,.5)}
+.sptbl{font-size:12.5px}.sptbl th{font-size:12px;letter-spacing:.05em;padding-right:6px}.sptbl td{padding-right:6px}
 .spfacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:8px 16px;margin:6px 0 8px}
 .spfacts div{border-top:1px solid var(--rule);padding-top:5px}
 .spfacts span{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
@@ -747,9 +748,9 @@ function spotStorm(s){
      (s.moveText?'<div><span>Moving</span><b>'+esc(s.moveText)+'</b></div>':'')+(s.mslp?'<div><span>Pressure</span><b>'+s.mslp+' mb</b></div>':'')+
      (reach!=null?'<div><span>39+ mph winds reach</span><b>'+(reach>0?miles(reach)+' miles out on your side':'none on your side of the storm')+'</b></div>':'')+
      (hasFR?'<div><span>39+ mph winds at your spot</span><b>'+(firstHit?'in the forecast for '+tz(firstHit.t):'not in this forecast')+'</b></div>':'')+'</div>';
-  if(tr.length>1)h+='<div class="tbl"><table><thead><tr><th>Forecast time</th><th>Strength</th><th>Distance from you</th>'+(hasFR?'<th>Winds at your spot</th>':'')+'</tr></thead><tbody>'+tr.map(function(p){var dd=distKm(spot.lat,spot.lon,p.lat,p.lon),w=windAt(spot.lat,spot.lon,p,p.radii),known=p.radii&&Object.keys(p.radii).length;
-      return '<tr><td>'+tz(p.t)+'</td><td>'+esc(catShort(p.wind))+', '+mph(p.wind)+' mph</td><td>'+miles(dd)+' mi '+dirOf(bearing(spot.lat,spot.lon,p.lat,p.lon))+'</td>'+(hasFR?'<td>'+(w?'<b>'+WINDSHORT[w]+'</b>':known||p.wind<34?'under 39 mph':'&ndash;')+'</td>':'')+'</tr>'}).join('')+'</tbody></table></div>'+
-    (hasFR?'<p class="sub" style="margin-top:6px">&ldquo;Winds at your spot&rdquo; says whether your spot is inside the area where the Hurricane Center forecasts winds that strong at that time. The area is the farthest reach in each quarter of the storm, so the wind at one place can be lower. A dash means the forecast gives no wind area that far ahead.</p>':'');
+  if(tr.length>1)h+='<div class="tbl"><table class="sptbl"><thead><tr><th>Forecast time</th><th>Strength</th><th>From you</th>'+(hasFR?'<th>Wind here</th>':'')+'</tr></thead><tbody>'+tr.map(function(p){var dd=distKm(spot.lat,spot.lon,p.lat,p.lon),w=windAt(spot.lat,spot.lon,p,p.radii),known=p.radii&&Object.keys(p.radii).length;
+      return '<tr><td>'+tz(p.t)+'</td><td>'+esc(catShort(p.wind))+', '+mph(p.wind)+' mph</td><td>'+miles(dd)+' mi '+dirOf(bearing(spot.lat,spot.lon,p.lat,p.lon))+'</td>'+(hasFR?'<td>'+(w?'<b>'+WINDSHORT[w]+'</b>':known||p.wind<34?'below 39':'&ndash;')+'</td>':'')+'</tr>'}).join('')+'</tbody></table></div>'+
+    (hasFR?'<p class="sub" style="margin-top:6px">&ldquo;Wind here&rdquo; says whether your spot is inside the area where the Hurricane Center forecasts winds that strong at that time. The area is the farthest reach in each quarter of the storm, so the wind at one place can be lower. A dash means the forecast gives no wind area that far ahead.</p>':'');
   if(s.dissipated)h+='<p class="sub" style="margin-top:6px">The Hurricane Center forecasts the storm to have dissipated by '+tz(s.dissipated)+'.</p>';
   if(s.watches||(s.watchesParas&&s.watchesParas.length))h+='<p style="margin-top:8px"><b>Coastal watches and warnings, as issued by the Hurricane Center:</b></p>'+paras(s.watchesParas,s.watches);
   if(s.hazards||(s.hazardsParas&&s.hazardsParas.length))h+='<p style="margin-top:8px"><b>Hazards affecting land, as issued:</b></p>'+paras(s.hazardsParas,s.hazards,'sub');
