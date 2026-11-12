@@ -157,7 +157,7 @@ Aira ~30 ka, Campanian Ignimbrite ~39 ka).
   (`earliestArrivalTimeTSWindsGIS` in CurrentStorms.json); reading it would give an official arrival time. Storm surge
   watch/warning and peak surge files are listed there too.
 
-## 4f. Local weather for a U.S. spot (preview branch `local-weather`, Nov 11, 2026; not live until Randy says Go)
+## 4f. Local weather for a U.S. spot (LIVE Nov 11, 2026 on Randy's Go)
 
 - Randy, Nov 11: make this "more of a local weather site like AccuWeather as well": checking a hurricane or tornado
   from your own location without ads. He approved the plan: U.S. first from the National Weather Service; no 30- or
@@ -177,8 +177,8 @@ Aira ~30 ka, Campanian Ignimbrite ~39 ka).
   nothing comes to this site.
 - A point outside NWS coverage answers 404 and the panel says so. Coordinates are sent without trailing zeros because
   the Weather Service redirects 43.10 to 43.1.
-- Built against real answers fetched through a throwaway branch `probe-nws` (`api/probe.js`, api.weather.gov only;
-  never merge, delete when done). Not yet seen in a real browser against the live Weather Service.
+- Built against real answers fetched through a throwaway branch `probe-nws` (`api/probe.js`, api.weather.gov only),
+  deleted after this went live. Not yet seen in a real browser against the live Weather Service.
 - Not built yet: radar loop; Canada (ECCC open data); the rest of the world (decision pending: model forecast labeled
   as such, or nothing); notifications when the page is closed.
 
