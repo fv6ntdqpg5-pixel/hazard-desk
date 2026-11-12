@@ -119,7 +119,14 @@ Aira ~30 ka, Campanian Ignimbrite ~39 ka).
   is no tsunami threat" now marks a message final. This fix is in this branch; the live World page still has the bug.
 - Tested with the saved North America snapshot and a saved copy of the live `/api/world` answer. Not yet seen with live
   North America feeds (radar, warnings) on the new projection: the workspace cannot reach them.
-- Step 2, not started: dark restyle, larger map, fewer control rows.
+- Step 2 (built on the same branch, Nov 11): Randy on the step-1 preview: "Having trouble moving the map up." The map sat
+  under four rows of controls and, being nearly screen-wide, took every finger drag, so the page was hard to scroll.
+  Now the map is the first thing after the header; View stays as one row under it; layer chips, outlook day and sea
+  temperature fold into "Layers and outlook day"; the legend folds into "Map key" (open on wide screens). On a phone the
+  map is `min(66vh,130vw)` tall so part of the page always shows for scrolling; a full-screen button (`#zfull`,
+  `setFull`, Escape closes) fills the screen. "Your spot", "Right now" and the desks follow the map (beside it on wide
+  screens). One dark look for everyone; the light theme is removed.
+- Randy's screenshot of the step-1 preview showed live radar drawing on the new projection over Tennessee and Alabama.
 
 ## 5. Open list
 

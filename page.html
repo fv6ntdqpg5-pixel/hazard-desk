@@ -1,30 +1,18 @@
 <title>Hazard Desk</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
 <style>
-/* Layout: a working chart table. One large map of the continent and both oceans, a ranked "right now" list above it,
-   and regional desks beside it. Hazard colors follow the agencies' own map colors; everything else stays quiet. */
+/* Layout: the map is the page. One flat world map opens the page (it fills most of a phone screen and can go full
+   screen); its controls fold away under it; "Your spot", the ranked "right now" list and the regional desks follow, or sit
+   beside the map on a wide screen. One dark look for everyone: radar, warning and storm colors read best on a dark map.
+   Hazard colors follow the agencies' own map colors; everything else stays quiet. */
 :root{
-  --bg:#ECEFF2; --panel:#FFFFFF; --panel-2:#F4F6F8; --ink:#16202A; --muted:#566473; --rule:#D3DAE0;
-  --accent:#1D4FA3; --accent-ink:#FFFFFF;
-  --water:#D5DFE7; --land:#F7F5EF; --land-edge:#8996A3; --state:#C6CDD4; --map-label:#4E5C6A; --cone:#16202A;
-  --ok:#23804F; --warn:#B26A00; --crit:#C02A2A;
+  --bg:#0B1118; --panel:#131B25; --panel-2:#1A2430; --ink:#E7EDF3; --muted:#93A1B0; --rule:#283442;
+  --accent:#8DB4FF; --accent-ink:#0D1319;
+  --water:#0C151D; --land:#222E3A; --land-edge:#5F7082; --state:#35434F; --map-label:#A3B3C2; --cone:#E7EDF3;
+  --ok:#5CC98B; --warn:#F0B34A; --crit:#FF7A70; color-scheme:dark;
   --font-display:'Barlow Condensed','Arial Narrow',sans-serif;
   --font-body:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
   --font-mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#0D1319; --panel:#141C25; --panel-2:#1A2430; --ink:#E7EDF3; --muted:#93A1B0; --rule:#283442;
-    --accent:#8DB4FF; --accent-ink:#0D1319;
-    --water:#0F1820; --land:#222E3A; --land-edge:#5F7082; --state:#35434F; --map-label:#A3B3C2; --cone:#E7EDF3;
-    --ok:#5CC98B; --warn:#F0B34A; --crit:#FF7A70; color-scheme:dark;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#0D1319; --panel:#141C25; --panel-2:#1A2430; --ink:#E7EDF3; --muted:#93A1B0; --rule:#283442;
-  --accent:#8DB4FF; --accent-ink:#0D1319;
-  --water:#0F1820; --land:#222E3A; --land-edge:#5F7082; --state:#35434F; --map-label:#A3B3C2; --cone:#E7EDF3;
-  --ok:#5CC98B; --warn:#F0B34A; --crit:#FF7A70; color-scheme:dark;
 }
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.5}
@@ -120,7 +108,7 @@ button{font:inherit;color:inherit}
 
 /* main grid */
 .main{display:grid;grid-template-columns:minmax(0,1fr);gap:18px;align-items:start}
-@media (min-width:1040px){.main{grid-template-columns:minmax(0,1.75fr) minmax(340px,1fr)}
+@media (min-width:1040px){.main{grid-template-columns:minmax(0,1.55fr) minmax(380px,1fr)}
   .mapcol{position:sticky;top:calc(env(safe-area-inset-top,0px) + 10px)}}
 .mapcol{display:flex;flex-direction:column;gap:10px;min-width:0}
 .bar-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
@@ -133,13 +121,24 @@ button{font:inherit;color:inherit}
 .seg button:last-child{border-right:0}
 .seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
 .lbl{font-family:var(--font-display);font-weight:600;letter-spacing:.1em;text-transform:uppercase;font-size:13px;color:var(--muted);margin-right:2px}
-.mapbox{position:relative;background:var(--water);border:1px solid var(--rule);border-radius:6px;overflow:hidden;aspect-ratio:16/10.4;max-width:100%}
-@media (max-width:640px){.mapbox{aspect-ratio:1/1.08}.status{align-items:flex-start;text-align:left}}
+.mapbox{position:relative;background:var(--water);border:1px solid var(--rule);border-radius:8px;overflow:hidden;height:min(74vh,760px);max-width:100%}
+/* On a phone the map is tall but always leaves part of the page showing above or below it, so a thumb can still scroll the page. */
+@media (max-width:640px){.mapbox{height:min(66vh,130vw);max-width:none;margin-inline:calc(-1 * clamp(16px,2.4vw,32px) + 6px)}.status{align-items:flex-start;text-align:left}}
+.mapbox.full{position:fixed;inset:0;z-index:60;height:auto;margin:0;border:0;border-radius:0}
+.mapbox.full .zoom{top:calc(env(safe-area-inset-top,0px) + 10px)}
+.mapbox.full .pop{bottom:calc(env(safe-area-inset-bottom,0px) + 10px)}
+body.mapfull{overflow:hidden}
+.fold{border:1px solid var(--rule);border-radius:8px;background:var(--panel);padding:0 12px}
+.fold>summary{cursor:pointer;padding:9px 0;font-family:var(--font-display);font-weight:600;font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink)}
+.fold>summary span{color:var(--muted);letter-spacing:.04em;text-transform:none;font-family:var(--font-body);font-weight:400;font-size:13px;margin-left:6px}
+.fold[open]{padding-bottom:12px}
+.fold[open]>*+*{margin-top:8px}
 .mapbox canvas{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:grab;touch-action:none}
 .mapbox canvas.drag{cursor:grabbing}
 .zoom{position:absolute;right:10px;top:10px;display:flex;flex-direction:column;border:1px solid var(--rule);border-radius:8px;overflow:hidden;background:var(--panel)}
-.zoom button{border:0;background:transparent;width:34px;height:32px;font-size:18px;line-height:1;cursor:pointer;border-bottom:1px solid var(--rule)}
-.zoom button:last-child{border-bottom:0;font-size:12px;font-family:var(--font-display);font-weight:600;letter-spacing:.06em}
+.zoom button{border:0;background:transparent;width:40px;height:38px;font-size:18px;line-height:1;cursor:pointer;border-bottom:1px solid var(--rule)}
+.zoom button:last-child{border-bottom:0}
+.zoom #zreset{font-size:12px;font-family:var(--font-display);font-weight:600;letter-spacing:.06em}
 .pop{position:absolute;left:10px;bottom:10px;width:min(340px,calc(100% - 20px));max-height:62%;overflow:auto;background:var(--panel);border:1px solid var(--rule);border-radius:8px;padding:11px 13px;box-shadow:0 6px 22px rgba(0,0,0,.18);font-size:13.5px}
 .pop h3{font-family:var(--font-display);font-size:19px;font-weight:600;letter-spacing:.02em;margin:0 22px 2px 0;line-height:1.1}
 .pop .x{position:absolute;right:6px;top:4px;border:0;background:transparent;font-size:20px;cursor:pointer;color:var(--muted);padding:2px 7px}
@@ -205,7 +204,7 @@ footer .feeds{font-family:var(--font-mono);font-size:12px;display:flex;flex-wrap
   <header class="mast">
     <div>
       <h1>Hazard Desk</h1>
-      <p>One map of the world's hazards: hurricanes and tropical storms, tornado and storm warnings, flooding rain, fire weather, snow, earthquakes, tsunami messages, volcanoes, wildfires and space weather. Warnings, radar and forecast outlooks cover the United States; storms, earthquakes and volcanoes cover the world. Public agency data, no ads.</p>
+      <p>One live map of hurricanes, storm warnings, earthquakes, tsunami messages, volcanoes, wildfires and more. Public agency data, no ads.</p>
     </div>
     <div class="status" aria-live="polite">
       <span class="pill" id="modePill"><i></i><span id="modeText">Snapshot</span></span>
@@ -218,35 +217,39 @@ footer .feeds{font-family:var(--font-mono);font-size:12px;display:flex;flex-wrap
   <div class="tsu" id="tsuBanner" role="alert" hidden></div>
   <div class="note" id="note" hidden></div>
 
-  <section class="spot" id="spot" aria-labelledby="spotH"></section>
-
-  <section aria-labelledby="nowH">
-    <h2 class="eyebrow" id="nowH">Right now</h2>
-    <ul class="now" id="now"></ul>
-  </section>
-
   <div class="main">
     <div class="mapcol">
-      <div class="bar-row" id="layers" role="group" aria-label="Map layers"></div>
-      <div class="bar-row">
-        <span class="lbl">Outlook for</span>
-        <div class="seg" id="days" role="group" aria-label="Outlook day"></div>
+      <div class="mapbox" id="mapbox">
+        <canvas id="map" aria-label="World map of current hazards, opening on North America. The lists on this page give the same information as text."></canvas>
+        <div class="zoom"><button id="zin" aria-label="Zoom in">+</button><button id="zout" aria-label="Zoom out">&minus;</button><button id="zreset" aria-label="Back to North America" title="Back to North America">NA</button><button id="zfull" aria-label="Fill the screen with the map" aria-pressed="false" title="Full screen">&#10530;</button></div>
+        <div class="pop" id="pop" hidden></div>
       </div>
       <div class="bar-row">
         <span class="lbl">View</span>
         <div class="seg" id="views" role="group" aria-label="Map view"></div>
       </div>
-      <div class="bar-row"><span class="lbl">Sea temperature</span><div class="seg" id="sst" role="group" aria-label="Sea temperature"></div><span class="sstkey" id="sstKey" hidden></span></div>
-      <div class="mapbox" id="mapbox">
-        <canvas id="map" aria-label="World map of current hazards, opening on North America. The lists beside the map give the same information as text."></canvas>
-        <div class="zoom"><button id="zin" aria-label="Zoom in">+</button><button id="zout" aria-label="Zoom out">&minus;</button><button id="zreset" aria-label="Back to North America" title="Back to North America">NA</button></div>
-        <div class="pop" id="pop" hidden></div>
-      </div>
-      <div class="legend" id="legend"></div>
-      <p class="sub" style="margin:0;max-width:80ch">Outside the United States this map is thinner. Tornado, severe storm and flood warnings, radar and forecast outlooks are U.S. only, because no free worldwide equivalent exists. For warnings where you are, follow your national weather and civil protection services.</p>
+      <details class="fold" id="layFold">
+        <summary>Layers and outlook day <span id="layN"></span></summary>
+        <div class="bar-row" id="layers" role="group" aria-label="Map layers"></div>
+        <div class="bar-row">
+          <span class="lbl">Outlook for</span>
+          <div class="seg" id="days" role="group" aria-label="Outlook day"></div>
+        </div>
+        <div class="bar-row"><span class="lbl">Sea temperature</span><div class="seg" id="sst" role="group" aria-label="Sea temperature"></div><span class="sstkey" id="sstKey" hidden></span></div>
+      </details>
+      <details class="fold" id="keyFold">
+        <summary>Map key</summary>
+        <div class="legend" id="legend"></div>
+      </details>
+      <p class="sub" style="margin:0;max-width:80ch">Warnings, radar and forecast outlooks cover the United States only, because no free worldwide equivalent exists; storms, earthquakes, volcanoes, wildfires and tsunami messages cover the world. For warnings where you are, follow your national weather and civil protection services.</p>
     </div>
 
     <div class="desks">
+      <section class="spot" id="spot" aria-labelledby="spotH"></section>
+      <section aria-labelledby="nowH">
+        <h2 class="eyebrow" id="nowH">Right now</h2>
+        <ul class="now" id="now"></ul>
+      </section>
       <div class="tabs" id="tabs" role="tablist" aria-label="Regional desks"></div>
       <div class="desk" id="desk" role="tabpanel"></div>
     </div>
@@ -621,6 +624,10 @@ cv.addEventListener('pointermove',function(e){var p=ptrs[e.pointerId];if(!p){hov
 function up(e){var had=ptrs[e.pointerId];delete ptrs[e.pointerId];if(Object.keys(ptrs).length<2)pinch0=null;if(!Object.keys(ptrs).length)cv.classList.remove('drag');if(had&&moved<6&&e.type==='pointerup'){if(spotPick)spotFromMap(e.offsetX,e.offsetY);else identify(e.offsetX,e.offsetY)}}
 cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
 cv.addEventListener('wheel',function(e){e.preventDefault();zoomAt(e.offsetX,e.offsetY,Math.exp(-e.deltaY*(e.ctrlKey?0.01:0.0016)))},{passive:false});
+function setFull(f){box.classList.toggle('full',f);document.body.classList.toggle('mapfull',f);var b=$('zfull');b.setAttribute('aria-pressed',f?'true':'false');b.textContent=f?'\u00D7':'\u2922';b.setAttribute('aria-label',f?'Close the full-screen map':'Fill the screen with the map')}
+$('zfull').onclick=function(){setFull(!box.classList.contains('full'))};
+document.addEventListener('keydown',function(e){if(e.key==='Escape'&&box.classList.contains('full'))setFull(false)});
+if(matchMedia('(min-width:1040px)').matches)$('keyFold').open=true; // on a wide screen there is room for the map key to sit open
 $('zin').onclick=function(){zoomAt(W/2,H/2,1.6)};$('zout').onclick=function(){zoomAt(W/2,H/2,1/1.6)};$('zreset').onclick=function(){setView('all')};
 function hover(x,y){var h=false;for(var i=hitPts.length-1;i>=0;i--){var p=hitPts[i];if(Math.hypot(p.x-x,p.y-y)<p.r){h=true;break}}cv.style.cursor=h?'pointer':''}
 function identify(x,y){
@@ -648,6 +655,7 @@ function stormHtml(s){return '<h3>'+esc((s.title||s.name))+'</h3>'+esc(catName(s
 function setView(v){fit(VIEWS[v].box,true);[].forEach.call($('views').children,function(b){b.setAttribute('aria-pressed',b.dataset.v===v)})}
 function buildControls(){
   $('layers').innerHTML='<span class="lbl">Show</span>'+LAYERS.filter(function(l){return l[0]!=='radar'||(LIVE_MODE&&radar.ok)}).map(function(l){return '<button class="chip" data-l="'+l[0]+'" aria-pressed="'+on[l[0]]+'"><span class="sw" style="background:'+(on[l[0]]?l[2]:'')+'"></span>'+l[1]+'</button>'}).join('');
+  $('layN').textContent=LAYERS.filter(function(l){return on[l[0]]}).length+' of '+LAYERS.length+' layers on';
   $('layers').onclick=function(e){var b=e.target.closest('.chip');if(!b)return;var k=b.dataset.l;on[k]=!on[k];save();buildControls();legend();dirty=true;if(k==='radar'&&on.radar)loadRadar()};
   $('days').innerHTML=[1,2,3].map(function(d){var w=dayWindow(d);return '<button data-d="'+d+'" aria-pressed="'+(d===day)+'">'+(d===1?'Today':d===2?'Tomorrow':fDay.format(new Date(w[0]+6*36e5)).split(',')[0])+'</button>'}).join('');
   $('days').onclick=function(e){var b=e.target.closest('button');if(!b)return;day=+b.dataset.d;buildControls();legend();dirty=true};
