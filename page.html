@@ -14,6 +14,15 @@
   --font-body:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
   --font-mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
 }
+:root[data-theme="light"]{ /* light look: pale blue sea, sand land, dark text */
+  --bg:#F5F2EA; --panel:#FFFFFF; --panel-2:#EFEADF; --ink:#15202B; --muted:#55626F; --rule:#D3CCBD;
+  --accent:#1D4ED8; --accent-ink:#FFFFFF;
+  --water:#B7D6EA; --land:#F2E8D0; --land-edge:#8A7D62; --state:#CDBF9F; --map-label:#47525E; --cone:#15202B;
+  --ok:#1B7F4B; --warn:#8A5200; --crit:#B3261E; color-scheme:light;
+}
+.thbtn{font:inherit;font-family:var(--font-body);font-size:12.5px;font-weight:600;border:1px solid var(--rule);background:var(--panel-2);color:var(--ink);border-radius:999px;padding:4px 11px;cursor:pointer;margin-top:4px}
+.totop{position:fixed;right:12px;bottom:calc(var(--trkh,0px) + 14px);z-index:55;font:inherit;font-weight:700;font-size:13px;border:1.5px solid var(--ink);background:var(--panel);color:var(--ink);border-radius:999px;padding:8px 13px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.3)}
+@media (min-width:900px){.totop{display:none}}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.5}
 .wrap{max-width:1480px;margin:0 auto;padding-inline:clamp(16px,2.4vw,32px);padding-block:18px 40px;display:flex;flex-direction:column;gap:18px}
@@ -245,6 +254,7 @@ footer p{margin:0;max-width:95ch}
 footer .feeds{font-family:var(--font-mono);font-size:12px;display:flex;flex-wrap:wrap;gap:2px 18px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
+<script>try{var qt=/[?&]theme=(light|dark)\b/.exec(location.search);if(qt)localStorage.setItem('haztheme',qt[1]);if(localStorage.getItem('haztheme')==='light')document.documentElement.setAttribute('data-theme','light')}catch(e){}</script>
 
 <div class="wrap">
 <!--BDK-->
@@ -261,6 +271,7 @@ footer .feeds{font-family:var(--font-mono);font-size:12px;display:flex;flex-wrap
       <span class="pill" id="modePill"><i></i><span id="modeText">Snapshot</span></span>
       <span id="stamp"></span>
       <span id="clock"></span>
+      <button class="thbtn" id="themeBtn" type="button"></button>
     </div>
   </header>
 
@@ -308,6 +319,7 @@ footer .feeds{font-family:var(--font-mono);font-size:12px;display:flex;flex-wrap
     </div>
   </div>
 
+  <button class="totop" id="toTop" type="button" hidden>&#9650; Top</button>
   <div class="trk" id="trk" role="region" aria-label="Storm tracking" hidden></div>
   <footer>
     <div class="feeds" id="feeds"></div>
@@ -550,7 +562,7 @@ function draw(){
     ctx.setLineDash([]);ctx.lineWidth=4.5;ctx.strokeStyle=css.land;ctx.beginPath();ctx.arc(q[0],q[1],9,0,7);ctx.moveTo(q[0]-16,q[1]);ctx.lineTo(q[0]+16,q[1]);ctx.moveTo(q[0],q[1]-16);ctx.lineTo(q[0],q[1]+16);ctx.stroke();
     ctx.lineWidth=2;ctx.strokeStyle=css.ink;ctx.stroke();ctx.font='600 12px "IBM Plex Sans",system-ui,sans-serif';ctx.textAlign='left';label('Your spot',q[0]+13,q[1]-12,css.ink)}}
   if(trk&&!trk.gone&&trk.lat!=null&&!isNaN(trk.lat)){ // what is being tracked: a dashed outline on the warning and a double dashed ring, shapes as well as color
-    if(trkObj&&trk.kind==='cell'&&on.wwa){paths.wwa.forEach(function(x){if(x.a===trkObj)copies(-3.9,3.9,function(){ctx.setLineDash([7*px,5*px]);ctx.lineWidth=3.5*px;ctx.strokeStyle='#FFFFFF';ctx.stroke(x.p);ctx.setLineDash([])})});ctx.setTransform(dpr,0,0,dpr,0,0)}
+    if(trkObj&&trk.kind==='cell'&&on.wwa){paths.wwa.forEach(function(x){if(x.a===trkObj)copies(-3.9,3.9,function(){ctx.lineWidth=5*px;ctx.strokeStyle='#10161D';ctx.stroke(x.p);ctx.setLineDash([7*px,5*px]);ctx.lineWidth=3*px;ctx.strokeStyle='#FFFFFF';ctx.stroke(x.p);ctx.setLineDash([])})});ctx.setTransform(dpr,0,0,dpr,0,0)}
     var tq=sx(proj(trk.lon,trk.lat)),tr2=trk.kind==='cell'?30:26;if(tq[0]>-40&&tq[0]<W+40&&tq[1]>-40&&tq[1]<H+40){if(trk.kind!=='cell'||!trkObj){ctx.setLineDash([6,5]);ctx.lineWidth=5;ctx.strokeStyle=css.land;ctx.beginPath();ctx.arc(tq[0],tq[1],tr2,0,7);ctx.stroke();ctx.lineWidth=2.2;ctx.strokeStyle=css.ink;ctx.stroke();ctx.setLineDash([]);}else tr2=4;
       ctx.font='700 12px "IBM Plex Sans",system-ui,sans-serif';ctx.textAlign='center';label('TRACKING',tq[0],tq[1]-tr2-6,css.ink);ctx.textAlign='left'}}
 }
@@ -674,11 +686,12 @@ function frame(tn){if(anim)anim(tn);if(dirty||(!noMotion&&on.tsu&&WD&&WD.tsunami
 
 /* pointer: pan, pinch, wheel, click */
 var ptrs={},moved=0,pinch0=null;
-function zoomAt(x,y,f){var k=Math.max(W/TAU,Math.min(k0*90,view.k*f));var wx=(x-W/2)/view.k+view.cx,wy=(y-H/2)/view.k+view.cy;view.k=k;view.cx=wx-(x-W/2)/k;view.cy=wy-(y-H/2)/k;dirty=true}
+function zoomAt(x,y,f){var k=Math.max(W/TAU,Math.min(k0*90,view.k*f));var wx=(x-W/2)/view.k+view.cx,wy=(y-H/2)/view.k+view.cy;view.k=k;view.cx=wx-(x-W/2)/k;view.cy=wy-(y-H/2)/k;clampView();dirty=true}
+function clampView(){var a=proj(0,84)[1],b=proj(0,-80)[1],lo=Math.min(a,b),hi=Math.max(a,b);if(view.cy<lo)view.cy=lo;if(view.cy>hi)view.cy=hi} // the middle of the view always stays on the world
 cv.addEventListener('pointerdown',function(e){cv.setPointerCapture(e.pointerId);ptrs[e.pointerId]={x:e.offsetX,y:e.offsetY};moved=0;anim=null;var ids=Object.keys(ptrs);if(ids.length===2){var a=ptrs[ids[0]],b=ptrs[ids[1]];pinch0={d:Math.hypot(a.x-b.x,a.y-b.y),k:view.k}}cv.classList.add('drag')});
 cv.addEventListener('pointermove',function(e){var p=ptrs[e.pointerId];if(!p){hover(e.offsetX,e.offsetY);return}var dx=e.offsetX-p.x,dy=e.offsetY-p.y;moved+=Math.abs(dx)+Math.abs(dy);var ids=Object.keys(ptrs);
   if(ids.length===2&&pinch0){p.x=e.offsetX;p.y=e.offsetY;var a=ptrs[ids[0]],b=ptrs[ids[1]],d=Math.hypot(a.x-b.x,a.y-b.y);zoomAt((a.x+b.x)/2,(a.y+b.y)/2,(pinch0.k*d/pinch0.d)/view.k)}
-  else{view.cx-=dx/view.k;view.cy-=dy/view.k;p.x=e.offsetX;p.y=e.offsetY;dirty=true}});
+  else{view.cx-=dx/view.k;view.cy-=dy/view.k;clampView();p.x=e.offsetX;p.y=e.offsetY;dirty=true}});
 function up(e){var had=ptrs[e.pointerId];delete ptrs[e.pointerId];if(Object.keys(ptrs).length<2)pinch0=null;if(!Object.keys(ptrs).length)cv.classList.remove('drag');if(had&&moved<6&&e.type==='pointerup'){if(spotPick)spotFromMap(e.offsetX,e.offsetY);else identify(e.offsetX,e.offsetY)}}
 cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
 cv.addEventListener('wheel',function(e){e.preventDefault();zoomAt(e.offsetX,e.offsetY,Math.exp(-e.deltaY*(e.ctrlKey?0.01:0.0016)))},{passive:false});
@@ -1438,6 +1451,13 @@ cv.addEventListener('pointermove',function(e){if(ptrs[e.pointerId]&&moved>6)trkM
 document.addEventListener('visibilitychange',function(){if(!document.hidden&&trk){trkLock();trkCheck()}});
 setInterval(function(){if(!document.hidden&&trk)trkCheck()},30e3);
 window.addEventListener('resize',function(){if(trk)trkRender()});
+
+/* ---------- light or dark look, and a way back to the top on a phone ---------- */
+function themeNow(){return document.documentElement.getAttribute('data-theme')==='light'?'light':'dark'}
+function themeBtn(){var b=$('themeBtn'),l=themeNow()==='light';b.innerHTML=l?'&#9790; Dark look':'&#9728; Light look';b.setAttribute('aria-label','Switch to the '+(l?'dark':'light')+' look')}
+$('themeBtn').addEventListener('click',function(){var t=themeNow()==='light'?'dark':'light';if(t==='light')document.documentElement.setAttribute('data-theme','light');else document.documentElement.removeAttribute('data-theme');try{localStorage.setItem('haztheme',t)}catch(e){}themeBtn();readCss();dirty=true});themeBtn();
+// a finger on the map moves the map, never the page, so on a phone the page can get stuck under it: this button always gets back up
+(function(){var b=$('toTop'),f=function(){b.hidden=!(window.scrollY>260)};window.addEventListener('scroll',f,{passive:true});f();b.addEventListener('click',function(){window.scrollTo({top:0,behavior:'smooth'})})})();
 
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){dirty=true});
 requestAnimationFrame(frame);
