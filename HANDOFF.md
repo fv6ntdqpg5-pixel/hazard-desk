@@ -238,6 +238,38 @@ Randy, Nov 11: anyone must be able to "pinpoint/select" a hurricane, tornado or 
   save): start, update (extended + observed + now covers spot), replacement by a new warning, end, reload, stop, map pan;
   and with the saved hurricane. **Not yet seen against a live warning.** Sound and wake lock cannot be tested here at all.
 
+## 4i. Weather bar above the map (PREVIEW on branch `weather-bar`, waiting for Randy's Go)
+
+Randy, Nov 11-12: make the weather more prominent without ruining the look of the main page.
+
+- One row (`#wbar`, a button) between the title and the map: current temperature and sky, the next two forecast periods
+  (high / low), the highest rain-or-snow chance in the next 6 hours, and the alert status. Tapping it scrolls to "Your spot".
+- It adds no data and no logic of its own: `barData()` reads the same `LW` / `GW` objects as the panel, and the alert status
+  is copied from the verdict already rendered in "Your spot" (same words, same shape marker), so the two can never disagree.
+- With a warning at the spot the alert moves to the top of the bar in a solid red block with the triangle marker.
+- No spot: the bar is a single "Set your spot for local weather and alerts" button that jumps to the search box.
+- Model forecasts are marked "(computer model)" in the bar too. A failed forecast says so instead of "Reading…".
+- `renderBar()` is called at the end of every `renderSpot()`.
+
+## 4j. Light look, a Top button, and a limit on dragging the map (PREVIEW on branch `light-mode`, which also carries 4i)
+
+Randy, Nov 12: his mom would prefer a light map (light blue sea, cream or sand land); and "when moving the map around -
+can't move back up in the map again".
+
+- Light look: `:root[data-theme="light"]` redefines the same color variables (sea #B7D6EA, land #F2E8D0). Dark stays the
+  default. "Light look / Dark look" button under the clock (`#themeBtn`), saved in localStorage `haztheme`. A link ending
+  in `?theme=light` opens light and remembers it, so a link can be sent to someone already set up. A tiny script in the
+  head applies it before the page paints. The map reads the variables through `readCss()`, so it follows.
+- The "can't move back up" report could not be reproduced here. Two things that fit it were fixed: (1) `clampView()` keeps
+  the middle of the map on the world, so it can no longer be dragged off into empty sea; (2) a fixed "Top" button
+  (`#toTop`, phones and tablets only) because a finger on the map moves the map and never the page. If Randy still sees
+  it, ask exactly what he was dragging and on which screen.
+- Randy then pinned it down: on his phone he can drag the map up (to look south) but not down (to look north). The code
+  has no such limit (tested both ways with a mouse), so the phone's browser is taking the downward drag for itself (pull to
+  refresh or an in-app browser's swipe-down-to-close). Fix: the map canvas now cancels `touchstart` / `touchmove`
+  (non-passive `preventDefault`) and sets `overscroll-behavior`. **Not verifiable here; needs Randy's phone.** If it still
+  fails, ask which app the page is open in (Safari itself, or a link opened inside another app).
+
 ## 5. Open list
 
 1. **NASA FIRMS fire detections** (every hotspot, not just big fires): needs `FIRMS_MAP_KEY` in Vercel; aggregate
