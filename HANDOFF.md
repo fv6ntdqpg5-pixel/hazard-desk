@@ -182,7 +182,7 @@ Aira ~30 ka, Campanian Ignimbrite ~39 ka).
   from the build workspace and can be deleted in GitHub). Not yet seen in a real browser against the live Weather Service.
 - Not built yet: radar loop; notifications when the page is closed. Canada and the rest of the world: see 4g.
 
-## 4g. Local weather for Canada, and a labeled computer model everywhere else (PREVIEW on branch `local-world`, waiting for Randy's Go)
+## 4g. Local weather for Canada, and a labeled computer model everywhere else (LIVE Nov 11, 2026 on Randy's Go)
 
 Randy, Nov 11: "Add Canada / Show computer model everywhere else".
 
