@@ -21,7 +21,7 @@
   --bg:#0B1118; --panel:#131B25; --panel-2:#1A2430; --ink:#E7EDF3; --muted:#93A1B0; --rule:#283442;
   --accent:#8DB4FF; --accent-ink:#0D1319;
   --water:#0C151D; --land:#222E3A; --land-edge:#5F7082; --state:#35434F; --map-label:#A3B3C2; --cone:#E7EDF3;
-  --ok:#5CC98B; --warn:#F0B34A; --crit:#FF7A70; color-scheme:dark;
+  --ok:#5CC98B; --warn:#F0B34A; --crit:#FF7A70; --hi:#FFB067; --lo:#7DC3FF; color-scheme:dark;
   --font-display:'Barlow Condensed','Arial Narrow',sans-serif;
   --font-body:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
   --font-mono:'IBM Plex Mono',ui-monospace,Menlo,Consolas,monospace;
@@ -30,7 +30,7 @@
   --bg:#F5F2EA; --panel:#FFFFFF; --panel-2:#EFEADF; --ink:#15202B; --muted:#55626F; --rule:#D3CCBD;
   --accent:#1D4ED8; --accent-ink:#FFFFFF;
   --water:#B7D6EA; --land:#F2E8D0; --land-edge:#8A7D62; --state:#CDBF9F; --map-label:#47525E; --cone:#15202B;
-  --ok:#1B7F4B; --warn:#8A5200; --crit:#B3261E; color-scheme:light;
+  --ok:#1B7F4B; --warn:#8A5200; --crit:#B3261E; --hi:#B8430A; --lo:#1D6FB8; color-scheme:light;
 }
 .thbtn{font:inherit;font-family:var(--font-body);font-size:12.5px;font-weight:600;border:1px solid var(--rule);background:var(--panel-2);color:var(--ink);border-radius:999px;padding:4px 11px;cursor:pointer;margin-top:4px}
 .totop{position:fixed;right:12px;bottom:calc(var(--trkh,0px) + 14px);z-index:55;font:inherit;font-weight:700;font-size:13px;border:1.5px solid var(--ink);background:var(--panel);color:var(--ink);border-radius:999px;padding:8px 13px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.3)}
@@ -128,7 +128,13 @@ button{font:inherit;color:inherit}
 .pbar i{display:block;height:100%;background:var(--accent)}
 .wxdays{list-style:none;margin:0;padding:0}
 .wxdays li{border-top:1px solid var(--rule)}.wxdays li:first-child{border-top:0}
-.wxdays summary{display:grid;grid-template-columns:minmax(84px,1.1fr) minmax(104px,auto) minmax(0,3fr);gap:4px 12px;align-items:baseline;padding:8px 0;cursor:pointer}
+.wxdays summary{display:grid;grid-template-columns:minmax(128px,1.1fr) minmax(104px,auto) minmax(0,3fr);gap:4px 12px;align-items:center;padding:7px 0;cursor:pointer}
+.wxi{display:inline-block;vertical-align:middle;flex:none}
+.wxnow .wxi{margin-right:-4px}
+.wxdays .dn{display:flex;align-items:center;gap:9px}
+.wxdays .hi b{color:var(--hi)}.wxdays .lo b{color:var(--lo)}
+.hr tr.t td{line-height:1.25}.hr tr.t .wxi{margin-bottom:2px}
+.pbar i{background:#2F8FEF}
 .wxdays .dn{font-weight:600}.wxdays .dt{font-variant-numeric:tabular-nums;white-space:nowrap}.wxdays .ds{color:var(--muted);font-size:13.5px}
 @media (max-width:520px){.wxdays summary{grid-template-columns:1fr auto}.wxdays .ds{grid-column:1/-1}}
 .wxdays details p{margin:0 0 8px}
@@ -908,9 +914,42 @@ function lwAlertHtml(a,i,here){var on=Date.parse(a.onset||a.effective)||null,en=
   return '<li><span class="bar" style="background:'+(WWA_COLOR[a.event]||'#9AA5B1')+'"></span><span><b>'+esc(a.event)+'</b><br>'+span(on,en)+(cell?'<br>'+esc(motionText(cell.motion)):'')+(eta?'<br><b>Projected to reach your spot about '+fHM.format(new Date(eta))+'</b>':'')+
     (cell?trkBtn('cell',cell):'')+(a.instruction?'<p style="margin:6px 0 4px"><b>What to do:</b> '+esc(String(a.instruction).replace(/\s*\n\s*/g,' '))+'</p>':'')+
     '<details data-k="al'+i+'"><summary>Full text, as issued by '+esc(a.senderName||'the National Weather Service')+'</summary>'+(a.headline?'<p>'+esc(a.headline)+'</p>':'')+String(a.description||'').split(/\n\s*\n/).map(function(p){return '<p class="sub">'+esc(p.replace(/\s*\n\s*/g,' '))+'</p>'}).join('')+(a.areaDesc?'<p class="sub">Area: '+esc(a.areaDesc)+'</p>':'')+'</details></span></li>'}
+
+/* ---------- weather symbols ----------
+   Small pictures drawn here, chosen from the forecast's own words (or the model's weather code). They add nothing the
+   words do not say; the words stay beside them, and each picture has its own shape so it reads without color. */
+function wxKind(text,night){var s=String(text||'').toLowerCase();if(!s)return '';
+  if(/thunder|t-storm|tstorm/.test(s))return 'storm';
+  if(/snow|flurr|blizzard|sleet|ice pellets|wintry|freezing|hail/.test(s))return /rain|drizzle/.test(s)?'mix':'snow';
+  if(/rain|shower|drizzle|sprinkle/.test(s))return 'rain';
+  if(/fog|mist|haze|smoke/.test(s))return 'fog';
+  if(/partly|mostly sunny|mostly clear|a few clouds|mix of sun|mainly sunny|mainly clear|clearing/.test(s))return night?'pnight':'partly';
+  if(/cloud|overcast/.test(s))return 'cloud';
+  if(/sunny|clear|fair/.test(s))return night?'moon':'sun';
+  if(/wind|breez|blust/.test(s))return 'wind';
+  return ''}
+function wmoKind(c,night){if(c==null)return '';if(c===0)return night?'moon':'sun';if(c<=2)return night?'pnight':'partly';if(c===3)return 'cloud';if(c===45||c===48)return 'fog';if(c===56||c===57||c===66||c===67)return 'mix';if((c>=71&&c<=77)||c===85||c===86)return 'snow';if(c>=95)return 'storm';if(c>=51&&c<=82)return 'rain';return ''}
+function nightAt(t,rise,set){if(!t||!rise||!set)return false;var D=864e5,x=((t%D)+D)%D,r=((rise%D)+D)%D,s=((set%D)+D)%D;return !(r<s?(x>=r&&x<s):(x>=r||x<s))}
+var WXC='M7.2 18.5h9.9a3.9 3.9 0 0 0 .6-7.76A5.4 5.4 0 0 0 7.3 9.7a4.4 4.4 0 0 0-.1 8.8z',WXCH='M7.2 15.5h9.9a3.9 3.9 0 0 0 .6-7.76A5.4 5.4 0 0 0 7.3 6.7a4.4 4.4 0 0 0-.1 8.8z';
+function wxIco(k,size){if(!k)return '';var s=size||22,sun='#F2A900',cl='#9DB0C3',cs='#6F8296',rn='#2F8FEF',sn='#49A6DE',mn='#8C97D6',o='';
+  var rays=function(cx,cy,r1,r2){var a='';for(var i=0;i<8;i++){var t=i*Math.PI/4;a+='M'+(cx+Math.cos(t)*r1).toFixed(1)+' '+(cy+Math.sin(t)*r1).toFixed(1)+'L'+(cx+Math.cos(t)*r2).toFixed(1)+' '+(cy+Math.sin(t)*r2).toFixed(1)}return '<path d="'+a+'" stroke="'+sun+'" stroke-width="1.8" stroke-linecap="round"/>'};
+  var cloud=function(d){return '<path d="'+d+'" fill="'+cl+'" stroke="'+cs+'" stroke-width="1"/>'};
+  if(k==='sun')o='<circle cx="12" cy="12" r="4.6" fill="'+sun+'"/>'+rays(12,12,7,9.6);
+  else if(k==='moon')o='<path d="M15.5 3.6a8.6 8.6 0 1 0 5 13.2A7.4 7.4 0 0 1 15.5 3.6z" fill="'+mn+'"/>';
+  else if(k==='partly')o='<circle cx="8.2" cy="8" r="3.4" fill="'+sun+'"/>'+rays(8.2,8,5.2,7)+cloud('M9.4 19.5h8.2a3.3 3.3 0 0 0 .5-6.56 4.6 4.6 0 0 0-8.8-1.3 3.7 3.7 0 0 0 .1 7.86z');
+  else if(k==='pnight')o='<path d="M10.6 3.2a5.6 5.6 0 1 0 3.3 8.6 4.8 4.8 0 0 1-3.3-8.6z" fill="'+mn+'"/>'+cloud('M9.4 19.5h8.2a3.3 3.3 0 0 0 .5-6.56 4.6 4.6 0 0 0-8.8-1.3 3.7 3.7 0 0 0 .1 7.86z');
+  else if(k==='cloud')o=cloud(WXC);
+  else if(k==='rain')o=cloud(WXCH)+'<path d="M8.5 18l-1.2 3M12.5 18l-1.2 3M16.5 18l-1.2 3" stroke="'+rn+'" stroke-width="1.9" stroke-linecap="round"/>';
+  else if(k==='snow')o=cloud(WXCH)+'<path d="M8 17.6v3.4M6.5 18.5l3 1.6M9.5 18.5l-3 1.6M16 17.6v3.4M14.5 18.5l3 1.6M17.5 18.5l-3 1.6M12 18.6v3.4" stroke="'+sn+'" stroke-width="1.5" stroke-linecap="round"/>';
+  else if(k==='mix')o=cloud(WXCH)+'<path d="M8.5 18l-1.2 3" stroke="'+rn+'" stroke-width="1.9" stroke-linecap="round"/><path d="M15 17.6v3.4M13.5 18.5l3 1.6M16.5 18.5l-3 1.6" stroke="'+sn+'" stroke-width="1.5" stroke-linecap="round"/>';
+  else if(k==='storm')o=cloud(WXCH)+'<path d="M12.6 15.2l-3 4h2.4l-1.2 3.4 4-4.8h-2.5l1.5-2.6z" fill="'+sun+'" stroke="#B37B00" stroke-width=".6" stroke-linejoin="round"/>';
+  else if(k==='fog')o='<path d="M7.2 12.5h9.9a3.9 3.9 0 0 0 .6-7.76A5.4 5.4 0 0 0 7.3 3.7a4.4 4.4 0 0 0-.1 8.8z" fill="'+cl+'" stroke="'+cs+'" stroke-width="1"/><path d="M4 16h16M6 19h12M8 22h8" stroke="'+cs+'" stroke-width="1.7" stroke-linecap="round"/>';
+  else if(k==='wind')o='<path d="M3 9h10.5a2.5 2.5 0 1 0-2.4-3.2M3 13h15a2.6 2.6 0 1 1-2.5 3.3M3 17h8" fill="none" stroke="#3FA796" stroke-width="1.9" stroke-linecap="round"/>';
+  else return '';
+  return '<svg class="wxi" viewBox="0 0 24 24" width="'+s+'" height="'+s+'" aria-hidden="true" focusable="false">'+o+'</svg>'}
 function lwNowHtml(){var o=LW.obs,p=LW.pt||{};if(!o)return '<p class="none">'+(LW.err.obs?'No reading from the last three hours came back from the nearest stations.':'Reading the nearest station…')+'</p>';
   var feels=o.chill!=null?o.chill:o.heat,ft=lwFmt({hour:'numeric',minute:'2-digit'}),fact=function(k,v){return '<div><span>'+k+'</span><b>'+v+'</b></div>'};
-  return '<div class="wxnow"><span class="wxt">'+Math.round(o.temp)+'°F</span><div><b>'+esc(o.text||'')+'</b>'+(feels!=null&&Math.abs(feels-o.temp)>=2?'<br>Feels like '+Math.round(feels)+'° ('+(o.chill!=null?'wind chill':'heat index')+')':'')+'</div></div>'+
+  return '<div class="wxnow">'+wxIco(wxKind(o.text,nightAt(o.t,p.sunrise,p.sunset)),56)+'<span class="wxt">'+Math.round(o.temp)+'°F</span><div><b>'+esc(o.text||'')+'</b>'+(feels!=null&&Math.abs(feels-o.temp)>=2?'<br>Feels like '+Math.round(feels)+'° ('+(o.chill!=null?'wind chill':'heat index')+')':'')+'</div></div>'+
     '<div class="spfacts">'+fact('Wind',o.wind==null?'not reported':o.wind<1?'Calm':(o.dir!=null?dirOf(o.dir)+' ':'')+Math.round(o.wind)+' mph')+(o.gust!=null?fact('Gusts',Math.round(o.gust)+' mph'):'')+(o.hum!=null?fact('Humidity',Math.round(o.hum)+'%'):'')+(o.dew!=null?fact('Dew point',Math.round(o.dew)+'°'):'')+(o.vis!=null?fact('Visibility',(o.vis>=9.9?'10+':o.vis.toFixed(o.vis<3?1:0))+' mi'):'')+
     (p.sunrise&&p.sunset?fact('Sun','up '+ft.format(new Date(p.sunrise))+', down '+ft.format(new Date(p.sunset))):'')+'</div>'+
     '<p class="sub">Measured at '+esc(o.name)+' at '+ft.format(new Date(o.t))+' ('+ago(o.t)+'), the nearest reporting station.</p>'}
@@ -918,14 +957,14 @@ function lwHourlyHtml(){var H=(LW.hourly||[]).filter(function(p){return Date.par
   var fh=lwFmt({hour:'numeric'}),fd=lwFmt({weekday:'short'}),day=null,cls=[],pop=function(p){return p.probabilityOfPrecipitation&&p.probabilityOfPrecipitation.value!=null?p.probabilityOfPrecipitation.value:0};
   var hrs=H.map(function(p,i){var d=new Date(p.startTime),w=fd.format(d),nd=w!==day;day=w;cls[i]=nd&&i?' class="newday"':'';return '<td'+cls[i]+'>'+(nd?'<b>'+esc(w)+'</b><br>':'')+esc(fh.format(d))+'</td>'}).join('');
   var row=function(c,name,fn){return '<tr'+(c?' class="'+c+'"':'')+'><th scope="row">'+name+'</th>'+H.map(function(p,i){return '<td'+cls[i]+'>'+fn(p)+'</td>'}).join('')+'</tr>'};
-  return '<div class="hr" tabindex="0" role="region" aria-label="Hourly forecast, next 24 hours; scroll sideways"><table><tr><th scope="row">Hour</th>'+hrs+'</tr>'+row('t','Temp',function(p){return esc(p.temperature)+'°'})+
+  return '<div class="hr" tabindex="0" role="region" aria-label="Hourly forecast, next 24 hours; scroll sideways"><table><tr><th scope="row">Hour</th>'+hrs+'</tr>'+row('t','Temp',function(p){return wxIco(wxKind(p.shortForecast,p.isDaytime===false),26)+'<br>'+esc(p.temperature)+'°'})+
     row('','Rain or snow',function(p){var v=pop(p);return v+'%<span class="pbar"><i style="width:'+Math.max(0,Math.min(100,v))+'%"></i></span>'})+
     row('','Wind mph',function(p){return esc((p.windDirection||'')+' '+String(p.windSpeed||'').replace(/\s*mph/,''))})+row('sky','Sky',function(p){return esc(p.shortForecast||'')})+'</table></div>'}
 function lwDailyHtml(){var P=LW.daily||[];if(!P.length)return '<p class="none">'+(LW.err.daily?'The 7-day forecast did not load from the Weather Service. It is tried again every few minutes.':'Reading the 7-day forecast…')+'</p>';
   var days=[],pop=function(p){return p&&p.probabilityOfPrecipitation&&p.probabilityOfPrecipitation.value!=null?p.probabilityOfPrecipitation.value:0};
   P.forEach(function(p){var last=days[days.length-1];if(p.isDaytime||!last||last.night)days.push({day:p.isDaytime?p:null,night:p.isDaytime?null:p});else last.night=p});
   return '<ul class="wxdays">'+days.map(function(d,i){var a=d.day||d.night,pp=Math.max(pop(d.day),pop(d.night));
-    return '<li><details data-k="d'+i+'"><summary><span class="dn">'+esc(a.name)+'</span><span class="dt">'+(d.day?'High <b>'+esc(d.day.temperature)+'°</b>':'')+(d.day&&d.night?' · ':'')+(d.night?'Low <b>'+esc(d.night.temperature)+'°</b>':'')+'</span><span class="ds">'+esc(a.shortForecast||'')+(pp?' · '+pp+'% chance of rain or snow':'')+'</span></summary>'+
+    return '<li><details data-k="d'+i+'"><summary><span class="dn">'+wxIco(wxKind(a.shortForecast,!d.day),30)+esc(a.name)+'</span><span class="dt">'+(d.day?'<span class="hi">High <b>'+esc(d.day.temperature)+'°</b></span>':'')+(d.day&&d.night?' · ':'')+(d.night?'<span class="lo">Low <b>'+esc(d.night.temperature)+'°</b></span>':'')+'</span><span class="ds">'+esc(a.shortForecast||'')+(pp?' · '+pp+'% chance of rain or snow':'')+'</span></summary>'+
       (d.day?'<p class="sub"><b>'+esc(d.day.name)+':</b> '+esc(d.day.detailedForecast||'')+'</p>':'')+(d.night?'<p class="sub"><b>'+esc(d.night.name)+':</b> '+esc(d.night.detailedForecast||'')+'</p>':'')+'</details></li>'}).join('')+'</ul>'+
     '<p class="sub" style="margin-top:6px">Tap a day for the full wording. Forecast by the National Weather Service'+(LW.pt&&LW.pt.office?' office '+esc(LW.pt.office):'')+(LW.fcAt?', updated '+lwFmt({weekday:'short',hour:'numeric',minute:'2-digit'}).format(new Date(LW.fcAt)):'')+'. The Weather Service forecasts seven days; this page does not show longer day-by-day forecasts because none are reliable.</p>'}
 function lwSections(){if(!lwOn())return '';var p=LW.pt||{},where=p.city?' <span style="text-transform:none;letter-spacing:0">for '+esc(p.city)+(p.state?', '+esc(p.state):'')+'</span>':'';
@@ -1001,26 +1040,26 @@ function gwFact(k,v){return '<div><span>'+k+'</span><b>'+v+'</b></div>'}
 function gwTemp(c){return Math.round(c)+'°C <span class="sub">('+fOf(c)+'°F)</span>'}
 function gwWind(k,dir){return k==null?'not reported':k<1?'Calm':(dir?esc(dir)+' ':'')+Math.round(k)+' km/h <span class="sub">('+mphOf(k)+' mph)</span>'}
 var fUH=new Intl.DateTimeFormat(undefined,{hour:'numeric',timeZone:'UTC'}),fUHM=new Intl.DateTimeFormat(undefined,{hour:'numeric',minute:'2-digit',timeZone:'UTC'}),fUD=new Intl.DateTimeFormat(undefined,{weekday:'short',timeZone:'UTC'}),fUDL=new Intl.DateTimeFormat(undefined,{weekday:'long',timeZone:'UTC'}),fLH=new Intl.DateTimeFormat(undefined,{hour:'numeric'}),fLD=new Intl.DateTimeFormat(undefined,{weekday:'short'}),fLZ=new Intl.DateTimeFormat(undefined,{hour:'numeric',minute:'2-digit',timeZoneName:'short'});
-function gwHours(H,fh,fd,sky,dir){var day=null,cls=[];
+function gwHours(H,fh,fd,sky,dir,kind){var day=null,cls=[];
   var hrs=H.map(function(p,i){var d=new Date(p.t),w=fd.format(d),nd=w!==day;day=w;cls[i]=nd&&i?' class="newday"':'';return '<td'+cls[i]+'>'+(nd?'<b>'+esc(w)+'</b><br>':'')+esc(fh.format(d))+'</td>'}).join('');
   var row=function(c,name,fn){return '<tr'+(c?' class="'+c+'"':'')+'><th scope="row">'+name+'</th>'+H.map(function(p,i){return '<td'+cls[i]+'>'+fn(p)+'</td>'}).join('')+'</tr>'};
-  return '<div class="hr" tabindex="0" role="region" aria-label="Hourly forecast, next 24 hours; scroll sideways"><table><tr><th scope="row">Hour</th>'+hrs+'</tr>'+row('t','Temp °C',function(p){return p.temp==null?'':Math.round(p.temp)+'°'})+
+  return '<div class="hr" tabindex="0" role="region" aria-label="Hourly forecast, next 24 hours; scroll sideways"><table><tr><th scope="row">Hour</th>'+hrs+'</tr>'+row('t','Temp °C',function(p){return (kind?wxIco(kind(p),26)+'<br>':'')+(p.temp==null?'':Math.round(p.temp)+'°')})+
     row('','Rain or snow',function(p){if(p.pop==null)return '';return Math.round(p.pop)+'%<span class="pbar"><i style="width:'+Math.max(0,Math.min(100,p.pop))+'%"></i></span>'})+
     row('','Wind km/h',function(p){return p.wind==null?'':esc(dir(p))+' '+Math.round(p.wind)})+row('sky','Sky',function(p){return esc(sky(p))})+'</table></div>'}
 function caSections(){var G=GW,c=G.cp;
   if(!c)return '<section class="wide"><h3>Local forecast</h3><p class="none">'+(G.err.fc?'Environment Canada did not answer for this spot. It is tried again every few minutes; in the meantime use <a href="https://weather.gc.ca/" target="_blank" rel="noopener">weather.gc.ca</a>.':'Reading the Environment Canada forecast…')+'</p></section>';
   var o=c.now,far=c.km>=8?', about '+Math.round(c.km)+' km ('+miles(c.km)+' miles) from your spot':'',h='<section><h3>Right now <span style="text-transform:none;letter-spacing:0">for '+esc(c.name)+'</span></h3>';
   if(o){var feels=o.chill!=null?o.chill:o.humidex;
-    h+='<div class="wxnow"><span class="wxt">'+Math.round(o.temp)+'°C</span><div><b>'+esc(o.text)+'</b>'+(o.text?'<br>':'')+fOf(o.temp)+'°F'+(feels!=null&&Math.abs(feels-o.temp)>=2?'<br>Feels like '+Math.round(feels)+' ('+(o.chill!=null?'wind chill':'humidex')+')':'')+'</div></div>'+
+    h+='<div class="wxnow">'+wxIco(wxKind(o.text,nightAt(o.t,c.sunrise,c.sunset)),56)+'<span class="wxt">'+Math.round(o.temp)+'°C</span><div><b>'+esc(o.text)+'</b>'+(o.text?'<br>':'')+fOf(o.temp)+'°F'+(feels!=null&&Math.abs(feels-o.temp)>=2?'<br>Feels like '+Math.round(feels)+' ('+(o.chill!=null?'wind chill':'humidex')+')':'')+'</div></div>'+
       '<div class="spfacts">'+gwFact('Wind',o.wind==null&&o.windRaw?esc(capFirst(o.windRaw)):gwWind(o.wind,o.dir))+(o.gust?gwFact('Gusts',Math.round(o.gust)+' km/h <span class="sub">('+mphOf(o.gust)+' mph)</span>'):'')+(o.hum!=null?gwFact('Humidity',Math.round(o.hum)+'%'):'')+(o.dew!=null?gwFact('Dew point',Math.round(o.dew)+'°C'):'')+(c.sunrise&&c.sunset?gwFact('Sun','up '+fHM.format(new Date(c.sunrise))+', down '+fHM.format(new Date(c.sunset))):'')+'</div>'+
       '<p class="sub">Measured at '+esc(o.station||'the Environment Canada station')+(o.t?' at '+fLZ.format(new Date(o.t))+' ('+ago(o.t)+')':'')+'. '}
   else h+='<p class="none">Environment Canada has no current reading for this forecast city.</p><p class="sub">';
   h+='This is Environment Canada\'s forecast city nearest your spot'+far+'. Times are in this device\'s time zone.</p></section>';
   var H=c.hours.filter(function(x){return x.t+36e5>now()}).slice(0,24);
-  h+='<section class="wide"><h3>Next 24 hours</h3>'+(H.length?gwHours(H,fLH,fLD,function(p){return p.sky},function(p){return p.dir}):'<p class="none">Environment Canada has no hourly forecast for this city right now.</p>')+'</section>';
+  h+='<section class="wide"><h3>Next 24 hours</h3>'+(H.length?gwHours(H,fLH,fLD,function(p){return p.sky},function(p){return p.dir},function(p){return wxKind(p.sky,nightAt(p.t,c.sunrise,c.sunset))}):'<p class="none">Environment Canada has no hourly forecast for this city right now.</p>')+'</section>';
   var days=[];c.periods.forEach(function(p){var last=days[days.length-1];if(!p.night||!last||last.night)days.push({day:p.night?null:p,night:p.night?p:null});else last.night=p});
   h+='<section class="wide"><h3>Next 7 days</h3>'+(days.length?'<ul class="wxdays">'+days.map(function(d,i){var a=d.day||d.night;
-      return '<li><details data-k="cd'+i+'"><summary><span class="dn">'+esc(a.name)+'</span><span class="dt">'+(d.day&&d.day.hi!=null?'High <b>'+Math.round(d.day.hi)+'°</b>':d.day&&d.day.lo!=null?'Low <b>'+Math.round(d.day.lo)+'°</b>':'')+(d.night&&d.night.lo!=null?(d.day?' · ':'')+'Low <b>'+Math.round(d.night.lo)+'°</b>':d.night&&d.night.hi!=null?(d.day?' · ':'')+'High <b>'+Math.round(d.night.hi)+'°</b>':'')+'</span><span class="ds">'+esc(a.short)+'</span></summary>'+
+      return '<li><details data-k="cd'+i+'"><summary><span class="dn">'+wxIco(wxKind(a.short,!d.day),30)+esc(a.name)+'</span><span class="dt">'+(d.day&&d.day.hi!=null?'<span class="hi">High <b>'+Math.round(d.day.hi)+'°</b></span>':d.day&&d.day.lo!=null?'<span class="lo">Low <b>'+Math.round(d.day.lo)+'°</b></span>':'')+(d.night&&d.night.lo!=null?(d.day?' · ':'')+'<span class="lo">Low <b>'+Math.round(d.night.lo)+'°</b></span>':d.night&&d.night.hi!=null?(d.day?' · ':'')+'<span class="hi">High <b>'+Math.round(d.night.hi)+'°</b></span>':'')+'</span><span class="ds">'+esc(a.short)+'</span></summary>'+
         (d.day?'<p class="sub"><b>'+esc(d.day.name)+':</b> '+esc(d.day.text)+'</p>':'')+(d.night?'<p class="sub"><b>'+esc(d.night.name)+':</b> '+esc(d.night.text)+'</p>':'')+'</details></li>'}).join('')+'</ul>':'<p class="none">Environment Canada has no day-by-day forecast for this city right now.</p>')+
     '<p class="sub" style="margin-top:6px">Tap a day for the full wording. Temperatures are in °C. Forecast by Environment and Climate Change Canada for '+esc(c.name)+(c.fcAt?', issued '+tz(c.fcAt):'')+'. '+(/^https:\/\/weather\.gc\.ca\//.test(c.url)?'<a href="'+esc(c.url)+'" target="_blank" rel="noopener">Official page</a>. ':'')+'Environment Canada labels this data service experimental, so check the official page before acting on it.</p></section>';
   return h}
@@ -1028,13 +1067,13 @@ function omSections(){var G=GW,o=G.om;
   var why=G.fell?'Environment Canada has no forecast city within 200 km of this spot, so this is a computer model instead. ':'';
   if(!o)return '<section class="wide"><h3>Local forecast (computer model)</h3><p class="none">'+(G.err.fc?'The model forecast did not load from Open-Meteo. It is tried again every few minutes.':'Reading the model forecast…')+'</p></section>';
   var c=o.now,d0=o.days[0],dirT=function(p){return p.deg==null?'':dirOf(p.deg)},h='<section><h3>Right now <span style="text-transform:none;letter-spacing:0">(computer model)</span></h3>';
-  if(c){h+='<div class="wxnow"><span class="wxt">'+Math.round(c.temp)+'°C</span><div><b>'+esc(WMO[c.code]||'')+'</b>'+(WMO[c.code]?'<br>':'')+fOf(c.temp)+'°F'+(c.feels!=null&&Math.abs(c.feels-c.temp)>=2?'<br>Feels like '+Math.round(c.feels)+'°C':'')+'</div></div>'+
+  if(c){h+='<div class="wxnow">'+wxIco(wmoKind(c.code,nightAt(c.t,d0&&d0.rise,d0&&d0.set)),56)+'<span class="wxt">'+Math.round(c.temp)+'°C</span><div><b>'+esc(WMO[c.code]||'')+'</b>'+(WMO[c.code]?'<br>':'')+fOf(c.temp)+'°F'+(c.feels!=null&&Math.abs(c.feels-c.temp)>=2?'<br>Feels like '+Math.round(c.feels)+'°C':'')+'</div></div>'+
       '<div class="spfacts">'+gwFact('Wind',gwWind(c.wind,c.deg==null?'':dirOf(c.deg)))+(c.gust!=null?gwFact('Gusts',Math.round(c.gust)+' km/h <span class="sub">('+mphOf(c.gust)+' mph)</span>'):'')+(c.hum!=null?gwFact('Humidity',Math.round(c.hum)+'%'):'')+(d0&&d0.rise&&d0.set?gwFact('Sun','up '+fUHM.format(new Date(d0.rise))+', down '+fUHM.format(new Date(d0.set))):'')+'</div>'}
   else h+='<p class="none">The model returned no current value for this spot.</p>';
   h+='<p class="sub"><b>This is a computer model\'s value for your spot, not a measurement and not a national weather service forecast.</b> '+why+(c&&c.t?'Model value for '+fUHM.format(new Date(c.t))+' local time'+(o.zone?' ('+esc(o.zone)+')':'')+'. ':'')+'It carries no warnings.</p></section>';
-  h+='<section class="wide"><h3>Next 24 hours <span style="text-transform:none;letter-spacing:0">(computer model)</span></h3>'+(o.hours.length?gwHours(o.hours.slice(0,24),fUH,fUD,function(p){return WMO[p.code]||''},dirT):'<p class="none">The model returned no hourly values.</p>')+'</section>';
+  h+='<section class="wide"><h3>Next 24 hours <span style="text-transform:none;letter-spacing:0">(computer model)</span></h3>'+(o.hours.length?gwHours(o.hours.slice(0,24),fUH,fUD,function(p){return WMO[p.code]||''},dirT,function(p){return wmoKind(p.code,nightAt(p.t,d0&&d0.rise,d0&&d0.set))}):'<p class="none">The model returned no hourly values.</p>')+'</section>';
   h+='<section class="wide"><h3>Next 7 days <span style="text-transform:none;letter-spacing:0">(computer model)</span></h3>'+(o.days.length?'<ul class="wxdays">'+o.days.map(function(d,i){var sky=WMO[d.code]||'';
-      return '<li><details data-k="od'+i+'"><summary><span class="dn">'+(i?esc(fUDL.format(new Date(d.t))):'Today')+'</span><span class="dt">'+(d.hi!=null?'High <b>'+Math.round(d.hi)+'°</b>':'')+(d.hi!=null&&d.lo!=null?' · ':'')+(d.lo!=null?'Low <b>'+Math.round(d.lo)+'°</b>':'')+'</span><span class="ds">'+esc(sky)+(d.pop?' · up to '+Math.round(d.pop)+'% chance of rain or snow':'')+'</span></summary>'+
+      return '<li><details data-k="od'+i+'"><summary><span class="dn">'+wxIco(wmoKind(d.code,false),30)+(i?esc(fUDL.format(new Date(d.t))):'Today')+'</span><span class="dt">'+(d.hi!=null?'<span class="hi">High <b>'+Math.round(d.hi)+'°</b></span>':'')+(d.hi!=null&&d.lo!=null?' · ':'')+(d.lo!=null?'<span class="lo">Low <b>'+Math.round(d.lo)+'°</b></span>':'')+'</span><span class="ds">'+esc(sky)+(d.pop?' · up to '+Math.round(d.pop)+'% chance of rain or snow':'')+'</span></summary>'+
         '<p class="sub">'+(d.hi!=null?'High '+Math.round(d.hi)+'°C ('+fOf(d.hi)+'°F). ':'')+(d.lo!=null?'Low '+Math.round(d.lo)+'°C ('+fOf(d.lo)+'°F). ':'')+(d.wind!=null?'Wind up to '+Math.round(d.wind)+' km/h ('+mphOf(d.wind)+' mph). ':'')+(d.rise&&d.set?'Sun up '+fUHM.format(new Date(d.rise))+', down '+fUHM.format(new Date(d.set))+'.':'')+'</p></details></li>'}).join('')+'</ul>':'<p class="none">The model returned no daily values.</p>')+
     '<p class="sub" style="margin-top:6px">Temperatures are in °C; tap a day for °F and wind. Times are local to the spot'+(o.zone?' ('+esc(o.zone)+')':'')+'. <b>Computer model forecast, not issued by a weather agency.</b> No forecaster has checked it, it can miss local effects such as mountains and coasts, and it never includes warnings. <a href="https://open-meteo.com/" target="_blank" rel="noopener">Weather data by Open-Meteo.com</a> (CC BY 4.0), built from national weather services\' models.</p></section>';
   return h}
@@ -1049,18 +1088,18 @@ function spotWorldStorms(){var ws=wStorms().filter(function(w){return w.lon!=nul
 function barData(){ // {temp, sky, parts[], src} or null while nothing has loaded
   var popMax=function(a){var m=null;a.forEach(function(v){if(v!=null&&!isNaN(v)&&(m==null||v>m))m=v});return m},o={parts:[]},rain=function(v){if(v!=null)o.parts.push('Rain or snow chance, next 6 hours: '+(v>0?'up to '+Math.round(v)+'%':'0%'))};
   if(spotUS()&&lwOn()&&!LW.none){var ob=LW.obs,P=LW.daily||[],H=(LW.hourly||[]).filter(function(q){return Date.parse(q.endTime)>now()}).slice(0,6);
-    if(ob){o.temp=Math.round(ob.temp)+'°F';o.sky=ob.text||''}
+    if(ob){o.temp=Math.round(ob.temp)+'°F';o.sky=ob.text||'';o.kind=wxKind(ob.text,nightAt(ob.t,LW.pt&&LW.pt.sunrise,LW.pt&&LW.pt.sunset))}
     P.slice(0,2).forEach(function(q){if(q&&q.temperature!=null)o.parts.push(esc(q.name)+': '+(q.isDaytime?'high ':'low ')+esc(q.temperature)+'°')});
     if(H.length)rain(popMax(H.map(function(q){return q.probabilityOfPrecipitation&&q.probabilityOfPrecipitation.value!=null?q.probabilityOfPrecipitation.value:0})));
     return o.temp||o.parts.length?o:null}
   if(!gwOn())return null;
   if(GW.prov==='ca'&&GW.cp){var c=GW.cp,Hc=c.hours.filter(function(x){return x.t+36e5>now()}).slice(0,6);
-    if(c.now){o.temp=Math.round(c.now.temp)+'°C';o.sky=c.now.text||''}
+    if(c.now){o.temp=Math.round(c.now.temp)+'°C';o.sky=c.now.text||'';o.kind=wxKind(c.now.text,nightAt(c.now.t,c.sunrise,c.sunset))}
     c.periods.slice(0,2).forEach(function(q){if(q.hi!=null)o.parts.push(esc(q.name)+': high '+Math.round(q.hi)+'°');else if(q.lo!=null)o.parts.push(esc(q.name)+': low '+Math.round(q.lo)+'°')});
     if(Hc.length)rain(popMax(Hc.map(function(x){return x.pop})));
     return o.temp||o.parts.length?o:null}
   if(GW.prov==='om'&&GW.om){var m=GW.om,d=m.days[0];o.src='computer model';
-    if(m.now){o.temp=Math.round(m.now.temp)+'°C';o.sky=WMO[m.now.code]||''}
+    if(m.now){o.temp=Math.round(m.now.temp)+'°C';o.sky=WMO[m.now.code]||'';o.kind=wmoKind(m.now.code,nightAt(m.now.t,d&&d.rise,d&&d.set))}
     if(d&&d.hi!=null)o.parts.push('Today: high '+Math.round(d.hi)+'°'+(d.lo!=null?', low '+Math.round(d.lo)+'°':''));
     if(m.hours.length)rain(popMax(m.hours.slice(0,6).map(function(x){return x.pop})));
     return o.temp||o.parts.length?o:null}
@@ -1068,7 +1107,7 @@ function barData(){ // {temp, sky, parts[], src} or null while nothing has loade
 function renderBar(){var el=$('wbar');if(!el)return;
   if(!spot){el.className='wbar';el.innerHTML='<span class="wbset">&#9678; Set your spot for local weather and alerts</span>';el.setAttribute('aria-label','Set your spot for local weather and alerts');return}
   var v=$('spot').querySelector('.verdict'),cls=v?(v.classList.contains('warn')?'warn':v.classList.contains('watch')?'watch':v.classList.contains('clear')?'clear':''):'',vb=v&&v.querySelector('b'),vg=v&&v.querySelector('.g'),d=spotEdit?null:barData();
-  var h='<span class="wbt">'+(d&&d.temp?d.temp:'&ndash;')+'</span><span class="wbm"><b>'+esc(spotName())+(d&&d.sky?' &middot; '+esc(d.sky):'')+(d&&d.src?' <i>('+d.src+')</i>':'')+'</b><span>'+(d?d.parts.join(' &middot; '):spotEdit?'':(gwOn()&&GW.err.fc)||(lwOn()&&!LW.none&&(LW.err.pt||(LW.err.obs&&LW.err.daily)))?'The forecast did not load. It is tried again every few minutes.':'Reading the forecast…')+'</span></span>'+
+  var h=(d&&d.kind?wxIco(d.kind,34):'')+'<span class="wbt">'+(d&&d.temp?d.temp:'&ndash;')+'</span><span class="wbm"><b>'+esc(spotName())+(d&&d.sky?' &middot; '+esc(d.sky):'')+(d&&d.src?' <i>('+d.src+')</i>':'')+'</b><span>'+(d?d.parts.join(' &middot; '):spotEdit?'':(gwOn()&&GW.err.fc)||(lwOn()&&!LW.none&&(LW.err.pt||(LW.err.obs&&LW.err.daily)))?'The forecast did not load. It is tried again every few minutes.':'Reading the forecast…')+'</span></span>'+
     (vb?'<span class="wba"><span aria-hidden="true">'+(vg?vg.innerHTML:'')+'</span> '+esc(vb.textContent)+'</span>':'')+'<span class="wbgo" aria-hidden="true">Details &#9662;</span>';
   el.className='wbar'+(cls?' '+cls:'');el.innerHTML=h;el.removeAttribute('aria-label')}
 $('wbar').addEventListener('click',function(){var s=$('spot');s.scrollIntoView({block:'start',behavior:'smooth'});if(!spot){var i=$('spQ');if(i)setTimeout(function(){i.focus({preventScroll:true})},400)}});
