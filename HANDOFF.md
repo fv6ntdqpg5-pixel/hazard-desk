@@ -287,7 +287,7 @@ can't move back up in the map again".
 - Tested with mock radar images and a mock time list in the real format. **Not yet seen against NOAA's live images.**
   The research probe was re-armed for this and removed again from `probe-nws`.
 
-## 4l. Weather symbols and a brighter forecast (PREVIEW on branch `wx-icons`, waiting for Randy's Go)
+## 4l. Weather symbols and a brighter forecast (LIVE Nov 12, 2026 on Randy's Go)
 
 Randy, Nov 12: "How do we brighten this up and add little weather symbols" in the weather section.
 - `wxIco(kind,size)` draws eleven small pictures as inline SVG (sun, moon, partly sunny, partly cloudy night, cloud, rain,
