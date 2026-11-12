@@ -88,6 +88,7 @@ button{font:inherit;color:inherit}
 .spstorm{border:1px solid var(--rule);border-radius:6px;padding:10px 12px;margin:0 0 8px}
 .spstorm h4{font-family:var(--font-display);font-weight:700;font-size:21px;letter-spacing:.02em;text-transform:uppercase;margin:0 0 4px;display:flex;align-items:center;gap:8px}
 .spstorm h4 i{width:12px;height:12px;border-radius:50%;flex:none;border:1px solid rgba(128,128,128,.5)}
+.sptbl{font-size:12.5px}.sptbl th{font-size:12px;letter-spacing:.05em;padding-right:6px}.sptbl td{padding-right:6px}
 .spfacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:8px 16px;margin:6px 0 8px}
 .spfacts div{border-top:1px solid var(--rule);padding-top:5px}
 .spfacts span{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
@@ -727,23 +728,34 @@ var NAT={CA:['Canada','Environment and Climate Change Canada','https://weather.g
 function spotUS(){return !spot.cc||spot.cc==='US'||spot.cc==='PR'||spot.cc==='VI'}
 function spotName(){return spot.name||(Math.abs(spot.lat).toFixed(2)+'°'+(spot.lat>=0?'N':'S')+' '+Math.abs(spot.lon).toFixed(2)+'°'+(spot.lon>=0?'E':'W'))}
 function spotSetHtml(){return '<div class="spset"><button class="spbtn" id="spGeo" type="button">Use my location</button><div class="spsearch"><input id="spQ" type="search" placeholder="Search a town or city" autocomplete="off" aria-label="Search for a town or city in North America"><ul class="spres" id="spRes" hidden></ul></div><button class="spbtn alt" id="spTap" type="button" aria-pressed="'+(spotPick?'true':'false')+'">'+(spotPick?'Now tap your spot on the map':'Tap it on the map')+'</button>'+(spot?'<button class="spbtn alt" id="spCancel" type="button">Cancel</button>':'')+'</div>'+(spotMsg?'<p class="sub" role="status">'+esc(spotMsg)+'</p>':'')+'<p class="sub">Your spot is saved only in this browser. It is not sent to this site or to anyone else.</p>'}
+// which of a storm position's wind radii covers a point: 64, 50 or 34 (knots), or 0. NHC gives the radii by quarter of the storm, in nautical miles.
+function windAt(lat,lon,pt,radii){if(!radii)return 0;var d=distKm(lat,lon,pt.lat,pt.lon),q=bearing(pt.lat,pt.lon,lat,lon),qi=q<90?0:q<180?1:q<270?2:3,hit=0;['64','50','34'].forEach(function(k){var r=radii[k];if(!hit&&r&&d<=r[qi]*1.852)hit=+k});return hit}
+var WINDLONG={64:'hurricane-force (74 mph or more)',50:'58 mph or more',34:'tropical-storm-force (39 mph or more)'},WINDSHORT={64:'74+ mph',50:'58+ mph',34:'39+ mph'};
+function paras(list,one,cls){var a=list&&list.length?list:(one?[one]:[]);return a.map(function(p){return '<p'+(cls?' class="'+cls+'"':'')+'>'+esc(p)+'</p>'}).join('')}
 function spotStorm(s){
   var d=distKm(spot.lat,spot.lon,s.lat,s.lon),b=bearing(spot.lat,spot.lon,s.lat,s.lon),c=closest(s,spot.lat,spot.lon),inCone=s.cone&&s.cone.length&&inPolys(spot.lon,spot.lat,s.cone),h='';
-  // which of the storm's measured wind fields reaches this point right now (radii are published by quadrant, in nautical miles)
-  var q=bearing(s.lat,s.lon,spot.lat,spot.lon),qi=q<90?0:q<180?1:q<270?2:3,inside=null,reach=null;
-  if(s.radii)[['64','hurricane-force (74 mph or more)'],['50','58 mph or more'],['34','tropical-storm-force (39 mph or more)']].forEach(function(x){var r=s.radii[x[0]];if(!r)return;if(x[0]==='34')reach=r[qi]*1.852;if(!inside&&d<=r[qi]*1.852)inside=x[1]});
-  var far=!inCone&&c.km>1000&&d>1500;
-  if(far)return {far:true,html:'<li><span class="bar" style="background:'+CAT_COLOR[catIndex(s.wind)]+'"></span><span><b>'+esc(s.title||s.name)+'</b>: now about '+miles(d)+' miles to your '+dirOf(b)+(c.km>d-80?', and not forecast to come closer through ':', forecast to stay more than '+miles(c.km)+' miles away through ')+tz(s.track&&s.track.length?s.track[s.track.length-1].t:s.advTime)+'.</span></li>'};
+  var nowHit=windAt(spot.lat,spot.lon,s,s.radii),q=bearing(s.lat,s.lon,spot.lat,spot.lon),qi=q<90?0:q<180?1:q<270?2:3,reach=s.radii&&s.radii['34']?s.radii['34'][qi]*1.852:null;
+  // forecast points that carry their own wind radii (NHC gives them out to about 3 days)
+  var tr=s.track||[],hasFR=tr.some(function(p,i){return i&&p.radii&&Object.keys(p.radii).length}),firstHit=null;
+  if(hasFR)tr.forEach(function(p){if(!firstHit&&p.t>=now()-6*36e5&&windAt(spot.lat,spot.lon,p,p.radii))firstHit=p});
+  var far=!inCone&&c.km>1000&&d>1500&&!firstHit;
+  if(far)return {far:true,html:'<li><span class="bar" style="background:'+CAT_COLOR[catIndex(s.wind)]+'"></span><span><b>'+esc(s.title||s.name)+'</b>: now about '+miles(d)+' miles to your '+dirOf(b)+(c.km>d-80?', and not forecast to come closer through ':', forecast to stay more than '+miles(c.km)+' miles away through ')+tz(tr.length?tr[tr.length-1].t:s.advTime)+'.</span></li>'};
   h+='<div class="spstorm"><h4><i style="background:'+CAT_COLOR[catIndex(s.wind)]+'"></i>'+esc(s.title||s.name)+'</h4>';
-  h+='<p class="lead">'+(inCone?'Your spot is inside the forecast cone. ':'Your spot is outside the forecast cone. ')+(inside?'Winds of '+inside+' reach your spot now, by the last measured wind field.':'')+'</p>';
+  if(s.headline)h+='<p class="sub">National Hurricane Center: &ldquo;'+esc(s.headline)+'&rdquo;</p>';
+  h+='<p class="lead">'+(s.cone&&s.cone.length?(inCone?'Your spot is inside the forecast cone. ':'Your spot is outside the forecast cone. '):'')+(nowHit?'Winds of '+WINDLONG[nowHit]+' reach your spot now, by the advisory\'s wind field.':'')+'</p>';
   h+='<div class="spfacts"><div><span>Right now</span><b>'+esc(catName(s.wind))+', '+(s.mph||mph(s.wind))+' mph</b></div><div><span>Where</span><b>'+miles(d)+' miles to your '+dirOf(b)+'</b></div>'+
      '<div><span>Closest forecast approach</span><b>'+(c.km<25?'over or next to your spot':'about '+miles(c.km)+' miles')+', '+tz(c.t)+'</b></div><div><span>Strength then</span><b>'+esc(catName(c.wind))+', '+mph(c.wind)+' mph</b></div>'+
      (s.moveText?'<div><span>Moving</span><b>'+esc(s.moveText)+'</b></div>':'')+(s.mslp?'<div><span>Pressure</span><b>'+s.mslp+' mb</b></div>':'')+
-     (reach!=null?'<div><span>39+ mph winds reach</span><b>'+miles(reach)+' miles out on your side</b></div>':'')+'</div>';
-  if(s.track&&s.track.length>1)h+='<div class="tbl"><table><thead><tr><th>Forecast time</th><th>Strength</th><th>Distance from you</th></tr></thead><tbody>'+s.track.map(function(p){var dd=distKm(spot.lat,spot.lon,p.lat,p.lon);return '<tr><td>'+tz(p.t)+'</td><td>'+esc(catShort(p.wind))+', '+mph(p.wind)+' mph</td><td>'+miles(dd)+' mi '+dirOf(bearing(spot.lat,spot.lon,p.lat,p.lon))+'</td></tr>'}).join('')+'</tbody></table></div>';
-  if(s.watches)h+='<p style="margin-top:8px"><b>Coastal watches and warnings (NHC):</b> '+esc(s.watches)+'</p>';
-  if(s.hazards)h+='<p class="sub">'+esc(s.hazards)+'</p>';
-  h+='<p class="sub">The cone shows where the center will probably track, not how big the storm is; wind, surge and rain reach well outside it. Distances are to the forecast center track. Advisory '+esc(s.adv)+' issued '+tz(s.advTime)+(s.nextAdv?', next '+t(s.nextAdv):'')+'. <button class="go" data-storm="'+esc(s.id)+'">Show on map</button> &middot; <a href="'+esc(s.url||'https://www.nhc.noaa.gov/')+'" target="_blank" rel="noopener">Official NHC advisory</a></p></div>';
+     (reach!=null?'<div><span>39+ mph winds reach</span><b>'+(reach>0?miles(reach)+' miles out on your side':'none on your side of the storm')+'</b></div>':'')+
+     (hasFR?'<div><span>39+ mph winds at your spot</span><b>'+(firstHit?'in the forecast for '+tz(firstHit.t):'not in this forecast')+'</b></div>':'')+'</div>';
+  if(tr.length>1)h+='<div class="tbl"><table class="sptbl"><thead><tr><th>Forecast time</th><th>Strength</th><th>From you</th>'+(hasFR?'<th>Wind here</th>':'')+'</tr></thead><tbody>'+tr.map(function(p){var dd=distKm(spot.lat,spot.lon,p.lat,p.lon),w=windAt(spot.lat,spot.lon,p,p.radii),known=p.radii&&Object.keys(p.radii).length;
+      return '<tr><td>'+tz(p.t)+'</td><td>'+esc(catShort(p.wind))+', '+mph(p.wind)+' mph</td><td>'+miles(dd)+' mi '+dirOf(bearing(spot.lat,spot.lon,p.lat,p.lon))+'</td>'+(hasFR?'<td>'+(w?'<b>'+WINDSHORT[w]+'</b>':known||p.wind<34?'below 39':'&ndash;')+'</td>':'')+'</tr>'}).join('')+'</tbody></table></div>'+
+    (hasFR?'<p class="sub" style="margin-top:6px">&ldquo;Wind here&rdquo; says whether your spot is inside the area where the Hurricane Center forecasts winds that strong at that time. The area is the farthest reach in each quarter of the storm, so the wind at one place can be lower. A dash means the forecast gives no wind area that far ahead.</p>':'');
+  if(s.dissipated)h+='<p class="sub" style="margin-top:6px">The Hurricane Center forecasts the storm to have dissipated by '+tz(s.dissipated)+'.</p>';
+  if(s.watches||(s.watchesParas&&s.watchesParas.length))h+='<p style="margin-top:8px"><b>Coastal watches and warnings, as issued by the Hurricane Center:</b></p>'+paras(s.watchesParas,s.watches);
+  if(s.hazards||(s.hazardsParas&&s.hazardsParas.length))h+='<p style="margin-top:8px"><b>Hazards affecting land, as issued:</b></p>'+paras(s.hazardsParas,s.hazards,'sub');
+  if(s.discussionParas&&s.discussionParas.length)h+='<details style="margin:8px 0"><summary><b>Discussion and outlook, as issued</b></summary>'+paras(s.discussionParas,'','sub')+'</details>';
+  h+='<p class="sub">The cone shows where the center will probably track, not how big the storm is; wind, surge and rain reach well outside it. Distances are to the forecast center track. Advisory '+esc(s.adv)+' issued '+tz(s.advTime)+(s.nextAdv?', next '+t(s.nextAdv):'')+'. <button class="go" data-storm="'+esc(s.id)+'">Show on map</button> &middot; <a href="'+esc(s.tcpUrl||s.url||'https://www.nhc.noaa.gov/')+'" target="_blank" rel="noopener">Official NHC advisory</a></p></div>';
   return {far:false,html:h,score:(inCone?0:1e6)+c.km}}
 function spotWorldStorms(){var ws=wStorms().filter(function(w){return w.lon!=null}).map(function(w){return {w:w,km:distKm(spot.lat,spot.lon,w.lat,w.lon)}}).sort(function(a,b){return a.km-b.km}),nearW=ws.filter(function(x){return x.km<=3000});
   if(!ws.length)return '';
@@ -765,7 +777,7 @@ function renderSpot(){
   else if(!wwaLive)h+='<div class="verdict watch"><span class="g" aria-hidden="true">&#9670;</span><div><b>The warning feed is not responding right now.</b><span>This page cannot confirm what is in effect at your spot. Use <a href="https://www.weather.gov/" target="_blank" rel="noopener">weather.gov</a>.</span></div></div>';
   else if(hw.length)h+='<div class="verdict warn" role="alert"><span class="g" aria-hidden="true">&#9650;</span><div><b>In effect at your spot now: '+esc(uniq(hw).join(', '))+'</b><span>'+checked+' Details are below. Act on the official warning, not on this page.</span></div></div>';
   else if(here.length)h+='<div class="verdict watch"><span class="g" aria-hidden="true">&#9670;</span><div><b>No warning at your spot. In effect: '+esc(uniq(here).join(', '))+'</b><span>'+checked+'</span></div></div>';
-  else h+='<div class="verdict clear"><span class="g" aria-hidden="true">&#9679;</span><div><b>No warnings or watches of the mapped types are in effect at your spot.</b><span>'+checked+(near.length?' There '+(near.length>1?'are '+near.length+' warnings':'is 1 warning')+' within about 40 miles; see below.':'')+' River flood and marine warnings are not mapped here.</span></div></div>';
+  else h+='<div class="verdict clear"><span class="g" aria-hidden="true">&#9679;</span><div><b>No warnings or watches of the mapped types are in effect at your spot.</b><span>'+checked+(near.length?' There '+(near.length>1?'are '+near.length+' warnings':'is 1 warning')+' within about 40 miles; see below.':'')+' River flood and marine warnings are not mapped here.'+(spot.cc?'':' Only U.S. National Weather Service warnings are checked, so this says nothing about a spot outside the United States.')+'</span></div></div>';
   h+='<div class="spgrid">';
   if(us&&(here.length||near.length)){
     h+='<section><h3>Warnings and watches</h3>';
@@ -893,7 +905,7 @@ function renderStatus(){
   var note=$('note');
   if(liveN){note.hidden=true}else{note.hidden=false;note.className='note'+(age>6*36e5?' old':'');
     note.innerHTML='<b>This is a snapshot from '+fD.format(new Date(SNAP.generated))+' ('+ago(SNAP.generated)+').</b> Warnings that have ended since then are removed automatically, but new ones do not appear until the next refresh. For warnings in effect this minute, check <a href="https://www.weather.gov/" target="_blank" rel="noopener">weather.gov</a>.'+(/vercel\.app$/.test(location.hostname)?'':' <b>The live version, with tornado tracking and radar, is at <a href="https://hazard-desk.vercel.app/" target="_blank" rel="noopener">hazard-desk.vercel.app</a>.</b>')}
-  var feeds=[['storms','Storms'],['outlooks','Outlooks'],['wwa','Watches and warnings'],['quakes','Earthquakes'],['volc','Volcanoes']];if(liveN)feeds.push([live.cells?'cells':'short','Tornado and storm warnings'],['lsr','Storm reports']);
+  var feeds=[['storms','Storms'],['outlooks','Outlooks'],['wwa','Watches and warnings'],['quakes','Earthquakes'],['volc','Volcanoes']];if(liveN)feeds.push([live.cells?'cells':'short','Tornado and storm warnings'],['lsr','Storm reports']);if(liveN&&live.nhc)feeds.push(['nhc','Hurricane Center advisories']);
   $('feeds').innerHTML=feeds.map(function(f){return '<span>'+f[1]+': '+(live[f[0]]?'live, '+ago(live[f[0]]):'snapshot, '+ago(SNAP.generated))+'</span>'}).join('')+'<span>World feeds: '+(WD?'live, '+ago(utc(WD.generated)||now()):'not loaded')+'</span><span>World earthquakes: '+(WQ?'live':'not loaded')+'</span>';
 }
 function clock(){$('clock').textContent='Your time: '+fD.format(new Date())}
@@ -932,7 +944,21 @@ function liveStorms(){
       where:old.where,mph:old.mph,moveText:old.moveText||('at '+mph(+a.p.tcspd)+' mph'),watches:old.watches,hazards:old.hazards,nextAdv:old.nextAdv};
     if(old.id)s.id=old.id;
     return arc(S+(b+4),{maxAllowableOffset:'0.03'}).then(function(c){(c.features||[]).forEach(function(x){s.cone=s.cone.concat(gPolys(x.geometry))});return s},function(){return s})},function(){return null})}))
-  .then(function(a){D.storms=a.filter(Boolean);live.storms=now()})}
+  .then(function(a){return settle(loadNhc()).then(function(){D.storms=mergeNhc(a.filter(Boolean));live.storms=now()})})}
+// /api/storms: the Hurricane Center's advisory text and wind radii for every active storm (see api/storms.js)
+var NHC=null;
+function loadNhc(){return getJSON('/api/storms').then(function(j){if(j&&j.ok&&Array.isArray(j.storms)){NHC=j;live.nhc=now()}else throw new Error('no storms list')})}
+function applyNhc(s,d){var m=d.tcm,p=d.tcp;if(d.id)s.id=d.id;if(d.url)s.url=d.url;s.tcpUrl=d.tcpUrl||null;
+  if(m){s.lat=m.lat;s.lon=m.lon;s.wind=m.wind;s.gust=m.gust;if(m.mslp)s.mslp=m.mslp;if(m.dir!=null){s.dir=m.dir;s.spd=m.spd;s.dirText=m.dirText}s.radii=m.radii||{};if(m.track&&m.track.length>1)s.track=m.track;s.advTime=m.advTime;s.adv=m.adv;if(m.nextAdv)s.nextAdv=m.nextAdv;if(m.title)s.title=m.title;s.dissipated=m.dissipated||null}
+  if(p){['headline','where','mph','moveText','watches','hazards','watchesParas','hazardsParas','discussionParas'].forEach(function(k){if(p[k]!=null&&p[k]!=='')s[k]=p[k]});if(p.adv)s.adv=p.adv}
+  // the storm list itself carries the newest position and strength (an intermediate advisory can be newer than the forecast)
+  if(isFinite(d.lat)&&isFinite(d.lon)&&d.lat!=null){s.lat=d.lat;s.lon=d.lon}if(d.wind)s.wind=d.wind;if(d.mslp)s.mslp=d.mslp;
+  var lu=d.lastUpdate&&Date.parse(d.lastUpdate);if(lu)s.advTime=lu;s.nhc=true}
+function mergeNhc(list){if(!NHC||!NHC.storms)return list;var used={};
+  list.forEach(function(s){var d=NHC.storms.filter(function(x){return x.bin===s.bin})[0];if(!d)return;used[d.bin]=1;applyNhc(s,d)});
+  // a storm the advisory list has but the map service has not caught up with yet: shown without a cone
+  NHC.storms.forEach(function(d){if(used[d.bin]||!d.tcm)return;var s={id:d.id,bin:d.bin,name:d.name,title:d.name,lat:d.lat,lon:d.lon,wind:d.wind||d.tcm.wind,track:[],radii:{},cone:[],url:d.url,adv:d.adv||'',advTime:d.tcm.advTime};applyNhc(s,d);list.push(s)});
+  return list}
 var fHM=new Intl.DateTimeFormat(undefined,{hour:'numeric',minute:'2-digit'});
 function textStale(){return LIVE_MODE&&now()-SNAP.generated>12*36e5}
 
