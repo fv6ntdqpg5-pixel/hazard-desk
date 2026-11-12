@@ -350,3 +350,10 @@ He gave no detail, so these are the faults found by reading the code and testing
 - If Randy still sees a problem, ask: which desk, what the map did (jumped, zoomed, did not move, page moved instead), and
   whether the page was open in Safari or inside another app. Inside the Claude app a downward swipe closes the page; no
   website can override that.
+- Randy then answered: Weather Desk, opened from a home-screen icon on his iPhone, and the map "wouldn't move one way".
+  That could not be reproduced in emulation, so finger input was moved off pointer events: one-finger pan, two-finger pinch
+  (with pan) and taps now come from `touchstart` / `touchmove` / `touchend` with the default cancelled (`TOUCH`, `tpts`,
+  `tend`); the pointer handlers ignore `pointerType==='touch'` and still serve mouse and pen. Tested with touch emulation in
+  all four directions, pinch, lifting one of two fingers, and tap. **Only Randy's phone can confirm it.** If it is still
+  stuck, the next step is north / south / east / west buttons on the map. The Outbreak Desk still uses pointer events for
+  fingers; port this there if it fixes the Weather Desk.
