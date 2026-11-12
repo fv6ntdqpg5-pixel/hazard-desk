@@ -270,7 +270,7 @@ can't move back up in the map again".
   (non-passive `preventDefault`) and sets `overscroll-behavior`. **Not verifiable here; needs Randy's phone.** If it still
   fails, ask which app the page is open in (Safari itself, or a link opened inside another app).
 
-## 4k. Radar loop (PREVIEW on branch `radar-loop`, waiting for Randy's Go)
+## 4k. Radar loop (LIVE Nov 12, 2026 on Randy's Go)
 
 - "Radar loop" button at the top left of the map (`#rl`, shown when radar is on and live). It replays the past hour of
   NOAA's MRMS radar: about one scan every 6 minutes, up to 11 frames, for the area on screen. Play / pause, a slider, and
