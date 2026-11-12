@@ -209,7 +209,7 @@ Randy, Nov 11: "Add Canada / Show computer model everywhere else".
   cannot reach them); Open-Meteo's browser access (CORS) in particular is unverified until Randy opens the preview.
 - Not done: Canadian and Mexican warnings drawn on the map; French text; a °C/°F switch; Mexico's official forecast (no open feed found).
 
-## 4h. Tracking: pick a storm or warning and watch it (PREVIEW on branch `track`, waiting for Randy's Go)
+## 4h. Tracking: pick a storm or warning and watch it (LIVE Nov 11, 2026 on Randy's Go)
 
 Randy, Nov 11: anyone must be able to "pinpoint/select" a hurricane, tornado or severe storm "and watch it. This could help save a life".
 
