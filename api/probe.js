@@ -1,12 +1,13 @@
 // TEMPORARY research probe on a preview branch only. Never merge to main. Reads api.weather.gov so the page can be built
-// against real answers (the build workspace cannot reach the Weather Service).
+// against real answers (the build workspace cannot reach the Weather Service). ?u=url|url|... ; the padding makes the
+// answer large enough that the reading tool saves it to a file.
 module.exports = async (req, res) => {
-  const u = String((req.query && req.query.u) || '');
-  if (!/^https:\/\/api\.weather\.gov\//.test(u)) { res.statusCode = 400; return res.end('host'); }
-  try {
-    const r = await fetch(u, { headers: { 'User-Agent': 'WeatherDesk research (hazard-desk.vercel.app)', Accept: 'application/geo+json' }, signal: AbortSignal.timeout(20000) });
-    const t = await r.text();
-    res.setHeader('Content-Type', 'application/json'); res.setHeader('Cache-Control', 'no-store');
-    res.end(JSON.stringify({ status: r.status, cors: r.headers.get('access-control-allow-origin'), text: t.slice(0, +((req.query && req.query.max) || 60000)) }));
-  } catch (e) { res.statusCode = 502; res.end(String(e && e.message || e)); }
+  const urls = String((req.query && req.query.u) || '').split('|').filter(u => /^https:\/\/api\.weather\.gov\//.test(u)).slice(0, 8);
+  if (!urls.length) { res.statusCode = 400; return res.end('host'); }
+  const out = await Promise.all(urls.map(async u => { try {
+    const r = await fetch(u, { headers: { 'User-Agent': 'WeatherDesk research (hazard-desk.vercel.app)', Accept: 'application/geo+json' }, signal: AbortSignal.timeout(25000) });
+    return { u, status: r.status, text: await r.text() };
+  } catch (e) { return { u, error: String(e && e.message || e) }; } }));
+  res.setHeader('Content-Type', 'application/json'); res.setHeader('Cache-Control', 'no-store');
+  res.end(JSON.stringify({ out, pad: 'x'.repeat(320000) }));
 };
