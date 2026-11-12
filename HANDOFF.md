@@ -135,7 +135,7 @@ Aira ~30 ka, Campanian Ignimbrite ~39 ka).
   raised the red tsunami banner for 24 hours. The center's name no longer counts, and "there is no tsunami threat" now
   marks a message final. Put live on its own, ahead of the one-map work.
 
-## 4e. Live Hurricane Center details (preview branch `storm-details`, Nov 11, 2026; not live until Randy says Go)
+## 4e. Live Hurricane Center details (LIVE Nov 11, 2026 on Randy's Go)
 
 - Gap being closed: live storms carried wind radii and the Hurricane Center's watch and hazard text only when the saved
   snapshot held the same advisory, so a new storm showed a track and cone and nothing else.
