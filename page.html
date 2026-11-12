@@ -715,17 +715,21 @@ function frame(tn){if(anim)anim(tn);if(dirty||(!noMotion&&on.tsu&&WD&&WD.tsunami
 var ptrs={},moved=0,pinch0=null;
 function zoomAt(x,y,f){var k=Math.max(W/TAU,Math.min(k0*90,view.k*f));var wx=(x-W/2)/view.k+view.cx,wy=(y-H/2)/view.k+view.cy;view.k=k;view.cx=wx-(x-W/2)/k;view.cy=wy-(y-H/2)/k;clampView();dirty=true}
 function clampView(){var a=proj(0,84)[1],b=proj(0,-80)[1],lo=Math.min(a,b),hi=Math.max(a,b);if(view.cy<lo)view.cy=lo;if(view.cy>hi)view.cy=hi} // the middle of the view always stays on the world
-cv.addEventListener('pointerdown',function(e){cv.setPointerCapture(e.pointerId);ptrs[e.pointerId]={x:e.offsetX,y:e.offsetY};moved=0;anim=null;var ids=Object.keys(ptrs);if(ids.length===2){var a=ptrs[ids[0]],b=ptrs[ids[1]];pinch0={d:Math.hypot(a.x-b.x,a.y-b.y),k:view.k}}cv.classList.add('drag')});
+cv.addEventListener('pointerdown',function(e){if(e.isPrimary){ptrs={};pinch0=null} // a first finger means no other finger is down: forget any touch whose end was never reported
+  try{cv.setPointerCapture(e.pointerId)}catch(x){}ptrs[e.pointerId]={x:e.offsetX,y:e.offsetY};moved=0;anim=null;var ids=Object.keys(ptrs);if(ids.length===2){var a=ptrs[ids[0]],b=ptrs[ids[1]];pinch0={d:Math.hypot(a.x-b.x,a.y-b.y),k:view.k}}cv.classList.add('drag')});
 cv.addEventListener('pointermove',function(e){var p=ptrs[e.pointerId];if(!p){hover(e.offsetX,e.offsetY);return}var dx=e.offsetX-p.x,dy=e.offsetY-p.y;moved+=Math.abs(dx)+Math.abs(dy);var ids=Object.keys(ptrs);
   if(ids.length===2&&pinch0){p.x=e.offsetX;p.y=e.offsetY;var a=ptrs[ids[0]],b=ptrs[ids[1]],d=Math.hypot(a.x-b.x,a.y-b.y);zoomAt((a.x+b.x)/2,(a.y+b.y)/2,(pinch0.k*d/pinch0.d)/view.k)}
   else{view.cx-=dx/view.k;view.cy-=dy/view.k;clampView();p.x=e.offsetX;p.y=e.offsetY;dirty=true}});
-function up(e){var had=ptrs[e.pointerId];delete ptrs[e.pointerId];if(Object.keys(ptrs).length<2)pinch0=null;if(!Object.keys(ptrs).length)cv.classList.remove('drag');if(had&&moved<6&&e.type==='pointerup'){if(spotPick)spotFromMap(e.offsetX,e.offsetY);else identify(e.offsetX,e.offsetY)}}
-cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
+function up(e){var had=ptrs[e.pointerId];delete ptrs[e.pointerId];if(Object.keys(ptrs).length<2)pinch0=null;if(!Object.keys(ptrs).length)cv.classList.remove('drag');if(had&&moved<(e.pointerType==='touch'?14:6)&&e.type==='pointerup'){if(spotPick)spotFromMap(e.offsetX,e.offsetY);else identify(e.offsetX,e.offsetY)}}
+cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);cv.addEventListener('lostpointercapture',function(e){if(ptrs[e.pointerId])up(e)});
 // A finger on the map belongs to the map. Some phone browsers still take a downward drag for themselves (pull to refresh, or
 // closing an in-app browser sheet) even with touch-action:none, which made it impossible to drag the map down to look north.
 ['touchstart','touchmove'].forEach(function(t){cv.addEventListener(t,function(e){if(e.cancelable)e.preventDefault()},{passive:false})});
 cv.addEventListener('wheel',function(e){e.preventDefault();zoomAt(e.offsetX,e.offsetY,Math.exp(-e.deltaY*(e.ctrlKey?0.01:0.0016)))},{passive:false});
-function setFull(f){box.classList.toggle('full',f);document.body.classList.toggle('mapfull',f);var b=$('zfull');b.setAttribute('aria-pressed',f?'true':'false');b.textContent=f?'\u00D7':'\u2922';b.setAttribute('aria-label',f?'Close the full-screen map':'Fill the screen with the map')}
+// Full screen on a phone: the page behind is pinned in place (some phones still scroll it under a full-screen layer),
+// and it comes back to where it was when the map is closed.
+var fullY=0;function lockPage(on){var b=document.body;if(on){fullY=window.scrollY;b.style.position='fixed';b.style.top=(-fullY)+'px';b.style.left='0';b.style.right='0'}else if(b.style.position==='fixed'){b.style.position='';b.style.top='';b.style.left='';b.style.right='';window.scrollTo(0,fullY)}}
+function setFull(f){if(box.classList.contains('full')!==!!f)lockPage(!!f);box.classList.toggle('full',f);document.body.classList.toggle('mapfull',f);var b=$('zfull');b.setAttribute('aria-pressed',f?'true':'false');b.textContent=f?'\u00D7':'\u2922';b.setAttribute('aria-label',f?'Close the full-screen map':'Fill the screen with the map')}
 $('zfull').onclick=function(){setFull(!box.classList.contains('full'))};
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&box.classList.contains('full'))setFull(false)});
 if(matchMedia('(min-width:1040px)').matches)$('keyFold').open=true; // on a wide screen there is room for the map key to sit open
