@@ -100,8 +100,9 @@ Aira ~30 ka, Campanian Ignimbrite ~39 ka).
 - Randy, Nov 11: "The map is still a little weak. Thinking just a global map, no reason for the switch." He chose a flat
   map over a globe (county-level accuracy, radar and warning outlines).
 - `page.html` is now the only page. `world_page.html` and `world.html` are deleted; `vercel.json` forwards `/world.html`
-  and `/world` to `/`. `build_site.py` builds `index.html` only. Title and H1 are "Hazard Desk" (the other desks' nav
-  bars still say "North America Hazard Desk" until Randy decides the name).
+  and `/world` to `/`. `build_site.py` builds `index.html` only. Randy, Nov 11: "Change it to weather instead of hazard desk." Title, H1 and this site's nav label are now
+  "Weather Desk". The other desks' nav bars still say "North America Hazard Desk"; change them when this goes live.
+  The address is still hazard-desk.vercel.app.
 - Map engine: the North America engine, with the projection changed from Lambert azimuthal to Mercator (`proj`, `inv`,
   x measured east from 100°W so North America is mid-sheet). The world repeats every `TAU` in x: `copies()` draws each
   layer on up to three side-by-side copies, `sx()` puts a point on the copy nearest the view center, `ringPath` and
@@ -116,7 +117,7 @@ Aira ~30 ka, Campanian Ignimbrite ~39 ka).
 - **Bug found and fixed in `api/world.js`:** every tsunami bulletin's header names the "TSUNAMI WARNING CENTER", and
   the parser read that as a warning. A no-threat information statement (M4.6 near Puerto Rico, Nov 8) was labeled
   "Warning" and would have raised the red tsunami banner for 24 hours. The center's name no longer counts, and "there
-  is no tsunami threat" now marks a message final. This fix is in this branch; the live World page still has the bug.
+  is no tsunami threat" now marks a message final. Put live on its own Nov 11 (section 4d).
 - Tested with the saved North America snapshot and a saved copy of the live `/api/world` answer. Not yet seen with live
   North America feeds (radar, warnings) on the new projection: the workspace cannot reach them.
 - Step 2 (built on the same branch, Nov 11): Randy on the step-1 preview: "Having trouble moving the map up." The map sat
@@ -127,6 +128,12 @@ Aira ~30 ka, Campanian Ignimbrite ~39 ka).
   `setFull`, Escape closes) fills the screen. "Your spot", "Right now" and the desks follow the map (beside it on wide
   screens). One dark look for everyone; the light theme is removed.
 - Randy's screenshot of the step-1 preview showed live radar drawing on the new projection over Tennessee and Alabama.
+## 4d. Tsunami label fix (LIVE Nov 11, 2026 on Randy's "Go on the tsunami fix")
+
+- `api/world.js`: every tsunami bulletin's header names the issuing "TSUNAMI WARNING CENTER", and the parser read that
+  as a warning. A no-threat information statement (M4.6 near Puerto Rico, Nov 8) was labeled "Warning" and would have
+  raised the red tsunami banner for 24 hours. The center's name no longer counts, and "there is no tsunami threat" now
+  marks a message final. Put live on its own, ahead of the one-map work.
 
 ## 5. Open list
 

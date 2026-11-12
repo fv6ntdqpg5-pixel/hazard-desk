@@ -20,7 +20,7 @@ doc = f'''<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="description" content="{DESC}">
-<meta property="og:title" content="Hazard Desk">
+<meta property="og:title" content="Weather Desk">
 <meta property="og:description" content="{DESC}">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
