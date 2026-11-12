@@ -56,6 +56,4 @@ weather.gov and local officials.
 
 ## World view
 
-`/world.html` (source `world_page.html`, built by `build_site.py`) covers tropical storms, earthquakes, tsunami messages,
-volcanoes, giant calderas, wildfires, floods, space weather and sea temperature worldwide, from `api/world.js` plus USGS
-and NASA GIBS in the browser. See HANDOFF.md for sources, decisions and open items.
+Since November 2026 the site is one page with one flat world map (Mercator, opening on North America). The former `/world.html` forwards to `/`. The world layers (tropical storms outside the Hurricane Center area, tsunami messages, erupting volcanoes, giant calderas, wildfires, floods, aurora, sea temperature, space weather) come from `api/world.js` plus the USGS M4.5+ feed and are drawn on the same map; see HANDOFF.md.
