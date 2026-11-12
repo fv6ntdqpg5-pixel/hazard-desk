@@ -238,6 +238,19 @@ Randy, Nov 11: anyone must be able to "pinpoint/select" a hurricane, tornado or 
   save): start, update (extended + observed + now covers spot), replacement by a new warning, end, reload, stop, map pan;
   and with the saved hurricane. **Not yet seen against a live warning.** Sound and wake lock cannot be tested here at all.
 
+## 4i. Weather bar above the map (PREVIEW on branch `weather-bar`, waiting for Randy's Go)
+
+Randy, Nov 11-12: make the weather more prominent without ruining the look of the main page.
+
+- One row (`#wbar`, a button) between the title and the map: current temperature and sky, the next two forecast periods
+  (high / low), the highest rain-or-snow chance in the next 6 hours, and the alert status. Tapping it scrolls to "Your spot".
+- It adds no data and no logic of its own: `barData()` reads the same `LW` / `GW` objects as the panel, and the alert status
+  is copied from the verdict already rendered in "Your spot" (same words, same shape marker), so the two can never disagree.
+- With a warning at the spot the alert moves to the top of the bar in a solid red block with the triangle marker.
+- No spot: the bar is a single "Set your spot for local weather and alerts" button that jumps to the search box.
+- Model forecasts are marked "(computer model)" in the bar too. A failed forecast says so instead of "Reading…".
+- `renderBar()` is called at the end of every `renderSpot()`.
+
 ## 5. Open list
 
 1. **NASA FIRMS fire detections** (every hotspot, not just big fires): needs `FIRMS_MAP_KEY` in Vercel; aggregate

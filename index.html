@@ -88,6 +88,16 @@ button{font:inherit;color:inherit}
 .spres li:first-child button{border-top:0}
 .spres button:hover,.spres button:focus-visible{background:var(--panel-2)}
 .spres small{color:var(--muted)}
+.wbar{all:unset;box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:center;gap:4px 14px;width:100%;margin:10px 0 0;padding:8px 12px;border:1px solid var(--rule);border-left:8px solid var(--muted);border-radius:8px;background:var(--panel);cursor:pointer;font-size:14px;line-height:1.35}
+.wbar:hover{background:var(--panel-2)}.wbar:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.wbt{font-family:var(--font-display);font-weight:700;font-size:30px;line-height:1;min-width:2.2em}
+.wbm{flex:1 1 220px;min-width:0;display:block}.wbm b{display:block;font-weight:600}.wbm b i{font-weight:400;color:var(--muted)}.wbm span{display:block;color:var(--muted);font-size:13px}
+.wba{flex:0 1 auto;max-width:100%;font-weight:600;border:1px solid var(--rule);border-radius:6px;padding:4px 9px;background:var(--panel-2)}
+.wbgo{color:var(--muted);font-size:12.5px;white-space:nowrap}
+.wbset{font-weight:600;font-size:15px;padding:3px 0}
+.wbar.warn{border-color:var(--crit);border-left-color:var(--crit);border-width:2px 2px 2px 8px}.wbar.warn .wba{background:#B00020;color:#FFFFFF;border-color:#B00020;order:-1;flex-basis:100%;font-size:15.5px}
+.wbar.watch{border-left-color:var(--warn)}.wbar.clear{border-left-color:var(--ok)}
+@media (max-width:640px){.wbt{font-size:26px}.wba{flex-basis:100%}.wbgo{display:none}}
 .verdict{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start;border:1px solid var(--rule);border-left:8px solid var(--muted);border-radius:6px;padding:10px 12px;background:var(--panel-2)}
 .verdict .g{font-size:22px;line-height:1.15}
 .verdict b{display:block;font-size:17px;line-height:1.3}
@@ -266,6 +276,8 @@ footer .feeds{font-family:var(--font-mono);font-size:12px;display:flex;flex-wrap
       <span id="clock"></span>
     </div>
   </header>
+
+  <button class="wbar" id="wbar" type="button"></button>
 
   <div class="torn" id="torn" role="alert" hidden></div>
   <div class="tsu" id="tsuBanner" role="alert" hidden></div>
@@ -995,9 +1007,38 @@ function spotWorldStorms(){var ws=wStorms().filter(function(w){return w.lon!=nul
   if(!ws.length)return '';
   return (nearW.length?'<p style="margin-top:8px"><b>Storms outside the Hurricane Center\'s area (GDACS):</b></p><ul class="items">'+nearW.map(function(x){return '<li><span class="bar" style="background:'+(ALC[x.w.alert]||'#888888')+'"></span><span><b>'+esc(x.w.title||x.w.name)+'</b>: now about '+miles(x.km)+' miles to your '+dirOf(bearing(spot.lat,spot.lon,x.w.lat,x.w.lon))+'. '+esc(kmhMph(x.w.severity))+'.<br><span class="sub">Position and wind zones are GDACS estimates, not an official forecast for your spot. Follow your national weather service. <button class="go" type="button" data-wstorm="'+esc(x.w.id)+'">Show on map</button></span>'+trkBtn('wstorm',x.w)+'</span></li>'}).join('')+'</ul>':'')+
     (ws.length>nearW.length?'<p class="sub">'+(ws.length-nearW.length)+' other tropical storm'+(ws.length-nearW.length>1?'s':'')+' elsewhere in the world, more than 1,860 miles from your spot. See the World tab.</p>':'')}
+/* ---------- the weather bar: the spot's weather and alert status in one row above the map ----------
+   It only repeats what "Your spot" already shows (same readings, same forecast, same alert verdict). Tapping it goes there. */
+function barData(){ // {temp, sky, parts[], src} or null while nothing has loaded
+  var popMax=function(a){var m=null;a.forEach(function(v){if(v!=null&&!isNaN(v)&&(m==null||v>m))m=v});return m},o={parts:[]},rain=function(v){if(v!=null)o.parts.push('Rain or snow chance, next 6 hours: '+(v>0?'up to '+Math.round(v)+'%':'0%'))};
+  if(spotUS()&&lwOn()&&!LW.none){var ob=LW.obs,P=LW.daily||[],H=(LW.hourly||[]).filter(function(q){return Date.parse(q.endTime)>now()}).slice(0,6);
+    if(ob){o.temp=Math.round(ob.temp)+'°F';o.sky=ob.text||''}
+    P.slice(0,2).forEach(function(q){if(q&&q.temperature!=null)o.parts.push(esc(q.name)+': '+(q.isDaytime?'high ':'low ')+esc(q.temperature)+'°')});
+    if(H.length)rain(popMax(H.map(function(q){return q.probabilityOfPrecipitation&&q.probabilityOfPrecipitation.value!=null?q.probabilityOfPrecipitation.value:0})));
+    return o.temp||o.parts.length?o:null}
+  if(!gwOn())return null;
+  if(GW.prov==='ca'&&GW.cp){var c=GW.cp,Hc=c.hours.filter(function(x){return x.t+36e5>now()}).slice(0,6);
+    if(c.now){o.temp=Math.round(c.now.temp)+'°C';o.sky=c.now.text||''}
+    c.periods.slice(0,2).forEach(function(q){if(q.hi!=null)o.parts.push(esc(q.name)+': high '+Math.round(q.hi)+'°');else if(q.lo!=null)o.parts.push(esc(q.name)+': low '+Math.round(q.lo)+'°')});
+    if(Hc.length)rain(popMax(Hc.map(function(x){return x.pop})));
+    return o.temp||o.parts.length?o:null}
+  if(GW.prov==='om'&&GW.om){var m=GW.om,d=m.days[0];o.src='computer model';
+    if(m.now){o.temp=Math.round(m.now.temp)+'°C';o.sky=WMO[m.now.code]||''}
+    if(d&&d.hi!=null)o.parts.push('Today: high '+Math.round(d.hi)+'°'+(d.lo!=null?', low '+Math.round(d.lo)+'°':''));
+    if(m.hours.length)rain(popMax(m.hours.slice(0,6).map(function(x){return x.pop})));
+    return o.temp||o.parts.length?o:null}
+  return null}
+function renderBar(){var el=$('wbar');if(!el)return;
+  if(!spot){el.className='wbar';el.innerHTML='<span class="wbset">&#9678; Set your spot for local weather and alerts</span>';el.setAttribute('aria-label','Set your spot for local weather and alerts');return}
+  var v=$('spot').querySelector('.verdict'),cls=v?(v.classList.contains('warn')?'warn':v.classList.contains('watch')?'watch':v.classList.contains('clear')?'clear':''):'',vb=v&&v.querySelector('b'),vg=v&&v.querySelector('.g'),d=spotEdit?null:barData();
+  var h='<span class="wbt">'+(d&&d.temp?d.temp:'&ndash;')+'</span><span class="wbm"><b>'+esc(spotName())+(d&&d.sky?' &middot; '+esc(d.sky):'')+(d&&d.src?' <i>('+d.src+')</i>':'')+'</b><span>'+(d?d.parts.join(' &middot; '):spotEdit?'':(gwOn()&&GW.err.fc)||(lwOn()&&!LW.none&&(LW.err.pt||(LW.err.obs&&LW.err.daily)))?'The forecast did not load. It is tried again every few minutes.':'Reading the forecast…')+'</span></span>'+
+    (vb?'<span class="wba"><span aria-hidden="true">'+(vg?vg.innerHTML:'')+'</span> '+esc(vb.textContent)+'</span>':'')+'<span class="wbgo" aria-hidden="true">Details &#9662;</span>';
+  el.className='wbar'+(cls?' '+cls:'');el.innerHTML=h;el.removeAttribute('aria-label')}
+$('wbar').addEventListener('click',function(){var s=$('spot');s.scrollIntoView({block:'start',behavior:'smooth'});if(!spot){var i=$('spQ');if(i)setTimeout(function(){i.focus({preventScroll:true})},400)}});
+
 function renderSpot(){
   var el=$('spot');if(!el)return;
-  if(!spot||spotEdit){el.innerHTML='<div class="sphead"><h2 class="eyebrow" id="spotH">Your spot</h2></div><p class="lead">'+(spot?'Pick a new spot.':'Set your location and this page tells you what is in effect there and what is headed your way.')+'</p>'+spotSetHtml();return}
+  if(!spot||spotEdit){el.innerHTML='<div class="sphead"><h2 class="eyebrow" id="spotH">Your spot</h2></div><p class="lead">'+(spot?'Pick a new spot.':'Set your location and this page tells you what is in effect there and what is headed your way.')+'</p>'+spotSetHtml();renderBar();return}
   var n=now(),lat=spot.lat,lon=spot.lon,us=spotUS(),h='';
   var keepOpen={},keepScroll=0,oldHr=el.querySelector('.hr');[].forEach.call(el.querySelectorAll('details[open][data-k]'),function(d){keepOpen[d.dataset.k]=1});if(oldHr)keepScroll=oldHr.scrollLeft;
   h+='<div class="sphead"><h2 class="eyebrow" id="spotH">Your spot</h2><span class="spname">'+esc(spotName())+'</span><button class="go" id="spMap" type="button">Show on map</button><button class="go" id="spChange" type="button">Change</button><button class="go" id="spClear" type="button">Remove</button></div>';
@@ -1048,7 +1089,7 @@ function renderSpot(){
   if(vo.length)h+='<p style="margin-top:8px"><b>Volcanoes above normal within 310 miles:</b></p><ul class="items">'+vo.map(function(x){return '<li><span class="bar" style="background:'+(VOLC_COLOR[x.v.color_code]||'#9AA5B1')+'"></span><span><b>'+esc(x.v.volcano_name)+'</b>: alert level '+esc(x.v.alert_level)+' ('+esc(String(x.v.color_code).toLowerCase())+'), '+miles(x.km)+' miles to your '+dirOf(x.brg)+'</span></li>'}).join('')+'</ul>';
   h+='</section></div>';
   el.innerHTML=h;
-  [].forEach.call(el.querySelectorAll('details[data-k]'),function(d){if(keepOpen[d.dataset.k])d.open=true});var newHr=el.querySelector('.hr');if(newHr&&keepScroll)newHr.scrollLeft=keepScroll}
+  [].forEach.call(el.querySelectorAll('details[data-k]'),function(d){if(keepOpen[d.dataset.k])d.open=true});var newHr=el.querySelector('.hr');if(newHr&&keepScroll)newHr.scrollLeft=keepScroll;renderBar()}
 function setSpot(lat,lon,name,cc){spot={lat:Math.round(lat*100)/100,lon:Math.round(lon*100)/100,name:name||'',cc:cc||''};spotPick=false;spotEdit=false;spotMsg='';cv.style.cursor='';save();renderSpot();dirty=true;lwLoad()}
 // the town list (places.js) is fetched only when the search box or a located point first needs it
 var PL=null,plWait=null;
