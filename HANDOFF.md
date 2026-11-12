@@ -1,7 +1,7 @@
 # Hazard Desk: handoff
 
 **Read this first in any new chat.** It is the current picture of the site, the rules it runs by, the decisions behind it,
-and what is still open. Last updated **October 24, 2026**. Update the "Decisions" and "Open list" sections whenever
+and what is still open. Last updated **November 11, 2026**. Update the "Decisions" and "Open list" sections whenever
 something ships (Randy, Oct 24: "Let's periodically update the handoff notes"). README.md covers the North America page's
 feeds in detail; this file covers everything, including the World view.
 
@@ -73,6 +73,27 @@ Aira ~30 ka, Campanian Ignimbrite ~39 ka).
 | Oct 24 | Group 2 live: wildfires, space weather + aurora button, giant caldera panel | Randy "Go" 5:20 pm |
 | Oct 24 | Calderas panel includes VEI 7 systems, labeled as such; "none of these is a forecast" | Only Yellowstone, Toba, Taupō had VEI 8 |
 | Oct 24 | Wildfires from GDACS (no key); NASA FIRMS detections not added | FIRMS needs a free key Randy would add in Vercel; offered as an option |
+
+## 4b. "Your spot" (preview branch `my-spot`, Nov 11, 2026; not live until Randy says Go)
+
+- Randy, Nov 11: focus on the Hazard Desk next. Location first ("if a hurricane is coming that person wants to know
+  everything about it"); the page stays continent-wide by default and people zoom in.
+- `#spot` panel between the tornado banner and "Right now". Set a spot three ways: device location, town search, or tap
+  the map. Stored in localStorage `hazdesk.spot` {lat, lon (2 decimals), name, cc}; never sent anywhere.
+- Town search runs on `places.js` (20,388 places: all US and Canadian GeoNames places of 1,000+, Mexico and the
+  Caribbean/Central America at 5,000+), loaded only on first use. Built by `tools/build_places.mjs` from the npm package
+  all-the-cities 3.1.0 (GeoNames, CC BY 4.0; credited in the footer). No geocoding service is called.
+- The panel (`renderSpot`) uses only feeds the page already reads: warnings covering the point and warnings within about
+  40 miles (`distPolys`, with a projected arrival time from the warning's own motion, `etaAt`); every active storm with
+  distance and bearing, cone in/out, closest forecast approach, the forecast track as a table of distances, wind-field
+  reach on the reader's side, NHC watch and hazard text; SPC/WPC outlook for three days (`cityRisks`); quakes within
+  300 km; elevated volcanoes within 500 km.
+- Honesty rules built in: in snapshot mode it says it cannot tell what is in effect now; if the warning feed is stale it
+  says so; outside the US it says NWS warnings stop at the border and links ECCC or SMN.
+- Known gaps: (1) live storms carry wind radii and NHC watch/hazard text only when the saved snapshot holds the same
+  advisory, so on a new storm those lines are absent; reading them live from NHC is the next step. (2) No ZIP code
+  search yet. (3) River flood and marine warnings are not in the mapped set. (4) Tested against the saved snapshot with
+  the clock set back; not yet seen with live feeds (the workspace cannot reach them) or on a real phone.
 
 ## 5. Open list
 

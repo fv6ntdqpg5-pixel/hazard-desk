@@ -55,6 +55,41 @@ button{font:inherit;color:inherit}
 .note.old{border-left-color:var(--crit)}
 .note b{font-weight:600}
 
+/* your spot */
+.spot{background:var(--panel);border:1px solid var(--rule);border-top:4px solid var(--ink);border-radius:6px;padding:14px 16px 16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.spot h3{font-family:var(--font-display);font-weight:600;font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
+.spot p{margin:0 0 6px;max-width:70ch}
+.sphead{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 14px}
+.sphead .eyebrow{margin:0}
+.spname{font-family:var(--font-display);font-weight:700;font-size:clamp(21px,5.6vw,27px);line-height:1;letter-spacing:.02em;text-transform:uppercase;margin-right:auto}
+.spset{display:flex;flex-wrap:wrap;gap:8px 10px;align-items:flex-start}
+.spbtn{font:inherit;font-weight:600;border:1px solid var(--ink);background:var(--ink);color:var(--bg);border-radius:8px;padding:8px 14px;cursor:pointer}
+.spbtn.alt{background:var(--panel);color:var(--ink)}
+.spbtn[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.spsearch{position:relative;flex:1 1 220px;min-width:0;max-width:360px}
+.spsearch input{font:inherit;width:100%;border:1px solid var(--muted);border-radius:8px;padding:8px 12px;background:var(--panel);color:var(--ink)}
+.spres{list-style:none;margin:4px 0 0;padding:0;border:1px solid var(--rule);border-radius:8px;background:var(--panel);overflow:hidden;position:absolute;left:0;right:0;z-index:5;box-shadow:0 6px 18px rgba(0,0,0,.18)}
+.spres button{all:unset;box-sizing:border-box;display:block;width:100%;padding:9px 12px;cursor:pointer;border-top:1px solid var(--rule)}
+.spres li:first-child button{border-top:0}
+.spres button:hover,.spres button:focus-visible{background:var(--panel-2)}
+.spres small{color:var(--muted)}
+.verdict{display:grid;grid-template-columns:auto minmax(0,1fr);gap:10px;align-items:start;border:1px solid var(--rule);border-left:8px solid var(--muted);border-radius:6px;padding:10px 12px;background:var(--panel-2)}
+.verdict .g{font-size:22px;line-height:1.15}
+.verdict b{display:block;font-size:17px;line-height:1.3}
+.verdict span{color:var(--muted);font-size:13.5px}
+.verdict.warn{border-left-color:var(--crit)}
+.verdict.watch{border-left-color:var(--warn)}
+.verdict.clear{border-left-color:var(--ok)}
+.spgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:14px 26px}
+.spgrid section{min-width:0}
+.spstorm{border:1px solid var(--rule);border-radius:6px;padding:10px 12px;margin:0 0 8px}
+.spstorm h4{font-family:var(--font-display);font-weight:700;font-size:21px;letter-spacing:.02em;text-transform:uppercase;margin:0 0 4px;display:flex;align-items:center;gap:8px}
+.spstorm h4 i{width:12px;height:12px;border-radius:50%;flex:none;border:1px solid rgba(128,128,128,.5)}
+.spfacts{display:grid;grid-template-columns:repeat(auto-fit,minmax(128px,1fr));gap:8px 16px;margin:6px 0 8px}
+.spfacts div{border-top:1px solid var(--rule);padding-top:5px}
+.spfacts span{display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.spfacts b{font-weight:600}
+
 /* right now */
 .eyebrow{font-family:var(--font-display);font-weight:600;font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
 .now{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:0 22px;margin:0;padding:0;list-style:none;border-top:1px solid var(--rule)}
@@ -168,6 +203,8 @@ footer .feeds{font-family:var(--font-mono);font-size:12px;display:flex;flex-wrap
   <div class="torn" id="torn" role="alert" hidden></div>
   <div class="note" id="note" hidden></div>
 
+  <section class="spot" id="spot" aria-labelledby="spotH"></section>
+
   <section aria-labelledby="nowH">
     <h2 class="eyebrow" id="nowH">Right now</h2>
     <ul class="now" id="now"></ul>
@@ -200,7 +237,7 @@ footer .feeds{font-family:var(--font-mono);font-size:12px;display:flex;flex-wrap
 
   <footer>
     <div class="feeds" id="feeds"></div>
-    <p>Sources: NOAA National Hurricane Center and Central Pacific Hurricane Center (storms, forecast cones, tropical outlooks), NWS (warnings and watches), Storm Prediction Center (severe storm, tornado and fire weather outlooks), NOAA MRMS radar, Iowa Environmental Mesonet (storm reports), Weather Prediction Center (excessive rainfall and heavy snow outlooks), USGS Earthquake Hazards Program, and the USGS volcano observatories. Canadian and Mexican national weather warnings are not included yet; storms, earthquakes and volcanoes cover all three countries.</p>
+    <p>Sources: NOAA National Hurricane Center and Central Pacific Hurricane Center (storms, forecast cones, tropical outlooks), NWS (warnings and watches), Storm Prediction Center (severe storm, tornado and fire weather outlooks), NOAA MRMS radar, Iowa Environmental Mesonet (storm reports), Weather Prediction Center (excessive rainfall and heavy snow outlooks), USGS Earthquake Hazards Program, and the USGS volcano observatories. Canadian and Mexican national weather warnings are not included yet; storms, earthquakes and volcanoes cover all three countries. Town names for "Your spot" are from <a href="https://www.geonames.org/" target="_blank" rel="noopener">GeoNames</a> (CC BY 4.0).</p>
     <p>A web page only helps while it is open. Keep Wireless Emergency Alerts turned on in your phone and have a second way to get warnings, such as a NOAA Weather Radio. The NWS feed itself can run a minute or two behind a new warning.</p>
     <p>This is an independent summary, not an official warning service. For decisions about life and property, follow your local National Weather Service office at <a href="https://www.weather.gov/" target="_blank" rel="noopener">weather.gov</a>, the National Hurricane Center at <a href="https://www.nhc.noaa.gov/" target="_blank" rel="noopener">nhc.noaa.gov</a>, and local emergency officials.</p>
   </footer>
@@ -277,9 +314,9 @@ var DESKS = [
 ];
 var LAYERS = [['radar','Radar','#3FA060'],['storms','Hurricanes','#E4572E'],['wwa','Warnings','#C71585'],['torn','Tornado risk','#2E9E3A'],['spc','Severe storms','#F2D04B'],['ero','Flooding rain','#3F8FD9'],['fire','Fire weather','#F2A65A'],['quakes','Earthquakes','#B5523B'],['volc','Volcanoes','#F08A24']];
 var on = {radar:true,torn:true,storms:true,wwa:true,spc:true,ero:true,fire:true,quakes:true,volc:true};
-var day = 1, deskId = 'gulf';
-try{var sv=JSON.parse(localStorage.getItem('hazdesk')||'{}');if(sv.on)for(var k in on)if(k in sv.on)on[k]=!!sv.on[k];if(sv.desk)deskId=sv.desk}catch(e){}
-function save(){try{localStorage.setItem('hazdesk',JSON.stringify({on:on,desk:deskId}))}catch(e){}}
+var day = 1, deskId = 'gulf', spot = null, spotPick = false, spotEdit = false, spotMsg = '';
+try{var sv=JSON.parse(localStorage.getItem('hazdesk')||'{}');if(sv.on)for(var k in on)if(k in sv.on)on[k]=!!sv.on[k];if(sv.desk)deskId=sv.desk;if(sv.spot&&isFinite(sv.spot.lat)&&isFinite(sv.spot.lon))spot={lat:+sv.spot.lat,lon:+sv.spot.lon,name:String(sv.spot.name||''),cc:String(sv.spot.cc||'')}}catch(e){}
+function save(){try{localStorage.setItem('hazdesk',JSON.stringify({on:on,desk:deskId,spot:spot}))}catch(e){}}
 
 /* ---------- time ---------- */
 var now = function(){return Date.now()};
@@ -423,6 +460,9 @@ function draw(){
   pts.forEach(function(c){if(c[3]>maxRank)return;var p=sx(proj(c[1],c[2]));if(p[0]<0||p[0]>W||p[1]<0||p[1]>H)return;var w=ctx.measureText(c[0]).width,bx=[p[0]+5,p[1]-7,p[0]+7+w,p[1]+7];
     for(var i=0;i<used.length;i++){var u=used[i];if(bx[0]<u[2]&&bx[2]>u[0]&&bx[1]<u[3]&&bx[3]>u[1])return}used.push(bx);
     ctx.fillStyle=css['map-label'];ctx.beginPath();ctx.arc(p[0],p[1],1.8,0,7);ctx.fill();label(c[0],p[0]+5,p[1],css['map-label'])});
+  if(spot){var q=sx(proj(spot.lon,spot.lat));if(q[0]>-20&&q[0]<W+20&&q[1]>-20&&q[1]<H+20){ // your spot: a ring with cross-hairs, so it is a shape and not only a color
+    ctx.setLineDash([]);ctx.lineWidth=4.5;ctx.strokeStyle=css.land;ctx.beginPath();ctx.arc(q[0],q[1],9,0,7);ctx.moveTo(q[0]-16,q[1]);ctx.lineTo(q[0]+16,q[1]);ctx.moveTo(q[0],q[1]-16);ctx.lineTo(q[0],q[1]+16);ctx.stroke();
+    ctx.lineWidth=2;ctx.strokeStyle=css.ink;ctx.stroke();ctx.font='600 12px "IBM Plex Sans",system-ui,sans-serif';ctx.textAlign='left';label('Your spot',q[0]+13,q[1]-12,css.ink)}}
 }
 function label(s,x,y,col){ctx.lineWidth=3;ctx.strokeStyle=css.land;ctx.globalAlpha=.85;ctx.strokeText(s,x,y);ctx.globalAlpha=1;ctx.fillStyle=col;ctx.fillText(s,x,y)}
 function spaced(s,x,y,sp){var w=0,i;for(i=0;i<s.length;i++)w+=ctx.measureText(s[i]).width+sp;var cx=x-w/2;ctx.textAlign='left';for(i=0;i<s.length;i++){ctx.fillText(s[i],cx,y);cx+=ctx.measureText(s[i]).width+sp}ctx.textAlign='center'}
@@ -435,7 +475,7 @@ cv.addEventListener('pointerdown',function(e){cv.setPointerCapture(e.pointerId);
 cv.addEventListener('pointermove',function(e){var p=ptrs[e.pointerId];if(!p){hover(e.offsetX,e.offsetY);return}var dx=e.offsetX-p.x,dy=e.offsetY-p.y;moved+=Math.abs(dx)+Math.abs(dy);var ids=Object.keys(ptrs);
   if(ids.length===2&&pinch0){p.x=e.offsetX;p.y=e.offsetY;var a=ptrs[ids[0]],b=ptrs[ids[1]],d=Math.hypot(a.x-b.x,a.y-b.y);zoomAt((a.x+b.x)/2,(a.y+b.y)/2,(pinch0.k*d/pinch0.d)/view.k)}
   else{view.cx-=dx/view.k;view.cy-=dy/view.k;p.x=e.offsetX;p.y=e.offsetY;dirty=true}});
-function up(e){var had=ptrs[e.pointerId];delete ptrs[e.pointerId];if(Object.keys(ptrs).length<2)pinch0=null;if(!Object.keys(ptrs).length)cv.classList.remove('drag');if(had&&moved<6&&e.type==='pointerup')identify(e.offsetX,e.offsetY)}
+function up(e){var had=ptrs[e.pointerId];delete ptrs[e.pointerId];if(Object.keys(ptrs).length<2)pinch0=null;if(!Object.keys(ptrs).length)cv.classList.remove('drag');if(had&&moved<6&&e.type==='pointerup'){if(spotPick)spotFromMap(e.offsetX,e.offsetY);else identify(e.offsetX,e.offsetY)}}
 cv.addEventListener('pointerup',up);cv.addEventListener('pointercancel',up);
 cv.addEventListener('wheel',function(e){e.preventDefault();zoomAt(e.offsetX,e.offsetY,Math.exp(-e.deltaY*(e.ctrlKey?0.01:0.0016)))},{passive:false});
 $('zin').onclick=function(){zoomAt(W/2,H/2,1.6)};$('zout').onclick=function(){zoomAt(W/2,H/2,1/1.6)};$('zreset').onclick=function(){setView('all')};
@@ -503,6 +543,101 @@ function nowItems(){
 var nowList=[],nowAll=false;
 function renderNow(){nowList=nowItems();var show=nowAll?nowList:nowList.slice(0,6),more=nowList.length-show.length;$('now').innerHTML=nowList.length?show.map(function(x,i){return '<li><button data-i="'+i+'"><span class="bar" style="background:'+x.color+'"></span><span><span class="k">'+esc(x.k)+'</span><span class="t">'+esc(x.t)+'</span><span class="w">'+esc(x.w)+'</span></span></button></li>'}).join('')+(more>0?'<li class="more"><button data-more="1"><span></span><span class="t">Show '+more+' more</span></button></li>':''):'<li style="padding:10px 0;color:var(--muted)">No active hazards in the data on hand.</li>'}
 $('now').onclick=function(e){var b=e.target.closest('button');if(!b)return;if(b.dataset.more){nowAll=true;renderNow();return}var x=nowList[+b.dataset.i];if(x&&x.go){x.go();box.scrollIntoView({block:'nearest',behavior:'smooth'})}};
+
+/* ---------- your spot: everything the feeds on this page say about one point ---------- */
+var COMP8=['N','NE','E','SE','S','SW','W','NW'];
+function bearing(la1,lo1,la2,lo2){var y=Math.sin(dlon(lo2,lo1)*D2R)*Math.cos(la2*D2R),x=Math.cos(la1*D2R)*Math.sin(la2*D2R)-Math.sin(la1*D2R)*Math.cos(la2*D2R)*Math.cos(dlon(lo2,lo1)*D2R);return (Math.atan2(y,x)/D2R+360)%360}
+function dirOf(b){return COMP8[Math.round(b/45)%8]}
+function miles(km){var m=km*0.6214;return (m<10?Math.max(1,Math.round(m)):m<100?Math.round(m/5)*5:Math.round(m/10)*10).toLocaleString('en-US')}
+// distance from a point to the nearest edge of an outlined area, in km, with the bearing to that nearest point (0 when the point is inside)
+function distPolys(lon,lat,polys){if(inPolys(lon,lat,polys))return {km:0,brg:0};var cl=Math.cos(lat*D2R),best={km:1e9,brg:0};
+  polys.forEach(function(rings){rings.forEach(function(r){for(var i=0;i<r.length-1;i++){var ax=dlon(r[i][0],lon)*cl*111.32,ay=(r[i][1]-lat)*111.32,bx=dlon(r[i+1][0],lon)*cl*111.32,by=(r[i+1][1]-lat)*111.32,dx=bx-ax,dy=by-ay,L=dx*dx+dy*dy,u=L?Math.max(0,Math.min(1,-(ax*dx+ay*dy)/L)):0,px=ax+u*dx,py=ay+u*dy,d=Math.hypot(px,py);if(d<best.km)best={km:d,brg:(Math.atan2(px,py)/D2R+360)%360}}})});return best}
+// when a moving warned storm is projected to reach the point: the same straight-line method the map uses for towns in its path
+function etaAt(a,lat,lon){var m=a.motion;if(!m||m.kt<3||a.type==='Flash Flood Warning')return null;var n=now(),end=a.ends||n+45*60e3,h=m.head*D2R,kmh=m.kt*1.852;
+  var dx=dlon(lon,m.lon)*Math.cos(m.lat*D2R)*111.32,dy=(lat-m.lat)*111.32;if(Math.abs(dx)>250||Math.abs(dy)>250)return null;var along=dx*Math.sin(h)+dy*Math.cos(h),cross=Math.abs(dx*Math.cos(h)-dy*Math.sin(h)),eta=m.t+along/kmh*36e5;return cross<12&&eta>n-5*60e3&&eta<end+10*60e3?eta:null}
+var NAT={CA:['Canada','Environment and Climate Change Canada','https://weather.gc.ca/warnings/index_e.html'],MX:['Mexico','Servicio Meteorológico Nacional','https://smn.conagua.gob.mx/']};
+function spotUS(){return !spot.cc||spot.cc==='US'||spot.cc==='PR'||spot.cc==='VI'}
+function spotName(){return spot.name||(Math.abs(spot.lat).toFixed(2)+'°'+(spot.lat>=0?'N':'S')+' '+Math.abs(spot.lon).toFixed(2)+'°'+(spot.lon>=0?'E':'W'))}
+function spotSetHtml(){return '<div class="spset"><button class="spbtn" id="spGeo" type="button">Use my location</button><div class="spsearch"><input id="spQ" type="search" placeholder="Search a town or city" autocomplete="off" aria-label="Search for a town or city in North America"><ul class="spres" id="spRes" hidden></ul></div><button class="spbtn alt" id="spTap" type="button" aria-pressed="'+(spotPick?'true':'false')+'">'+(spotPick?'Now tap your spot on the map':'Tap it on the map')+'</button>'+(spot?'<button class="spbtn alt" id="spCancel" type="button">Cancel</button>':'')+'</div>'+(spotMsg?'<p class="sub" role="status">'+esc(spotMsg)+'</p>':'')+'<p class="sub">Your spot is saved only in this browser. It is not sent to this site or to anyone else.</p>'}
+function spotStorm(s){
+  var d=distKm(spot.lat,spot.lon,s.lat,s.lon),b=bearing(spot.lat,spot.lon,s.lat,s.lon),c=closest(s,spot.lat,spot.lon),inCone=s.cone&&s.cone.length&&inPolys(spot.lon,spot.lat,s.cone),h='';
+  // which of the storm's measured wind fields reaches this point right now (radii are published by quadrant, in nautical miles)
+  var q=bearing(s.lat,s.lon,spot.lat,spot.lon),qi=q<90?0:q<180?1:q<270?2:3,inside=null,reach=null;
+  if(s.radii)[['64','hurricane-force (74 mph or more)'],['50','58 mph or more'],['34','tropical-storm-force (39 mph or more)']].forEach(function(x){var r=s.radii[x[0]];if(!r)return;if(x[0]==='34')reach=r[qi]*1.852;if(!inside&&d<=r[qi]*1.852)inside=x[1]});
+  var far=!inCone&&c.km>1000&&d>1500;
+  if(far)return {far:true,html:'<li><span class="bar" style="background:'+CAT_COLOR[catIndex(s.wind)]+'"></span><span><b>'+esc(s.title||s.name)+'</b>: now about '+miles(d)+' miles to your '+dirOf(b)+(c.km>d-80?', and not forecast to come closer through ':', forecast to stay more than '+miles(c.km)+' miles away through ')+tz(s.track&&s.track.length?s.track[s.track.length-1].t:s.advTime)+'.</span></li>'};
+  h+='<div class="spstorm"><h4><i style="background:'+CAT_COLOR[catIndex(s.wind)]+'"></i>'+esc(s.title||s.name)+'</h4>';
+  h+='<p class="lead">'+(inCone?'Your spot is inside the forecast cone. ':'Your spot is outside the forecast cone. ')+(inside?'Winds of '+inside+' reach your spot now, by the last measured wind field.':'')+'</p>';
+  h+='<div class="spfacts"><div><span>Right now</span><b>'+esc(catName(s.wind))+', '+(s.mph||mph(s.wind))+' mph</b></div><div><span>Where</span><b>'+miles(d)+' miles to your '+dirOf(b)+'</b></div>'+
+     '<div><span>Closest forecast approach</span><b>'+(c.km<25?'over or next to your spot':'about '+miles(c.km)+' miles')+', '+tz(c.t)+'</b></div><div><span>Strength then</span><b>'+esc(catName(c.wind))+', '+mph(c.wind)+' mph</b></div>'+
+     (s.moveText?'<div><span>Moving</span><b>'+esc(s.moveText)+'</b></div>':'')+(s.mslp?'<div><span>Pressure</span><b>'+s.mslp+' mb</b></div>':'')+
+     (reach!=null?'<div><span>39+ mph winds reach</span><b>'+miles(reach)+' miles out on your side</b></div>':'')+'</div>';
+  if(s.track&&s.track.length>1)h+='<div class="tbl"><table><thead><tr><th>Forecast time</th><th>Strength</th><th>Distance from you</th></tr></thead><tbody>'+s.track.map(function(p){var dd=distKm(spot.lat,spot.lon,p.lat,p.lon);return '<tr><td>'+tz(p.t)+'</td><td>'+esc(catShort(p.wind))+', '+mph(p.wind)+' mph</td><td>'+miles(dd)+' mi '+dirOf(bearing(spot.lat,spot.lon,p.lat,p.lon))+'</td></tr>'}).join('')+'</tbody></table></div>';
+  if(s.watches)h+='<p style="margin-top:8px"><b>Coastal watches and warnings (NHC):</b> '+esc(s.watches)+'</p>';
+  if(s.hazards)h+='<p class="sub">'+esc(s.hazards)+'</p>';
+  h+='<p class="sub">The cone shows where the center will probably track, not how big the storm is; wind, surge and rain reach well outside it. Distances are to the forecast center track. Advisory '+esc(s.adv)+' issued '+tz(s.advTime)+(s.nextAdv?', next '+t(s.nextAdv):'')+'. <button class="go" data-storm="'+esc(s.id)+'">Show on map</button> &middot; <a href="'+esc(s.url||'https://www.nhc.noaa.gov/')+'" target="_blank" rel="noopener">Official NHC advisory</a></p></div>';
+  return {far:false,html:h,score:(inCone?0:1e6)+c.km}}
+function renderSpot(){
+  var el=$('spot');if(!el)return;
+  if(!spot||spotEdit){el.innerHTML='<div class="sphead"><h2 class="eyebrow" id="spotH">Your spot</h2></div><p class="lead">'+(spot?'Pick a new spot.':'Set your location and this page tells you what is in effect there and what is headed your way.')+'</p>'+spotSetHtml();return}
+  var n=now(),lat=spot.lat,lon=spot.lon,us=spotUS(),h='';
+  h+='<div class="sphead"><h2 class="eyebrow" id="spotH">Your spot</h2><span class="spname">'+esc(spotName())+'</span><button class="go" id="spMap" type="button">Show on map</button><button class="go" id="spChange" type="button">Change</button><button class="go" id="spClear" type="button">Remove</button></div>';
+  // warnings covering the point, and warnings close by
+  var here=[],near=[];
+  activeWWA().sort(function(a,b){return wwaRank(a.type)-wwaRank(b.type)}).forEach(function(a){var d=distPolys(lon,lat,a.polys);if(d.km===0)here.push(a);else if(d.km<=65&&/Warning/.test(a.type))near.push({a:a,d:d,eta:etaAt(a,lat,lon)})});
+  var hw=here.filter(function(a){return /Warning/.test(a.type)}),uniq=function(l){var o=[];l.forEach(function(a){if(o.indexOf(a.type)<0)o.push(a.type)});return o};
+  var wwaLive=LIVE_MODE&&live.wwa&&n-live.wwa<20*60e3,checked=wwaLive?'Checked '+ago(shortLive()?(live.cells||live.short):live.wwa)+'.':'';
+  if(!LIVE_MODE)h+='<div class="verdict"><span class="g" aria-hidden="true">&#9632;</span><div><b>Live data has not loaded, so this cannot say what is in effect now.</b><span>What follows is from a saved snapshot taken '+fD.format(new Date(SNAP.generated))+'. For warnings in effect this minute use <a href="https://www.weather.gov/" target="_blank" rel="noopener">weather.gov</a>.</span></div></div>';
+  else if(!us&&NAT[spot.cc])h+='<div class="verdict"><span class="g" aria-hidden="true">&#9632;</span><div><b>Weather warnings for '+NAT[spot.cc][0]+' are not on this page yet.</b><span>The warnings and 3-day outlooks here come from the U.S. National Weather Service and stop at the border. For official warnings use <a href="'+NAT[spot.cc][2]+'" target="_blank" rel="noopener">'+NAT[spot.cc][1]+'</a>. Hurricanes, earthquakes and volcanoes below do cover your spot.</span></div></div>';
+  else if(!us)h+='<div class="verdict"><span class="g" aria-hidden="true">&#9632;</span><div><b>Weather warnings for this country are not on this page.</b><span>The warnings and 3-day outlooks here come from the U.S. National Weather Service. Follow your national weather service for official warnings. Hurricanes, earthquakes and volcanoes below do cover your spot.</span></div></div>';
+  else if(!wwaLive)h+='<div class="verdict watch"><span class="g" aria-hidden="true">&#9670;</span><div><b>The warning feed is not responding right now.</b><span>This page cannot confirm what is in effect at your spot. Use <a href="https://www.weather.gov/" target="_blank" rel="noopener">weather.gov</a>.</span></div></div>';
+  else if(hw.length)h+='<div class="verdict warn" role="alert"><span class="g" aria-hidden="true">&#9650;</span><div><b>In effect at your spot now: '+esc(uniq(hw).join(', '))+'</b><span>'+checked+' Details are below. Act on the official warning, not on this page.</span></div></div>';
+  else if(here.length)h+='<div class="verdict watch"><span class="g" aria-hidden="true">&#9670;</span><div><b>No warning at your spot. In effect: '+esc(uniq(here).join(', '))+'</b><span>'+checked+'</span></div></div>';
+  else h+='<div class="verdict clear"><span class="g" aria-hidden="true">&#9679;</span><div><b>No warnings or watches of the mapped types are in effect at your spot.</b><span>'+checked+(near.length?' There '+(near.length>1?'are '+near.length+' warnings':'is 1 warning')+' within about 40 miles; see below.':'')+' River flood and marine warnings are not mapped here.</span></div></div>';
+  h+='<div class="spgrid">';
+  if(us&&(here.length||near.length)){
+    h+='<section><h3>Warnings and watches</h3>';
+    if(here.length)h+='<ul class="items">'+here.slice(0,8).map(function(a){var eta=etaAt(a,lat,lon);return '<li><span class="bar" style="background:'+(WWA_COLOR[a.type]||'#9AA5B1')+'"></span><span>'+wwaHtml(a)+(eta?'<br><b>Projected to reach your spot about '+fHM.format(new Date(eta))+'</b>':'')+'</span></li>'}).join('')+'</ul>';
+    if(near.length)h+='<p style="margin-top:8px"><b>Close by, not covering your spot:</b></p><ul class="items">'+near.sort(function(x,y){return x.d.km-y.d.km}).slice(0,6).map(function(x){return '<li><span class="bar" style="background:'+(WWA_COLOR[x.a.type]||'#9AA5B1')+'"></span><span><b>'+esc(x.a.type)+'</b> about '+miles(x.d.km)+' miles to your '+dirOf(x.d.brg)+'<br><span class="sub">'+span(x.a.onset,x.a.ends)+(x.a.motion?'. '+esc(motionText(x.a.motion)):'')+'</span>'+(x.eta?'<br><b>On its present track it reaches your spot about '+fHM.format(new Date(x.eta))+'</b>':'')+'</span></li>'}).join('')+'</ul>';
+    h+='</section>';
+  }
+  // hurricanes and tropical storms
+  var st=D.storms.map(spotStorm),close=st.filter(function(x){return !x.far}).sort(function(a,b){return a.score-b.score}),far=st.filter(function(x){return x.far});
+  h+='<section'+(close.length?' style="grid-column:1/-1"':'')+'><h3>Hurricanes and tropical storms</h3>'+(st.length?close.map(function(x){return x.html}).join('')+(far.length?(close.length?'<p><b>Farther away:</b></p>':'')+'<ul class="items">'+far.map(function(x){return x.html}).join('')+'</ul>':''):'<p class="none">'+(live.storms||!LIVE_MODE?'No active tropical storm or hurricane in the National Hurricane Center feed.':'The storm feed is not responding.')+'</p>')+'</section>';
+  // outlook, next three days
+  if(us){var ws=[1,2,3].map(dayWindow);
+    h+='<section><h3>Next three days at your spot</h3><div class="tbl"><table><tbody>'+['Today','Tomorrow','Day 3'].map(function(nm,i){var r=cityRisks(lat,lon,i+1);return '<tr><td>'+nm+'<br><span class="sub">from '+fH.format(new Date(ws[i][0]))+'</span></td><td>'+(r.length?r.map(tag).join(''):'<span class="none">Outside every outlined risk area</span>')+'</td></tr>'}).join('')+'</tbody></table></div><p class="sub" style="margin-top:6px">Tornado, severe storm, flooding rain and fire weather outlooks from the Storm Prediction Center and Weather Prediction Center, plus any warning or forecast cone that covers your spot. Fire weather and tornado outlooks run two days.</p></section>'}
+  // earthquakes and volcanoes
+  var qk=D.quakes.filter(function(q){return distKm(lat,lon,q[1],q[2])<=300}).sort(function(a,b){return b[4]-a[4]});
+  h+='<section><h3>Earthquakes within 185 miles, past 7 days</h3>'+(qk.length?'<ul class="items">'+qk.slice(0,4).map(function(q){var d=distKm(lat,lon,q[1],q[2]);return '<li><span class="bar" style="background:#E0402A"></span><span><b>M'+q[4].toFixed(1)+'</b>, '+miles(d)+' miles to your '+dirOf(bearing(lat,lon,q[1],q[2]))+' <span class="sub">'+esc(q[5])+'</span><br><span class="sub">'+fD.format(new Date(q[0]))+' ('+ago(q[0])+')</span></span></li>'}).join('')+'</ul>'+(qk.length>4?'<p class="sub">'+(qk.length-4)+' more, smaller.</p>':''):'<p class="none">None of magnitude 3 or more (2.5 or more in California) in the USGS feed.</p>');
+  var vo=D.volcanoes.map(function(v){var ll=volcPos(v.volcano_name);return ll?{v:v,km:distKm(lat,lon,ll[0],ll[1]),brg:bearing(lat,lon,ll[0],ll[1])}:null}).filter(function(x){return x&&x.km<=500});
+  if(vo.length)h+='<p style="margin-top:8px"><b>Volcanoes above normal within 310 miles:</b></p><ul class="items">'+vo.map(function(x){return '<li><span class="bar" style="background:'+(VOLC_COLOR[x.v.color_code]||'#9AA5B1')+'"></span><span><b>'+esc(x.v.volcano_name)+'</b>: alert level '+esc(x.v.alert_level)+' ('+esc(String(x.v.color_code).toLowerCase())+'), '+miles(x.km)+' miles to your '+dirOf(x.brg)+'</span></li>'}).join('')+'</ul>';
+  h+='</section></div>';
+  el.innerHTML=h}
+function setSpot(lat,lon,name,cc){spot={lat:Math.round(lat*100)/100,lon:Math.round(lon*100)/100,name:name||'',cc:cc||''};spotPick=false;spotEdit=false;spotMsg='';cv.style.cursor='';save();renderSpot();dirty=true}
+// the town list (places.js) is fetched only when the search box or a located point first needs it
+var PL=null,plWait=null;
+function norm(x){return String(x).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9 ]+/g,' ').replace(/\s+/g,' ').trim()}
+function loadPlaces(){if(PL)return Promise.resolve(PL);if(plWait)return plWait;plWait=new Promise(function(ok,no){var sc=document.createElement('script');sc.src='places.js';sc.onload=function(){var P=window.HAZ_PLACES;if(!P){no();return}PL=P.d.split('\n').map(function(r){var a=r.split('|'),g=P.r[parseInt(a[1],36)]||['',''];return {n:a[0],g:g[0],cc:g[1],lat:+a[2],lon:+a[3],k:norm(a[0]+' '+g[0])}});ok(PL)};sc.onerror=function(){plWait=null;no()};document.head.appendChild(sc)});return plWait}
+function nearestPlace(lat,lon){var best=null,bd=80;if(PL)for(var i=0;i<PL.length;i++){var p=PL[i];if(Math.abs(p.lat-lat)>1)continue;var d=distKm(lat,lon,p.lat,p.lon);if(d<bd){bd=d;best=p}}return best?{p:best,km:bd}:null}
+function spotFromPoint(lat,lon){var done=function(){var np=nearestPlace(lat,lon);setSpot(lat,lon,np?(np.km<8?'':'Near ')+np.p.n+', '+np.p.g:'',np?np.p.cc:'')};loadPlaces().then(done,done)}
+function spotFromMap(x,y){var q=inv((x-W/2)/view.k+view.cx,(y-H/2)/view.k+view.cy);if(!q)return;spotFromPoint(q[1],((q[0]+540)%360)-180)}
+function spotSearch(){var inp=$('spQ'),res=$('spRes');if(!inp||!res)return;var q=norm(inp.value);if(q.length<2){res.hidden=true;return}
+  loadPlaces().then(function(P){if(norm(inp.value)!==q)return;var a=[],b=[];for(var i=0;i<P.length&&a.length<8;i++){var k=P[i].k;if(k.indexOf(q)===0)a.push(P[i]);else if(b.length<8&&k.indexOf(' '+q)>0)b.push(P[i])}a=a.concat(b).slice(0,8);
+    res.hidden=false;res.innerHTML=a.length?a.map(function(p){return '<li><button type="button" data-lat="'+p.lat+'" data-lon="'+p.lon+'" data-n="'+esc(p.n+', '+p.g)+'" data-cc="'+esc(p.cc)+'">'+esc(p.n)+' <small>'+esc(p.g)+'</small></button></li>'}).join(''):'<li><button type="button" disabled>No town by that name in the list. Try a larger town nearby, or tap the map.</button></li>'},
+  function(){res.hidden=false;res.innerHTML='<li><button type="button" disabled>The town list did not load. Use your location or tap the map.</button></li>'})}
+$('spot').addEventListener('input',function(e){if(e.target.id==='spQ')spotSearch()});
+$('spot').addEventListener('keydown',function(e){if(e.target.id==='spQ'&&e.key==='Enter'){var b=$('spRes').querySelector('button[data-lat]');if(b)b.click()}});
+$('spot').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;
+  if(b.dataset.lat){setSpot(+b.dataset.lat,+b.dataset.lon,b.dataset.n,b.dataset.cc);return}
+  if(b.dataset.storm){var s=D.storms.filter(function(x){return x.id===b.dataset.storm})[0];if(s){flyTo(s.lon,s.lat,14);box.scrollIntoView({block:'nearest',behavior:'smooth'})}return}
+  if(b.id==='spGeo'){if(!navigator.geolocation){spotMsg='This browser cannot share a location. Search for a town or tap the map.';renderSpot();return}spotMsg='Waiting for your device to share its location…';renderSpot();
+    navigator.geolocation.getCurrentPosition(function(p){spotFromPoint(p.coords.latitude,p.coords.longitude)},function(){spotMsg='Your device did not share a location. Search for a town or tap the map.';renderSpot()},{maximumAge:6e5,timeout:15e3});return}
+  if(b.id==='spTap'){spotPick=!spotPick;spotMsg='';cv.style.cursor=spotPick?'crosshair':'';renderSpot();if(spotPick)box.scrollIntoView({block:'center',behavior:'smooth'});return}
+  if(b.id==='spMap'){flyTo(spot.lon,spot.lat,2.4);box.scrollIntoView({block:'nearest',behavior:'smooth'});return}
+  if(b.id==='spChange'){spotEdit=true;renderSpot();var i=$('spQ');if(i)i.focus();return}
+  if(b.id==='spCancel'){spotEdit=false;spotPick=false;spotMsg='';cv.style.cursor='';renderSpot();return}
+  if(b.id==='spClear'){spot=null;spotEdit=false;spotPick=false;save();renderSpot();dirty=true}});
 
 /* ---------- desks ---------- */
 function tag(r){return '<span class="tag"><i style="background:'+r.color+'"></i>'+esc(r.text)+'</span>'}
@@ -585,7 +720,7 @@ function renderStatus(){
   $('feeds').innerHTML=feeds.map(function(f){return '<span>'+f[1]+': '+(live[f[0]]?'live, '+ago(live[f[0]]):'snapshot, '+ago(SNAP.generated))+'</span>'}).join('');
 }
 function clock(){$('clock').textContent='Your time: '+fD.format(new Date())}
-function renderAll(){buildOverlays();buildControls();legend();renderTorn();renderNow();renderDesk();renderStatus()}
+function renderAll(){buildOverlays();buildControls();legend();renderTorn();renderSpot();renderNow();renderDesk();renderStatus()}
 
 /* ---------- live feeds (used when the page is hosted where it may call the agencies directly) ---------- */
 var ARC='https://mapservices.weather.noaa.gov';
@@ -679,7 +814,7 @@ function liveLSR(){return getJSON('https://mesonet.agron.iastate.edu/geojson/lsr
 function settle(p){return p.then(function(){return true},function(){return false})}
 function fast(){return liveCells().then(null,function(){return liveShort()}).then(function(){return true},function(){return false})}
 function slow(){return Promise.all([liveQuakes(),liveWWA(),liveOutlooks(),liveStorms(),liveVolc(),liveLSR()].map(settle))}
-function afterFast(){buildOverlays();renderTorn();renderNow();renderDesk();legend();renderStatus()}
+function afterFast(){buildOverlays();renderTorn();if(!spotEdit)renderSpot();renderNow();renderDesk();legend();renderStatus()}
 var lastSlow=0,lastFast=0,ticks=0;
 function tickFast(){if(document.hidden)return;lastFast=now();ticks++;fast().then(function(){afterFast();if(ticks%(eventActive()?2:5)===0)loadRadar()})}
 function tickSlow(){if(document.hidden)return;lastSlow=now();slow().then(renderAll)}
@@ -727,7 +862,7 @@ var d0=DESKS.filter(function(x){return x.id===deskId})[0];
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){dirty=true});
 requestAnimationFrame(frame);
 setInterval(function(){clock();renderStatus()},30e3);
-setInterval(function(){renderNow();renderDesk();legend();dirty=true},10*60e3);
+setInterval(function(){if(!spotEdit)renderSpot();renderNow();renderDesk();legend();dirty=true},10*60e3);
 startLive();
 })();
 </script>
