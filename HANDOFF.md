@@ -238,7 +238,7 @@ Randy, Nov 11: anyone must be able to "pinpoint/select" a hurricane, tornado or 
   save): start, update (extended + observed + now covers spot), replacement by a new warning, end, reload, stop, map pan;
   and with the saved hurricane. **Not yet seen against a live warning.** Sound and wake lock cannot be tested here at all.
 
-## 4i. Weather bar above the map (PREVIEW on branch `weather-bar`, waiting for Randy's Go)
+## 4i. Weather bar above the map (LIVE Nov 12, 2026 on Randy's Go)
 
 Randy, Nov 11-12: make the weather more prominent without ruining the look of the main page.
 
@@ -251,7 +251,7 @@ Randy, Nov 11-12: make the weather more prominent without ruining the look of th
 - Model forecasts are marked "(computer model)" in the bar too. A failed forecast says so instead of "Reading…".
 - `renderBar()` is called at the end of every `renderSpot()`.
 
-## 4j. Light look, a Top button, and a limit on dragging the map (PREVIEW on branch `light-mode`, which also carries 4i)
+## 4j. Light look, a Top button, and a limit on dragging the map (LIVE Nov 12, 2026 on Randy's Go)
 
 Randy, Nov 12: his mom would prefer a light map (light blue sea, cream or sand land); and "when moving the map around -
 can't move back up in the map again".
