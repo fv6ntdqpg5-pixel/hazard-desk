@@ -74,7 +74,7 @@ Aira ~30 ka, Campanian Ignimbrite ~39 ka).
 | Oct 24 | Calderas panel includes VEI 7 systems, labeled as such; "none of these is a forecast" | Only Yellowstone, Toba, Taupō had VEI 8 |
 | Oct 24 | Wildfires from GDACS (no key); NASA FIRMS detections not added | FIRMS needs a free key Randy would add in Vercel; offered as an option |
 
-## 4b. "Your spot" (preview branch `my-spot`, Nov 11, 2026; not live until Randy says Go)
+## 4b. "Your spot" (LIVE Nov 11, 2026 on Randy's Go)
 
 - Randy, Nov 11: focus on the Hazard Desk next. Location first ("if a hurricane is coming that person wants to know
   everything about it"); the page stays continent-wide by default and people zoom in.
