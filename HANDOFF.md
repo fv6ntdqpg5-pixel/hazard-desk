@@ -357,3 +357,9 @@ He gave no detail, so these are the faults found by reading the code and testing
   all four directions, pinch, lifting one of two fingers, and tap. **Only Randy's phone can confirm it.** If it is still
   stuck, the next step is north / south / east / west buttons on the map. The Outbreak Desk still uses pointer events for
   fingers; port this there if it fixes the Weather Desk.
+
+## Copy protection (Nov 15, 2026)
+- Vercel no longer serves the build files or these notes. They're listed in `.vercelignore`, so only the page and the files it loads are public.
+- The page has the BIG domain lock and watermark: a `<!--BIGLOCK-->` block added by `tools/lock.py`, allowed on hazard-desk.vercel.app, the vercel.app previews and claude.ai. Anywhere else, an "Unlicensed copy" overlay covers the page after 30 s. Watermark: `window.__BIGW = sha256('BIG|(c) 2026 Randy Barnhill|weather|0511ee2e4405')`.
+- build_site.py re-adds the lock (fixed build id) every time it writes index.html.
+- This deters copying; it doesn't stop it. Someone who knows what they're doing can strip the block. The proof of copying is the watermark plus the LICENSE.

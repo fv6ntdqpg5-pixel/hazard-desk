@@ -35,3 +35,8 @@ doc = f'''<!doctype html>
 '''
 open(os.path.join(HERE, 'index.html'), 'w', encoding='utf-8').write(doc)
 print('index.html', len(doc), 'bytes')
+
+# BIG domain lock + watermark (Nov 15, 2026): re-added on every build so a rebuild never drops it. See HANDOFF / tools/lock.py.
+import subprocess as _sp, os as _os, glob as _gl
+_R = _os.path.normpath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), '.'))
+_sp.run(['python3', _os.path.join(_R, 'tools', 'lock.py'), 'weather', 'hazard-desk.vercel.app'] + [_os.path.join(_R,'index.html')], env=dict(_os.environ, BIGBUILD='0511ee2e4405'), check=True)

@@ -1,2 +1,10 @@
 tools
 .github
+HANDOFF.md
+README.md
+build_basemap.py
+build_data.py
+build_site.py
+page.html
+raw
+.gitignore
