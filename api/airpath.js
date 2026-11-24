@@ -90,9 +90,15 @@ async function airPaths(windAt, ev = EVENT, levels = LEVELS) {
   return out;
 }
 
+let lastErr = '';   // why the last wind request failed, reported as "detail" so a broken source can be told from a busy one
 async function get(url) {
   for (let i = 0; i < 2; i++) {
-    try { const r = await fetch(url, { headers: { 'User-Agent': UA, Accept: 'application/json' }, signal: AbortSignal.timeout(9000) }); if (r.ok) return await r.json(); if (r.status < 500 && r.status !== 429) return null; } catch (e) { /* try once more */ }
+    try {
+      const r = await fetch(url, { headers: { 'User-Agent': UA, Accept: 'application/json' }, signal: AbortSignal.timeout(9000) });
+      if (r.ok) return await r.json();
+      lastErr = r.status + ' ' + (await r.text().catch(() => '')).slice(0, 160);
+      if (r.status < 500 && r.status !== 429) return null;
+    } catch (e) { lastErr = String(e && e.message || e).slice(0, 120); }
   }
   return null;
 }
@@ -115,7 +121,7 @@ async function handler(req, res) {
   res.setHeader('Cache-Control', paths ? 'public, s-maxage=1200, stale-while-revalidate=3600' : 'public, s-maxage=60');
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.end(JSON.stringify({
-    generated: new Date().toISOString(), ok: !!paths, error,
+    generated: new Date().toISOString(), ok: !!paths, error, detail: paths ? undefined : lastErr || undefined,
     event: { id: EVENT.id, name: EVENT.name, site: EVENT.site, planned: EVENT.planned, showUntil: EVENT.showUntil, links: EVENT.links,
       facts: { ...f, leadLb: Math.round(f.leadAzideLb * f.leadFraction / 100) * 100 } },
     paths, model: 'NOAA HRRR and GFS forecast winds, read through open-meteo.com',
