@@ -388,7 +388,7 @@ Ammunition Plant, Middletown, Iowa, planned 9:00 AM Central on Wed Nov 25, 2026,
 
 **What was built:** a "Watch" card above the map and a map overlay, both from the new `/api/airpath`:
 - the plant marked on the map (the plant, not the blast: the Army has not published where inside the plant the drums are);
-- three forward air paths from the planned time (A near the ground, B 590 ft, C about 1,800 ft above the ground), each
+- three forward air paths from the planned time (A near the ground, B 260 ft, C about 1,800 ft above the ground), each
   a different line style and letter, with dots at 1, 3, 6 and 12 hours, and in words where each point is against a
   named city; the wind at the start; and, if the reader has set a spot, how close the nearest path passes;
 - the reported quantity and one computed figure, about 6,800 lb of lead (71.1% of 9,500 lb), labelled as our arithmetic;
