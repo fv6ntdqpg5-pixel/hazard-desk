@@ -139,6 +139,14 @@ button{font:inherit;color:inherit}
 .spfacts b{font-weight:600}
 
 /* right now */
+.evt{background:var(--panel);border:1px solid var(--rule);border-top:4px solid var(--ink);border-radius:6px;padding:14px 16px 14px;margin:0 0 14px;min-width:0}
+.evt .evh{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px}
+.evt .evh b{font-family:var(--font-display);font-size:22px;font-weight:600;line-height:1.15;flex:1 1 240px}
+.evt p{margin:8px 0 0}.evt h3{font-family:var(--font-display);font-weight:600;font-size:15px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin:14px 0 2px}
+.evt ul{margin:6px 0 0;padding:0;list-style:none}.evt li{padding:8px 0 8px 12px;border-left:4px solid var(--ink);margin:0 0 8px}
+.evt li.lB{border-left-style:dashed}.evt li.lC{border-left-style:dotted}
+.evt .evw{border:2px solid var(--ink);border-radius:6px;padding:10px 12px;margin-top:12px}
+.evt .evk{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:10px}
 .eyebrow{font-family:var(--font-display);font-weight:600;font-size:15px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 6px}
 .now{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:0 22px;margin:0;padding:0;list-style:none;border-top:1px solid var(--rule)}
 .now li{border-bottom:1px solid var(--rule)}
@@ -306,6 +314,7 @@ if(C.btn){var p=document.querySelector('.rbby,.credit');if(p){var b=document.cre
   <div class="torn" id="torn" role="alert" hidden></div>
   <div class="tsu" id="tsuBanner" role="alert" hidden></div>
   <div class="note" id="note" hidden></div>
+  <section class="evt" id="evt" aria-label="Event watch" hidden></section>
 
   <div class="main">
     <div class="mapcol">
@@ -592,7 +601,48 @@ function draw(){
     if(trkObj&&trk.kind==='cell'&&on.wwa){paths.wwa.forEach(function(x){if(x.a===trkObj)copies(-3.9,3.9,function(){ctx.lineWidth=5*px;ctx.strokeStyle='#10161D';ctx.stroke(x.p);ctx.setLineDash([7*px,5*px]);ctx.lineWidth=3*px;ctx.strokeStyle='#FFFFFF';ctx.stroke(x.p);ctx.setLineDash([])})});ctx.setTransform(dpr,0,0,dpr,0,0)}
     var tq=sx(proj(trk.lon,trk.lat)),tr2=trk.kind==='cell'?30:26;if(tq[0]>-40&&tq[0]<W+40&&tq[1]>-40&&tq[1]<H+40){if(trk.kind!=='cell'||!trkObj){ctx.setLineDash([6,5]);ctx.lineWidth=5;ctx.strokeStyle=css.land;ctx.beginPath();ctx.arc(tq[0],tq[1],tr2,0,7);ctx.stroke();ctx.lineWidth=2.2;ctx.strokeStyle=css.ink;ctx.stroke();ctx.setLineDash([]);}else tr2=4;
       ctx.font='700 12px "IBM Plex Sans",system-ui,sans-serif';ctx.textAlign='center';label('TRACKING',tq[0],tq[1]-tr2-6,css.ink);ctx.textAlign='left'}}
+  drawEvt();
 }
+/* ---------- event watch: one announced event with the forecast paths of the air leaving it (/api/airpath) ----------
+   Built Nov 24, 2026 for the Army's lead azide detonation at the Iowa Army Ammunition Plant. The map shows the plant and
+   three air paths (A near the ground, B 260 ft, C about 1,800 ft), each a different line style and letter, with a dot
+   at 1, 3, 6 and 12 hours. PATHS OF THE AIR ONLY: no lead amount is estimated anywhere, because the figures needed
+   are not published. The card disappears after event.showUntil. */
+var EV=null,EVH=[1,3,6,12],EVDASH={A:[],B:[10,6],C:[2,6]};
+function evShown(){return !!(EV&&EV.event&&now()<Date.parse(EV.event.showUntil))}
+function loadEvt(){if(document.hidden)return;fetch('/api/airpath').then(function(r){if(!r.ok)throw 0;return r.json()}).then(function(j){if(!j||!j.event)return;if(j.ok||!EV||!EV.paths)EV=j;else EV.late=true;if(!j.ok)setTimeout(loadEvt,45e3);renderEvt();dirty=true}).catch(function(){setTimeout(loadEvt,60e3)})}
+function evBox(){var e=EV.event,w=e.site.lon,x=w,s0=e.site.lat,n0=s0;(EV.paths||[]).forEach(function(p){p.pts.forEach(function(t){w=Math.min(w,t.lon);x=Math.max(x,t.lon);s0=Math.min(s0,t.lat);n0=Math.max(n0,t.lat)})});
+  var mx=Math.max(0.6,(x-w)*0.18),my=Math.max(0.4,(n0-s0)*0.18);return [w-mx,x+mx,s0-my,n0+my]}
+// where a path is closest to the reader's spot, stepping every 10 minutes along it
+function evNearest(){if(!spot||!EV.paths)return null;var best=null;EV.paths.forEach(function(p){for(var i=1;i<p.pts.length;i++){var a=p.pts[i-1],b=p.pts[i];for(var k=0;k<=6;k++){var f=k/6,la=a.lat+(b.lat-a.lat)*f,lo=a.lon+(b.lon-a.lon)*f,km=distKm(spot.lat,spot.lon,la,lo);
+  if(!best||km<best.km)best={km:km,id:p.id,t:Date.parse(a.t)+f*3600e3,brg:bearing(spot.lat,spot.lon,la,lo)}}}});return best}
+function renderEvt(){var el=$('evt');if(!el)return;if(!evShown()){el.hidden=true;return}
+  var e=EV.event,f=e.facts,t0=Date.parse(e.planned),n=now(),past=n>t0,fT=new Intl.DateTimeFormat(undefined,{weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}),
+    hrs=Math.abs(t0-n)/36e5,rel=hrs<1?Math.max(1,Math.round(hrs*60))+' min':Math.round(hrs)+(Math.round(hrs)===1?' hour':' hours'),lb=function(x){return Number(x).toLocaleString('en-US')};
+  var h='<div class="evh"><span class="eyebrow">Watch</span><b>'+esc(e.name)+'</b><button class="go" type="button" data-ev="map">Show on map</button></div>'+
+    '<p class="lead">'+(past?'Was planned for ':'Planned for ')+'<b>'+esc(fT.format(new Date(t0)))+'</b> ('+(past?rel+' ago':'in '+rel)+'). The Army sets the time and can move it; this page does not know when it actually happens.</p>'+
+    '<p>'+f.drums+' drums, reported as about '+lb(f.leadAzideLb)+' lb of degraded lead azide, in '+f.detonations+' controlled detonations. That is about '+lb(f.leadLb)+' lb of lead (lead azide is 71% lead by weight; our arithmetic on the reported weight, not an official figure).</p>'+
+    '<h3>Where the air is forecast to go</h3>';
+  if(EV.paths){
+    h+='<p class="sub">The path of air leaving the plant at the planned time, at three heights, from NOAA forecast winds. Worked out '+esc(ago(Date.parse(EV.generated)))+'; it changes as the forecast changes.'+(EV.late?' The newest forecast did not load, so this is the last one read.':'')+'</p><ul>';
+    EV.paths.forEach(function(p){if(p.hours<1){h+='<li class="l'+esc(p.id)+'"><b>'+esc(p.id)+' &middot; '+esc(p.label)+' ('+esc(p.height)+'):</b> no wind forecast was returned for this height.</li>';return}
+      var bits=EVH.filter(function(k){return k<=p.hours}).map(function(k){var q=p.pts[k];return (k===1?'1 hour':k+' hours')+': about '+lb(q.miles)+' miles '+esc(q.dir)+(q.near.miles<4?', at '+esc(q.near.city):', '+q.near.miles+' miles '+esc(q.near.dir)+' of '+esc(q.near.city))});
+      h+='<li class="l'+esc(p.id)+'"><b>'+esc(p.id)+' &middot; '+esc(p.label)+' ('+esc(p.height)+'):</b> wind from the '+esc(p.start.from)+' at '+p.start.mph+' mph, carrying air toward the '+esc(p.start.toward)+'.<br>'+bits.join('; ')+'.</li>'});
+    h+='</ul>';
+    var nb=evNearest();if(nb)h+='<p><b>From your spot:</b> the nearest of these paths ('+esc(nb.id)+') passes about '+milesT(nb.km)+' to your '+dirOf(nb.brg)+' around '+esc(fT.format(new Date(nb.t)))+'.</p>';
+  }else h+='<p class="sub">The wind forecast is not answering right now, so no paths are shown.</p>';
+  h+='<p class="evw"><b>&#9650; These are paths of the air, not amounts of lead.</b> Nobody has published how much of the lead will become airborne dust, so this page does not estimate lead in the air or on the ground, and a line on the map is not a danger zone. Measured results come from the EPA. If you live near Middletown, follow the Army, the EPA and Iowa health officials, not this page.</p>'+
+    '<p class="evk">'+e.links.map(function(l){return link(l[1],l[0])}).join('')+'</p>'+
+    '<p class="sub">Winds: '+esc(EV.model||'')+'. The plant is marked, not the blast: the Army has not said where inside the plant the drums are.</p>';
+  el.innerHTML=h;el.hidden=false}
+function drawEvt(){if(!evShown())return;var e=EV.event,s=sx(proj(e.site.lon,e.site.lat));ctx.setLineDash([]);ctx.lineJoin='round';ctx.lineCap='round';ctx.textBaseline='middle';ctx.textAlign='left';
+  (EV.paths||[]).forEach(function(p,pi){if(p.hours<1)return;var q=p.pts.map(function(t){return sx(proj(t.lon,t.lat))}),ln=function(){ctx.beginPath();q.forEach(function(a,i){if(i)ctx.lineTo(a[0],a[1]);else ctx.moveTo(a[0],a[1])})};
+    ln();ctx.strokeStyle=css.land;ctx.lineWidth=6.5;ctx.stroke();ln();ctx.strokeStyle=css.ink;ctx.lineWidth=2.6;ctx.setLineDash(EVDASH[p.id]||[]);ctx.stroke();ctx.setLineDash([]);
+    EVH.forEach(function(k){if(k>p.hours)return;var a=q[k];if(a[0]<-30||a[0]>W+30||a[1]<-30||a[1]>H+30)return;ctx.beginPath();ctx.arc(a[0],a[1],4.6,0,7);ctx.fillStyle=css.land;ctx.fill();ctx.lineWidth=2;ctx.strokeStyle=css.ink;ctx.stroke();
+      if(Math.hypot(a[0]-s[0],a[1]-s[1])>34*(1+pi*0.25)){ctx.font='600 11px "IBM Plex Mono",monospace';label(p.id+' +'+k+'h',a[0]+8,a[1]+(pi===0?-11:12),css.ink)}})});
+  if(s[0]<-30||s[0]>W+30||s[1]<-30||s[1]>H+30)return;var r=9;ctx.beginPath();ctx.moveTo(s[0],s[1]-r);ctx.lineTo(s[0]+r,s[1]);ctx.lineTo(s[0],s[1]+r);ctx.lineTo(s[0]-r,s[1]);ctx.closePath();ctx.fillStyle=css.ink;ctx.fill();ctx.lineWidth=2.5;ctx.strokeStyle=css.land;ctx.stroke();
+  ctx.font='700 12px "IBM Plex Sans",system-ui,sans-serif';ctx.textAlign='center';label('DETONATION SITE (PLANT)',s[0],s[1]-r-11,css.ink);ctx.textAlign='left'}
+document.addEventListener('click',function(ev){var b=ev.target.closest&&ev.target.closest('[data-ev]');if(!b||!EV)return;fit(evBox(),true);dirty=true;box.scrollIntoView({block:'nearest',behavior:'smooth'})});
 /* ---------- world layers: the former World page, drawn on the same map ---------- */
 var ALC={Green:'#2E8B3A',Orange:'#E07B00',Red:'#C62828'},SCL=['none','minor','moderate','strong','severe','extreme'];
 function kmhMph(x){return String(x==null?'':x).replace(/(\d+(?:\.\d+)?) km\/h/g,function(m,n){return m+', '+Math.round(n*0.621371)+' mph'})}
@@ -1585,7 +1635,7 @@ setInterval(function(){clock();renderStatus()},30e3);
 setInterval(function(){if(!spotEdit)renderSpot();renderNow();renderDesk();legend();dirty=true},10*60e3);
 startLive();
 lwLoad();
-sstKey();sstLoad();loadWorld();loadWorldQuakes();setInterval(loadWorld,5*60e3);setInterval(loadWorldQuakes,5*60e3);
+sstKey();sstLoad();loadWorld();loadWorldQuakes();loadEvt();setInterval(loadEvt,10*60e3);setInterval(function(){if(EV)renderEvt()},60e3);setInterval(loadWorld,5*60e3);setInterval(loadWorldQuakes,5*60e3);
 document.addEventListener('visibilitychange',function(){if(!document.hidden&&(!WD||now()-(utc(WD.generated)||0)>6*60e3)){loadWorld();loadWorldQuakes()}});
 })();
 </script>

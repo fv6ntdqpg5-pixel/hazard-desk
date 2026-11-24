@@ -376,3 +376,45 @@ He gave no detail, so these are the faults found by reading the code and testing
 - The page has the BIG domain lock and watermark: a `<!--BIGLOCK-->` block added by `tools/lock.py`, allowed on hazard-desk.vercel.app, the vercel.app previews and claude.ai. Anywhere else, an "Unlicensed copy" overlay covers the page after 30 s. Watermark: `window.__BIGW = sha256('BIG|(c) 2026 Randy Barnhill|weather|0511ee2e4405')`.
 - build_site.py re-adds the lock (fixed build id) every time it writes index.html.
 - This deters copying; it doesn't stop it. Someone who knows what they're doing can strip the block. The proof of copying is the watermark plus the LICENSE.
+
+## Iowa detonation watch (LIVE Nov 24, 2026, ~10:45 am ET, Randy: "Go")
+
+**Randy's words:** "Can we monitor this blast when it happens and have dispersal patterns / Would be a great way to gain
+some watchers/ followers", then "Build it - can we run any modeling from what's know about lead azide / The amount the
+blast contains / Possible air patterns".
+**The event:** the Army plans to detonate 68 drums of degraded lead azide (reported about 9,500 lb) at the Iowa Army
+Ammunition Plant, Middletown, Iowa, planned 9:00 AM Central on Wed Nov 25, 2026, in two controlled detonations.
+
+**What was built:** a "Watch" card above the map and a map overlay, both from the new `/api/airpath`:
+- the plant marked on the map (the plant, not the blast: the Army has not published where inside the plant the drums are);
+- three forward air paths from the planned time (A near the ground, B 260 ft, C about 1,800 ft above the ground), each
+  a different line style and letter, with dots at 1, 3, 6 and 12 hours, and in words where each point is against a
+  named city; the wind at the start; and, if the reader has set a spot, how close the nearest path passes;
+- the reported quantity and one computed figure, about 6,800 lb of lead (71.1% of 9,500 lb), labelled as our arithmetic;
+- links to the EPA results page, the Army advisory and EPA lead guidance.
+The card hides itself after `showUntil` (Nov 28, 06:00 UTC). To reuse this for another event, change `EVENT` in
+api/airpath.js; if the Army moves the time, change `planned` there.
+
+**How the paths are worked out:** a marker is moved from the plant by NOAA forecast winds (HRRR/GFS through
+open-meteo.com), the wind re-read each hour at the place the marker has reached and applied in 20-minute steps. It
+stays at its height (no rising or sinking air), which is the main simplification against NOAA's HYSPLIT.
+
+**What was deliberately NOT built (told to Randy):** any estimate of lead in the air or on the ground. That needs the
+share of the lead that becomes airborne dust, the particle sizes and the cloud height, none of which is published (the
+permit papers are partly redacted), and the Army is burying, wetting and misting to hold dust down. A made-up figure on
+a public page could frighten or falsely reassure people who live there. The card says so in a boxed line. Do not add a
+concentration or "danger zone" layer without a published source for the inputs.
+
+**Not verified / open:** the exact blast point; the actual detonation time (the page only knows the planned one); the
+EPA had not posted measured results when this was built. The city list used to describe points is a hand-entered list
+of about 30 Midwest cities with rounded coordinates.
+
+**After the first preview runs (Nov 24):** the middle path was moved from 590 ft to 260 ft because the NOAA models return
+no wind at 180 m. The wind source refused a request twice during testing (once on Randy's phone: "The wind forecast is
+not answering right now"), then answered on the next try. So the route now tries a failed run once more after 1.5
+seconds, a failure is never cached, the page asks again after 45 seconds instead of 10 minutes, and the route reports
+the source's own error text as `detail`. First real forecast (read 15:33 UTC Nov 24): winds from the NE and E, paths
+heading SW into Missouri.
+**Open, asked of Randy:** the copy-protection overlay ("Unlicensed copy") appears on Vercel preview addresses. Cause:
+tools/lock.py allows `fv6ntdqpg5-pixels-projects.vercel.app` but compares whole dot-separated parts, and a preview
+address is one part (`hazard-desk-<hash>-fv6ntdqpg5-pixels-projects`), so it never matches. Not changed; waiting on him.
