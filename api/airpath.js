@@ -40,7 +40,7 @@ const EVENT = {
 // Heights the markers ride at. Different dashes and letters on the map, never color alone.
 const LEVELS = [
   { id: 'A', label: 'Near the ground', height: '33 ft', spd: 'wind_speed_10m', dir: 'wind_direction_10m' },
-  { id: 'B', label: 'Above the treetops', height: '260 ft', spd: 'wind_speed_80m', dir: 'wind_direction_80m' }   // 80 m: the NOAA models give no wind at 180 m (first preview run, Nov 24),
+  { id: 'B', label: 'Above the treetops', height: '260 ft', spd: 'wind_speed_80m', dir: 'wind_direction_80m' },   // 80 m: the NOAA models give no wind at 180 m (first preview run, Nov 24),
   { id: 'C', label: 'Higher up', height: 'about 1,800 ft above the ground', spd: 'wind_speed_925hPa', dir: 'wind_direction_925hPa' }
 ];
 // Cities used only to say where a point is in words (name, state, lat, lon).
