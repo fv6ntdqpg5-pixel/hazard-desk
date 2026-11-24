@@ -18,7 +18,6 @@ list is how they stay out of each other's way. Rules, agreed with Randy on Nov 1
 - **Every change goes on a preview first and goes live only on Randy's "Go".** One agent at a time on this site.
 
 In flight now:
-- **Iowa detonation watch (air paths for the Army's lead azide detonation, Nov 25):** branch `detonation-watch`, Claude app, Nov 24. ON A PREVIEW, NOT LIVE, waiting on Randy's Go. New api/airpath.js, tools/test_airpath.js; page.html gets an event card and map drawing. See "Iowa detonation watch" at the end of this file.
 - **Research branch `probe-nws`:** never merge; Randy may delete it in GitHub.
 
 ---
@@ -378,7 +377,7 @@ He gave no detail, so these are the faults found by reading the code and testing
 - build_site.py re-adds the lock (fixed build id) every time it writes index.html.
 - This deters copying; it doesn't stop it. Someone who knows what they're doing can strip the block. The proof of copying is the watermark plus the LICENSE.
 
-## Iowa detonation watch (Nov 24, 2026) — branch `detonation-watch`, preview only until Randy's Go
+## Iowa detonation watch (LIVE Nov 24, 2026, ~10:45 am ET, Randy: "Go")
 
 **Randy's words:** "Can we monitor this blast when it happens and have dispersal patterns / Would be a great way to gain
 some watchers/ followers", then "Build it - can we run any modeling from what's know about lead azide / The amount the
@@ -409,3 +408,13 @@ concentration or "danger zone" layer without a published source for the inputs.
 **Not verified / open:** the exact blast point; the actual detonation time (the page only knows the planned one); the
 EPA had not posted measured results when this was built. The city list used to describe points is a hand-entered list
 of about 30 Midwest cities with rounded coordinates.
+
+**After the first preview runs (Nov 24):** the middle path was moved from 590 ft to 260 ft because the NOAA models return
+no wind at 180 m. The wind source refused a request twice during testing (once on Randy's phone: "The wind forecast is
+not answering right now"), then answered on the next try. So the route now tries a failed run once more after 1.5
+seconds, a failure is never cached, the page asks again after 45 seconds instead of 10 minutes, and the route reports
+the source's own error text as `detail`. First real forecast (read 15:33 UTC Nov 24): winds from the NE and E, paths
+heading SW into Missouri.
+**Open, asked of Randy:** the copy-protection overlay ("Unlicensed copy") appears on Vercel preview addresses. Cause:
+tools/lock.py allows `fv6ntdqpg5-pixels-projects.vercel.app` but compares whole dot-separated parts, and a preview
+address is one part (`hazard-desk-<hash>-fv6ntdqpg5-pixels-projects`), so it never matches. Not changed; waiting on him.

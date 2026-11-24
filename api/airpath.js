@@ -115,10 +115,15 @@ async function omWind(points, hourIso) {
 
 async function handler(req, res) {
   let paths = null, error;
-  try { paths = await airPaths(omWind); if (!paths.some(p => p.hours > 0)) { paths = null; error = 'the wind forecast did not answer'; } } catch (e) { error = String(e && e.message || e).slice(0, 120); }
+  // The wind source sometimes refuses one request and answers the next (seen twice on Nov 24), so a run that gets
+  // nothing is tried once more after a short wait before the page is told there are no paths.
+  for (let i = 0; i < 2 && !paths; i++) {
+    if (i) await new Promise(ok => setTimeout(ok, 1500));
+    try { paths = await airPaths(omWind); error = undefined; if (!paths.some(p => p.hours > 0)) { paths = null; error = 'the wind forecast did not answer'; } } catch (e) { error = String(e && e.message || e).slice(0, 120); }
+  }
   const f = EVENT.facts;
   res.setHeader('Content-Type', 'application/json; charset=utf-8');
-  res.setHeader('Cache-Control', paths ? 'public, s-maxage=1200, stale-while-revalidate=3600' : 'public, s-maxage=60');
+  res.setHeader('Cache-Control', paths ? 'public, s-maxage=1200, stale-while-revalidate=3600' : 'no-store');
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.end(JSON.stringify({
     generated: new Date().toISOString(), ok: !!paths, error, detail: paths ? undefined : lastErr || undefined,
