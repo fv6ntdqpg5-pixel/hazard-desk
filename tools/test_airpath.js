@@ -31,5 +31,6 @@ const close = (a, b, tol) => Math.abs(a - b) <= tol;
   ok('nearest city: the plant is next to Burlington, Iowa', A.near(40.8, -91.25).city === 'Burlington, IA');
   ok('the lead figure is arithmetic on the reported weight', Math.round(A.EVENT.facts.leadAzideLb * A.EVENT.facts.leadFraction / 100) * 100 === 6800);
   ok('the planned time is 9:00 AM Central on Nov 25, 2026', new Date(A.EVENT.planned).toLocaleString('en-US', { timeZone: 'America/Chicago' }) === '11/25/2026, 9:00:00 AM');
+  ok('the confirmation names its sources and is after the planned time', !A.EVENT.confirmed || (Date.parse(A.EVENT.confirmed.firstReport) >= Date.parse(A.EVENT.planned) && A.EVENT.confirmed.by.length > 10));
   console.log(`airpath: ${pass} passed, ${fail} failed`); if (fail) process.exit(1);
 })();
