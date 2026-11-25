@@ -418,3 +418,10 @@ heading SW into Missouri.
 **Open, asked of Randy:** the copy-protection overlay ("Unlicensed copy") appears on Vercel preview addresses. Cause:
 tools/lock.py allows `fv6ntdqpg5-pixels-projects.vercel.app` but compares whole dot-separated parts, and a preview
 address is one part (`hazard-desk-<hash>-fv6ntdqpg5-pixels-projects`), so it never matches. Not changed; waiting on him.
+
+**Detonation confirmed (Nov 25, ~9:20 am CT):** Randy: "Let's track it - looks like they detonated - please confirm".
+Confirmed from The Wire & Ledger's own feed: the first headlines saying the Army had detonated were stamped 15:08 to
+15:18 UTC (The Guardian, DW, Fox News, CBS News, The Hill, ABC News). No exact minute and no official post-blast
+statement was readable at the time (fetched article pages were still the pre-blast versions). `EVENT.confirmed` was
+added and the card now leads with "Detonated", names those outlets, and says the paths still start at the planned 9:00.
+

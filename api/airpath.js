@@ -24,6 +24,11 @@ const EVENT = {
   site: { lat: 40.80, lon: -91.25, label: 'Iowa Army Ammunition Plant', exact: false },
   planned: '2026-11-25T15:00:00Z',        // 9:00 AM Central, Wednesday Nov 25 (CBS2 Iowa, Nov 23). The Army can move it.
   hours: 12,
+  // Confirmed by news reports, not by this page. The first headlines saying the Army had detonated the stockpile were
+  // stamped from 9:08 AM Central (15:08 UTC) on Nov 25: The Guardian, Deutsche Welle, Fox News, CBS News, The Hill and
+  // ABC News, as read by The Wire & Ledger's feed. No outlet read gave the exact minute, so the air paths still start
+  // at the planned 9:00 AM.
+  confirmed: { firstReport: '2026-11-25T15:08:00Z', by: 'The Guardian, Deutsche Welle, Fox News, CBS News, The Hill and ABC News' },
   showUntil: '2026-11-28T06:00:00Z',
   facts: {
     drums: 68,
@@ -127,7 +132,7 @@ async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.end(JSON.stringify({
     generated: new Date().toISOString(), ok: !!paths, error, detail: paths ? undefined : lastErr || undefined,
-    event: { id: EVENT.id, name: EVENT.name, site: EVENT.site, planned: EVENT.planned, showUntil: EVENT.showUntil, links: EVENT.links,
+    event: { id: EVENT.id, name: EVENT.name, site: EVENT.site, planned: EVENT.planned, confirmed: EVENT.confirmed || null, showUntil: EVENT.showUntil, links: EVENT.links,
       facts: { ...f, leadLb: Math.round(f.leadAzideLb * f.leadFraction / 100) * 100 } },
     paths, model: 'NOAA HRRR and GFS forecast winds, read through open-meteo.com',
     note: 'Paths of the air, not amounts of lead.'
