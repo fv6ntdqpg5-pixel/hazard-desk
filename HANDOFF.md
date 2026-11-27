@@ -18,6 +18,7 @@ list is how they stay out of each other's way. Rules, agreed with Randy on Nov 1
 - **Every change goes on a preview first and goes live only on Randy's "Go".** One agent at a time on this site.
 
 In flight now:
+- **Vaccine Desk link removed:** branch `vaccine-desk-off`, preview only, waiting on Randy's "Go". Claude app, Nov 27, 2026.
 - **Research branch `probe-nws`:** never merge; Randy may delete it in GitHub.
 
 ---
@@ -430,4 +431,10 @@ The Earth Desk (the-ledger-of-the-earth) was idled on Nov 27, 2026: Randy said i
 - The Earth Desk link is out of this site's Desks row. Where this repo has a site check (`tools/sitecheck.mjs`), the Earth Desk is out of its list of sister sites, or the check would fail for a link that was removed on purpose.
 - Its host stays in the look-carrying script's host list on purpose (harmless, and one less edit when the desk returns).
 - To put it back: restore the link (and the sister-site entry) from git history; the Earth Desk repo's MAINTAIN.md has the rest.
+
+## Vaccine Desk link removed (Nov 27, 2026; branch `vaccine-desk-off`, waiting on Randy's "Go")
+Randy, Nov 27, 2026 ~4:07 pm CT: "Let's do the same with the vaccine desk as we [did with] the earth desk / We can cover some of that inside of the outbreak desk - they're related". So the Global Vaccine Desk is idled the way the Earth Desk was that morning: kept in its repo, its monthly refresh task paused, a PAUSED line on its page, and no desk links to it.
+- Here: the Vaccine Desk link is out of this site's Desks row (on The Wire & Ledger also the card on the Health page and the entry on the builder page). Its host stays in the look-carrying script's host list on purpose.
+- Open: which vaccine material moves into the Outbreak Desk is Randy's call and is not built; see the Outbreak Desk's HANDOFF.md.
+- To put it back: restore the link from git history; the Vaccine Desk repo's REFRESH.md has the rest.
 
