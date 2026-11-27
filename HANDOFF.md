@@ -18,6 +18,7 @@ list is how they stay out of each other's way. Rules, agreed with Randy on Nov 1
 - **Every change goes on a preview first and goes live only on Randy's "Go".** One agent at a time on this site.
 
 In flight now:
+- **Earth Desk link removed from the Desks row:** branch `earth-desk-off`, preview only, waiting on Randy's "Go". Claude app, Nov 27, 2026.
 - **Research branch `probe-nws`:** never merge; Randy may delete it in GitHub.
 
 ---
@@ -424,4 +425,10 @@ Confirmed from The Wire & Ledger's own feed: the first headlines saying the Army
 15:18 UTC (The Guardian, DW, Fox News, CBS News, The Hill, ABC News). No exact minute and no official post-blast
 statement was readable at the time (fetched article pages were still the pre-blast versions). `EVENT.confirmed` was
 added and the card now leads with "Detonated", names those outlets, and says the paths still start at the planned 9:00.
+
+## Earth Desk link removed from the Desks row (Nov 27, 2026; branch `earth-desk-off`, waiting on Randy's "Go")
+The Earth Desk (the-ledger-of-the-earth) was idled on Nov 27, 2026: Randy said its data is the hardest to get right and it stays in its repo "for future use and refinement". Asked whether the other desks should stop linking to it, he said: "Yes - remove the links for now".
+- The Earth Desk link is out of this site's Desks row. Where this repo has a site check (`tools/sitecheck.mjs`), the Earth Desk is out of its list of sister sites, or the check would fail for a link that was removed on purpose.
+- Its host stays in the look-carrying script's host list on purpose (harmless, and one less edit when the desk returns).
+- To put it back: restore the link (and the sister-site entry) from git history; the Earth Desk repo's MAINTAIN.md has the rest.
 

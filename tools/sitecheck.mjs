@@ -16,7 +16,7 @@ let pw;
 try { pw = await import('playwright-core'); } catch { pw = await import('/home/claude/.npm-global/lib/node_modules/playwright/index.mjs'); }
 const exe = process.env.CHROME || (fs.existsSync('/opt/pw-browsers/chromium') ? '/opt/pw-browsers/chromium' : '/usr/bin/google-chrome');
 const BASE = live ? DESK.url : 'http://desk.test';
-const SISTERS = ['thewireandledger.com', 'global-outbreak-desk', 'hazard-desk', 'the-ledger-of-the-earth', 'overhead-now'];
+const SISTERS = ['thewireandledger.com', 'global-outbreak-desk', 'hazard-desk', 'overhead-now'];
 
 async function route(page) {
   if (live) return;
