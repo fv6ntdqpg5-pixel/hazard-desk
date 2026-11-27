@@ -431,3 +431,9 @@ The Earth Desk (the-ledger-of-the-earth) was idled on Nov 27, 2026: Randy said i
 - Its host stays in the look-carrying script's host list on purpose (harmless, and one less edit when the desk returns).
 - To put it back: restore the link (and the sister-site entry) from git history; the Earth Desk repo's MAINTAIN.md has the rest.
 
+## Vaccine Desk link removed (LIVE Nov 27, 2026 ~4:20 pm CT; Randy: "Go")
+Randy, Nov 27, 2026 ~4:07 pm CT: "Let's do the same with the vaccine desk as we [did with] the earth desk / We can cover some of that inside of the outbreak desk - they're related". So the Global Vaccine Desk is idled the way the Earth Desk was that morning: kept in its repo, its monthly refresh task paused, a PAUSED line on its page, and no desk links to it.
+- Here: the Vaccine Desk link is out of this site's Desks row (on The Wire & Ledger also the card on the Health page and the entry on the builder page). Its host stays in the look-carrying script's host list on purpose.
+- Open: which vaccine material moves into the Outbreak Desk is Randy's call and is not built; see the Outbreak Desk's HANDOFF.md.
+- To put it back: restore the link from git history; the Vaccine Desk repo's REFRESH.md has the rest.
+
